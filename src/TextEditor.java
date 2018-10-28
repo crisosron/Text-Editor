@@ -3,14 +3,17 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.*;
+import java.util.List;
+
+import static java.awt.font.TextAttribute.FONT;
 
 public class TextEditor extends JFrame implements ActionListener {
 
     /*UI Fields*/
-    //Container container;
     private JTextArea mainTextArea;
     private JMenuBar menuBar;
     private JScrollPane mainTextAreaScroll;
+    private Font mainTextAreaFont;
 
     /*Constants for sizes of components - All are somehow related back to FRAME_WIDTH and FRAME_HEIGHT*/
     public static final int FRAME_WIDTH = 1000;
@@ -27,6 +30,9 @@ public class TextEditor extends JFrame implements ActionListener {
     private Map<String, JMenu> menuMap; //Use this map to gain access to menus
     private Map<String, JMenuItem> menuItemsMap; //Use this map to gain access to menu items
 
+    /*Other fields*/
+    private boolean isWrapping = false; //Wrapping of text area is set to false by default
+
     /**
      * Constructor - Initialises UI components and collections
      */
@@ -39,6 +45,7 @@ public class TextEditor extends JFrame implements ActionListener {
         menuItemNames = new HashSet<>();
         menuMap = new HashMap<>();
         menuItemsMap = new HashMap<>();
+        mainTextAreaFont = new Font("Sans-Serif", Font.PLAIN, 20);
 
         /* ---- Setting up the collections ---- */
         /*Set that stores the names of all the menus in the editor*/
@@ -59,7 +66,6 @@ public class TextEditor extends JFrame implements ActionListener {
             menuMap.put(menuName, new JMenu(menuName));
         }
 
-        /*Creating all menu items and adding to map*/
         for(String menuItemName : menuItemNames){
             menuItemsMap.put(menuItemName, new JMenuItem(menuItemName));
         }
@@ -67,6 +73,7 @@ public class TextEditor extends JFrame implements ActionListener {
         /*Setting action commands for all the menu items*/
         for(Map.Entry<String, JMenuItem> entryMenuItem : menuItemsMap.entrySet()){
             entryMenuItem.getValue().setActionCommand(entryMenuItem.getKey()); // The action command is the same as the reference key
+            entryMenuItem.getValue().addActionListener(this); //Adding this action listener
         }
 
         /*Setting up the GUI*/
@@ -87,18 +94,20 @@ public class TextEditor extends JFrame implements ActionListener {
 
         /* ---- Setting up the menus ---- */
         /*Adding menus to menu bar*/
-        for(Map.Entry<String, JMenu> menuEntry : menuMap.entrySet()){
-            menuBar.add(menuEntry.getValue());
+        List<String> tempMenuList = new ArrayList<>(Arrays.asList("File", "Edit", "Format")); //Menus will be added to menu bar in this order
+        for(String menuName : tempMenuList){
+            menuBar.add(menuMap.get(menuName));
         }
 
         /*Adding menu items to their respective menu items*/
         for(Map.Entry<String, JMenuItem> menuItemEntry : menuItemsMap.entrySet()){
-            if(fileMenuItemNames.contains(menuItemEntry.getKey()))menuMap.get("File").add(menuItemEntry.getValue()); //If element belongs to File menu, add it to file menu
-            else if(editMenuItemNames.contains(menuItemEntry.getKey()))menuMap.get("Edit").add(menuItemEntry.getValue()); //If element belongs to Edit menu, add it to edit menu
-            else if(formatMenuItemNames.contains(menuItemEntry.getKey()))menuMap.get("Format").add(menuItemEntry.getValue()); //If element belongs to Format menu, add it to format menu
+            if(fileMenuItemNames.contains(menuItemEntry.getKey())) menuMap.get("File").add(menuItemEntry.getValue()); //If element belongs to File menu, add it to file menu
+            else if(editMenuItemNames.contains(menuItemEntry.getKey())) menuMap.get("Edit").add(menuItemEntry.getValue()); //If element belongs to Edit menu, add it to edit menu
+            else if(formatMenuItemNames.contains(menuItemEntry.getKey())) menuMap.get("Format").add(menuItemEntry.getValue()); //If element belongs to Format menu, add it to format menu
         }
 
         /* ---- Setting up the main text area scroll panel (and in turn the main text area itself) ---- */
+        mainTextArea.setFont(mainTextAreaFont);
         mainTextAreaScroll.setBackground(Color.white);
         mainTextAreaScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
         mainTextAreaScroll.setPreferredSize(new Dimension(MAIN_TEXT_AREA_WIDTH, MAIN_TEXT_AREA_HEIGHT));
@@ -112,7 +121,28 @@ public class TextEditor extends JFrame implements ActionListener {
 
     public void actionPerformed(ActionEvent event){
         String action = event.getActionCommand();
+
+        /*File menu actions*/
+        if(action.equals("Open"))openFile();
+        else if(action.equals("Save"))saveFile();
+
+        /*Format menu actions*/
+        else if(action.equals("Word Wrap")) setWordWrap();
         //TODO: Start implementing functionality here
+    }
+
+    public void openFile(){
+
+    }
+
+    public void saveFile(){
+
+    }
+
+    public void setWordWrap(){
+        isWrapping = !isWrapping;
+        mainTextArea.setLineWrap(isWrapping);
+        System.out.println("Wrapping set to " + isWrapping);
     }
 
     public static void main(String[] args){
