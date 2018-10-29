@@ -35,6 +35,8 @@ public class TextEditor extends JFrame implements ActionListener {
 
     /*Other fields*/
     private boolean isWrapping = false; //Wrapping of text area is set to false by default
+    private boolean lightThemeActive = true; //Light theme on by default
+    private boolean darkThemeActive = false;
 
     /**
      * Constructor - Initialises UI components and collections
@@ -134,6 +136,8 @@ public class TextEditor extends JFrame implements ActionListener {
 
         /*Format menu actions*/
         else if(action.equals("Word Wrap")) setWordWrap();
+        else if(action.equals("Dark Theme")) enableDarkTheme();
+        else if(action.equals("Light Theme")) enableLightTheme();
         //TODO: Start implementing functionality here
     }
 
@@ -144,21 +148,19 @@ public class TextEditor extends JFrame implements ActionListener {
             JFileChooser openFileChooser = new JFileChooser();
             openFileChooser.setCurrentDirectory(new File(System.getProperty("user.dir"))); //Gets current working directory
             int status = openFileChooser.showOpenDialog(null); //Prompting user to open a file
-            if(status != openFileChooser.APPROVE_OPTION){
-                JOptionPane.showMessageDialog(null, "No file selected!");
-            }else{
+            if(status != openFileChooser.APPROVE_OPTION)JOptionPane.showMessageDialog(null, "No file selected!");
+            else{
 
                 /*Getting the text in the opened file and transferring it onto the
                 * mainTextArea component*/
                 File openedFile = openFileChooser.getSelectedFile();
                 Scanner scan = new Scanner(openedFile);
                 String textToDisplay = "";
-                while(scan.hasNext()){
-                    textToDisplay += scan.nextLine() + "\n";
-                }
+                while(scan.hasNext()) textToDisplay += scan.nextLine() + "\n";
                 mainTextArea.setText(textToDisplay);
                 setTitle(openedFile.getName()); //Setting the title of the frame to the name of the opened text file
             }
+
         }catch(Exception e){e.printStackTrace();}
     }
 
@@ -166,8 +168,27 @@ public class TextEditor extends JFrame implements ActionListener {
 
     }
 
-    public void enableDarktTheme(){}
-    public void enableLightTheme(){}
+    /**
+     * Changes the editor to use a dark theme
+     */
+    public void enableDarkTheme(){
+        if(darkThemeActive)return;
+        else{
+            darkThemeActive = true;
+            lightThemeActive = false;
+        }
+    }
+
+    /**
+     * Changes the editor to use a light theme
+     */
+    public void enableLightTheme(){
+        if(lightThemeActive)return;
+        else{
+            lightThemeActive = true;
+            darkThemeActive = false;
+        }
+    }
 
 
     public void setWordWrap(){
