@@ -1,7 +1,10 @@
+import javafx.stage.FileChooser;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.*;
 import java.util.List;
 
@@ -119,6 +122,9 @@ public class TextEditor extends JFrame implements ActionListener {
         setVisible(true);
     }
 
+    /**
+     * actionPerformed method that handles all the interaction in the menu
+     */
     public void actionPerformed(ActionEvent event){
         String action = event.getActionCommand();
 
@@ -132,12 +138,37 @@ public class TextEditor extends JFrame implements ActionListener {
     }
 
     public void openFile(){
+        try{
 
+            /*Prompting user to open a file using file choosers*/
+            JFileChooser openFileChooser = new JFileChooser();
+            openFileChooser.setCurrentDirectory(new File(System.getProperty("user.dir"))); //Gets current working directory
+            int status = openFileChooser.showOpenDialog(null); //Prompting user to open a file
+            if(status != openFileChooser.APPROVE_OPTION){
+                JOptionPane.showMessageDialog(null, "No file selected!");
+            }else{
+
+                /*Getting the text in the opened file and transferring it onto the
+                * mainTextArea component*/
+                File openedFile = openFileChooser.getSelectedFile();
+                Scanner scan = new Scanner(openedFile);
+                String textToDisplay = "";
+                while(scan.hasNext()){
+                    textToDisplay += scan.nextLine() + "\n";
+                }
+                mainTextArea.setText(textToDisplay);
+                setTitle(openedFile.getName()); //Setting the title of the frame to the name of the opened text file
+            }
+        }catch(Exception e){e.printStackTrace();}
     }
 
     public void saveFile(){
 
     }
+
+    public void enableDarktTheme(){}
+    public void enableLightTheme(){}
+
 
     public void setWordWrap(){
         isWrapping = !isWrapping;
