@@ -43,6 +43,11 @@ public class TextEditor extends JFrame implements ActionListener {
      */
     public TextEditor(){
 
+        /*Making the UI use the OS aesthetics*/
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        }catch(Exception e){e.printStackTrace();}
+
         /* ---- Initializing some fields ---- */
         mainTextArea = new JTextArea();
         mainTextAreaScroll = new JScrollPane(mainTextArea);
@@ -148,7 +153,7 @@ public class TextEditor extends JFrame implements ActionListener {
             JFileChooser openFileChooser = new JFileChooser();
             openFileChooser.setCurrentDirectory(new File(System.getProperty("user.dir"))); //Gets current working directory
             int status = openFileChooser.showOpenDialog(null); //Prompting user to open a file
-            if(status != openFileChooser.APPROVE_OPTION)JOptionPane.showMessageDialog(null, "No file selected!");
+            if(status != JFileChooser.APPROVE_OPTION)JOptionPane.showMessageDialog(null, "No file selected!");
             else{
 
                 /*Getting the text in the opened file and transferring it onto the
