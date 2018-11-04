@@ -116,6 +116,7 @@ public class TextEditor extends JFrame implements ActionListener {
 
         /* ---- Setting up the main text area scroll panel (and in turn the main text area itself) ---- */
         mainTextArea.setFont(mainTextAreaFont);
+        mainTextArea.setMargin(new Insets(5, 5, 5, 5));
         mainTextAreaScroll.setBackground(Color.white);
         mainTextAreaScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
         mainTextAreaScroll.setPreferredSize(new Dimension(MAIN_TEXT_AREA_WIDTH, MAIN_TEXT_AREA_HEIGHT));
