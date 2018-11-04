@@ -1,5 +1,3 @@
-import javafx.stage.FileChooser;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
