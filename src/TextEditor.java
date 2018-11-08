@@ -181,6 +181,9 @@ public class TextEditor extends JFrame implements ActionListener {
             darkThemeActive = true;
             lightThemeActive = false;
         }
+        mainTextArea.setCaretColor(Color.white);
+        mainTextArea.setForeground(Color.white);
+        mainTextArea.setBackground(new Color(42, 42, 42));
     }
 
     /**
@@ -192,9 +195,14 @@ public class TextEditor extends JFrame implements ActionListener {
             lightThemeActive = true;
             darkThemeActive = false;
         }
+        mainTextArea.setCaretColor(Color.black);
+        mainTextArea.setForeground(Color.black);
+        mainTextArea.setBackground(Color.white);
     }
 
-
+    /**
+     * Activates/Deactivates the word wrap functionality around the mainTextArea component
+     */
     public void setWordWrap(){
         isWrapping = !isWrapping;
         mainTextArea.setLineWrap(isWrapping);
