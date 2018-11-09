@@ -25,11 +25,13 @@ public class TextEditor extends JFrame implements ActionListener {
     /*Collections for UI*/
     private Set<String> menuNames;
     private Set<String> menuItemNames;
+    private Set<String> checkBoxMenuItemNames;
     private Set<String> fileMenuItemNames;
     private Set<String> editMenuItemNames;
     private Set<String> formatMenuItemNames;
     private Map<String, JMenu> menuMap; //Use this map to gain access to menus
     private Map<String, JMenuItem> menuItemsMap; //Use this map to gain access to menu items
+    private Map<String, JCheckBoxMenuItem> checkBoxMenuItemsMap = new HashMap<>(); //Use this map to gain access to check box menu items
 
     /*Other fields*/
     private boolean isWrapping = false; //Wrapping of text area is set to false by default
@@ -62,7 +64,8 @@ public class TextEditor extends JFrame implements ActionListener {
         /*Sets that stores the menu items within each respective menu*/
         fileMenuItemNames = new HashSet<>(Arrays.asList("Open", "Save", "Exit"));
         editMenuItemNames = new HashSet<>(Arrays.asList("Undo", "Cut", "Paste"));
-        formatMenuItemNames = new HashSet<>(Arrays.asList("Word Wrap", "Light Theme", "Dark Theme", "Font"));
+        formatMenuItemNames = new HashSet<>(Arrays.asList("Font", "Word Wrap", "Light Theme", "Dark Theme"));
+        checkBoxMenuItemNames = new HashSet<>(Arrays.asList("Word Wrap", "Light Theme", "Dark Theme"));
 
         /*Adding all menu item names into one set*/
         menuItemNames.addAll(fileMenuItemNames);
@@ -74,14 +77,26 @@ public class TextEditor extends JFrame implements ActionListener {
             menuMap.put(menuName, new JMenu(menuName));
         }
 
+        /*Creating all JMenuItem objects and placing them into the map*/
         for(String menuItemName : menuItemNames){
             menuItemsMap.put(menuItemName, new JMenuItem(menuItemName));
+        }
+
+        /*Creating JCheckBoxMenuItem objects and placing them into the map*/
+        for(String checkBoxMenuItemName : checkBoxMenuItemNames){
+            checkBoxMenuItemsMap.put(checkBoxMenuItemName, new JCheckBoxMenuItem(checkBoxMenuItemName));
         }
 
         /*Setting action commands for all the menu items*/
         for(Map.Entry<String, JMenuItem> entryMenuItem : menuItemsMap.entrySet()){
             entryMenuItem.getValue().setActionCommand(entryMenuItem.getKey()); // The action command is the same as the reference key
             entryMenuItem.getValue().addActionListener(this); //Adding this action listener
+        }
+
+        /*Setting action commands for all the check box menu items*/
+        for(Map.Entry<String, JCheckBoxMenuItem> entryCheckBoxMenuItem : checkBoxMenuItemsMap.entrySet()){
+            entryCheckBoxMenuItem.getValue().setActionCommand(entryCheckBoxMenuItem.getKey());
+            entryCheckBoxMenuItem.getValue().addActionListener(this);
         }
 
         /*Setting up the GUI*/
@@ -109,10 +124,21 @@ public class TextEditor extends JFrame implements ActionListener {
 
         /*Adding menu items to their respective menu items*/
         for(Map.Entry<String, JMenuItem> menuItemEntry : menuItemsMap.entrySet()){
-            if(fileMenuItemNames.contains(menuItemEntry.getKey())) menuMap.get("File").add(menuItemEntry.getValue()); //If element belongs to File menu, add it to file menu
-            else if(editMenuItemNames.contains(menuItemEntry.getKey())) menuMap.get("Edit").add(menuItemEntry.getValue()); //If element belongs to Edit menu, add it to edit menu
-            else if(formatMenuItemNames.contains(menuItemEntry.getKey())) menuMap.get("Format").add(menuItemEntry.getValue()); //If element belongs to Format menu, add it to format menu
+            if(fileMenuItemNames.contains(menuItemEntry.getKey()) && !checkBoxMenuItemsMap.containsKey(menuItemEntry.getKey())) menuMap.get("File").add(menuItemEntry.getValue()); //If element belongs to File menu, add it to file menu
+            else if(editMenuItemNames.contains(menuItemEntry.getKey()) && !checkBoxMenuItemsMap.containsKey(menuItemEntry.getKey())) menuMap.get("Edit").add(menuItemEntry.getValue()); //If element belongs to Edit menu, add it to edit menu
+            else if(formatMenuItemNames.contains(menuItemEntry.getKey()) && !checkBoxMenuItemsMap.containsKey(menuItemEntry.getKey())) menuMap.get("Format").add(menuItemEntry.getValue()); //If element belongs to Format menu, add it to format menu
         }
+
+        /*Adding check box menu items to their respective menus*/
+        for (Map.Entry<String, JCheckBoxMenuItem> entryCheckBox : checkBoxMenuItemsMap.entrySet()){
+            if(fileMenuItemNames.contains(entryCheckBox.getKey())) menuMap.get("File").add(entryCheckBox.getValue());
+            else if(editMenuItemNames.contains(entryCheckBox.getKey())) menuMap.get("Edit").add(entryCheckBox.getValue());
+            else if(formatMenuItemNames.contains(entryCheckBox.getKey())) menuMap.get("Format").add(entryCheckBox.getValue());
+            System.out.println("Added " + entryCheckBox.getKey());
+        }
+
+        /*Setting this checkbox menu item to true since the light theme is on by default*/
+        checkBoxMenuItemsMap.get("Light Theme").setSelected(true);
 
         /* ---- Setting up the main text area scroll panel (and in turn the main text area itself) ---- */
         mainTextArea.setFont(mainTextAreaFont);
@@ -176,11 +202,12 @@ public class TextEditor extends JFrame implements ActionListener {
      * Changes the editor to use a dark theme
      */
     public void enableDarkTheme(){
-        if(darkThemeActive)return;
-        else{
-            darkThemeActive = true;
-            lightThemeActive = false;
-        }
+        if(darkThemeActive) return;
+
+        darkThemeActive = true;
+        lightThemeActive = false;
+        checkBoxMenuItemsMap.get("Dark Theme").setSelected(true);
+        checkBoxMenuItemsMap.get("Light Theme").setSelected(false);
         mainTextArea.setCaretColor(Color.white);
         mainTextArea.setForeground(Color.white);
         mainTextArea.setBackground(new Color(42, 42, 42));
@@ -190,11 +217,12 @@ public class TextEditor extends JFrame implements ActionListener {
      * Changes the editor to use a light theme
      */
     public void enableLightTheme(){
-        if(lightThemeActive)return;
-        else{
-            lightThemeActive = true;
-            darkThemeActive = false;
-        }
+        if(lightThemeActive) return;
+
+        lightThemeActive = true;
+        darkThemeActive = false;
+        checkBoxMenuItemsMap.get("Dark Theme").setSelected(false);
+        checkBoxMenuItemsMap.get("Light Theme").setSelected(true);
         mainTextArea.setCaretColor(Color.black);
         mainTextArea.setForeground(Color.black);
         mainTextArea.setBackground(Color.white);
