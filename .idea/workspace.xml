@@ -94,18 +94,39 @@
         </counts>
       </usages-collector>
     </session>
+    <session id="531947194">
+      <usages-collector id="statistics.lifecycle.project">
+        <counts>
+          <entry key="project.closed" value="2" />
+          <entry key="project.open.time.12" value="1" />
+          <entry key="project.open.time.13" value="1" />
+          <entry key="project.open.time.9" value="1" />
+          <entry key="project.opened" value="3" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.edit">
+        <counts>
+          <entry key="java" value="1224" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.edit">
+        <counts>
+          <entry key="JAVA" value="1224" />
+        </counts>
+      </usages-collector>
+    </session>
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/TextEditor.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2197">
-              <caret line="231" column="59" lean-forward="true" selection-start-line="231" selection-start-column="59" selection-end-line="231" selection-end-column="59" />
+            <state relative-caret-position="336">
+              <caret line="119" column="9" lean-forward="true" selection-start-line="119" selection-start-column="9" selection-end-line="119" selection-end-column="9" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#11183#11184#0" expanded="true" />
-                <element signature="e#11239#11240#0" expanded="true" />
+                <element signature="e#11134#11135#0" expanded="true" />
+                <element signature="e#11190#11191#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -137,16 +158,17 @@
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-8" />
-    <option name="y" value="-8" />
-    <option name="width" value="1696" />
-    <option name="height" value="1066" />
+    <option name="x" value="-10" />
+    <option name="y" value="-10" />
+    <option name="width" value="1699" />
+    <option name="height" value="1069" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -163,15 +185,14 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
       <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1540816850924" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../ScaraArm/RobotArm" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="Project" />
-    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.0" />
     <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
@@ -215,10 +236,10 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.15921193" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.16510066" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -227,7 +248,7 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.17343578" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.17221418" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.39956093" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -252,12 +273,12 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/src/TextEditor.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2197">
-          <caret line="231" column="59" lean-forward="true" selection-start-line="231" selection-start-column="59" selection-end-line="231" selection-end-column="59" />
+        <state relative-caret-position="336">
+          <caret line="119" column="9" lean-forward="true" selection-start-line="119" selection-start-column="9" selection-end-line="119" selection-end-column="9" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#11183#11184#0" expanded="true" />
-            <element signature="e#11239#11240#0" expanded="true" />
+            <element signature="e#11134#11135#0" expanded="true" />
+            <element signature="e#11190#11191#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -302,7 +323,7 @@
       </state>
       <state key="JdkListConfigurable.UI">
         <settings>
-          <last-edited>11</last-edited>
+          <last-edited>1.8</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
@@ -319,6 +340,7 @@
             <option name="proportions">
               <list>
                 <option value="0.2" />
+                <option value="0.6" />
               </list>
             </option>
           </splitter-proportions>

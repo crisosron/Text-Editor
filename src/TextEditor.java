@@ -23,12 +23,7 @@ public class TextEditor extends JFrame implements ActionListener {
     public static final int MAIN_TEXT_AREA_HEIGHT = FRAME_HEIGHT;
 
     /*Collections for UI*/
-    private Set<String> menuNames;
-    private Set<String> menuItemNames;
-    private Set<String> checkBoxMenuItemNames;
-    private Set<String> fileMenuItemNames;
-    private Set<String> editMenuItemNames;
-    private Set<String> formatMenuItemNames;
+    private Set<String> menuNames, menuItemNames, checkBoxMenuItemNames, fileMenuItemNames, editMenuItemNames, formatMenuItemNames, graphicsMenuItemNames;
     private Map<String, JMenu> menuMap; //Use this map to gain access to menus
     private Map<String, JMenuItem> menuItemsMap; //Use this map to gain access to menu items
     private Map<String, JCheckBoxMenuItem> checkBoxMenuItemsMap = new HashMap<>(); //Use this map to gain access to check box menu items
@@ -59,18 +54,20 @@ public class TextEditor extends JFrame implements ActionListener {
 
         /* ---- Setting up the collections ---- */
         /*Set that stores the names of all the menus in the editor*/
-        menuNames = new HashSet<>(Arrays.asList("File", "Edit", "Format"));
+        menuNames = new HashSet<>(Arrays.asList("File", "Edit", "Format", "Graphics"));
 
         /*Sets that stores the menu items within each respective menu*/
         fileMenuItemNames = new HashSet<>(Arrays.asList("Open", "Save", "Exit"));
         editMenuItemNames = new HashSet<>(Arrays.asList("Undo", "Cut", "Paste"));
         formatMenuItemNames = new HashSet<>(Arrays.asList("Font", "Word Wrap", "Light Theme", "Dark Theme"));
+        graphicsMenuItemNames = new HashSet<>(Arrays.asList("New Graphics Window", "Open Graphics In Current Window"));
         checkBoxMenuItemNames = new HashSet<>(Arrays.asList("Word Wrap", "Light Theme", "Dark Theme"));
 
         /*Adding all menu item names into one set*/
         menuItemNames.addAll(fileMenuItemNames);
         menuItemNames.addAll(editMenuItemNames);
         menuItemNames.addAll(formatMenuItemNames);
+        menuItemNames.addAll(graphicsMenuItemNames);
 
         /*Creating all menus and adding to map*/
         for(String menuName : menuNames){
@@ -117,7 +114,7 @@ public class TextEditor extends JFrame implements ActionListener {
 
         /* ---- Setting up the menus ---- */
         /*Adding menus to menu bar*/
-        List<String> tempMenuList = new ArrayList<>(Arrays.asList("File", "Edit", "Format")); //Menus will be added to menu bar in this order
+        List<String> tempMenuList = new ArrayList<>(Arrays.asList("File", "Edit", "Format", "Graphics")); //Menus will be added to menu bar in this order
         for(String menuName : tempMenuList){
             menuBar.add(menuMap.get(menuName));
         }
@@ -127,6 +124,7 @@ public class TextEditor extends JFrame implements ActionListener {
             if(fileMenuItemNames.contains(menuItemEntry.getKey()) && !checkBoxMenuItemsMap.containsKey(menuItemEntry.getKey())) menuMap.get("File").add(menuItemEntry.getValue()); //If element belongs to File menu, add it to file menu
             else if(editMenuItemNames.contains(menuItemEntry.getKey()) && !checkBoxMenuItemsMap.containsKey(menuItemEntry.getKey())) menuMap.get("Edit").add(menuItemEntry.getValue()); //If element belongs to Edit menu, add it to edit menu
             else if(formatMenuItemNames.contains(menuItemEntry.getKey()) && !checkBoxMenuItemsMap.containsKey(menuItemEntry.getKey())) menuMap.get("Format").add(menuItemEntry.getValue()); //If element belongs to Format menu, add it to format menu
+            else if(graphicsMenuItemNames.contains(menuItemEntry.getKey()) && !checkBoxMenuItemsMap.containsKey(menuItemEntry.getKey())) menuMap.get("Graphics").add(menuItemEntry.getValue()); //If element belongs to Graphics menu, add it to graphics menu
         }
 
         /*Adding check box menu items to their respective menus*/
@@ -134,6 +132,7 @@ public class TextEditor extends JFrame implements ActionListener {
             if(fileMenuItemNames.contains(entryCheckBox.getKey())) menuMap.get("File").add(entryCheckBox.getValue());
             else if(editMenuItemNames.contains(entryCheckBox.getKey())) menuMap.get("Edit").add(entryCheckBox.getValue());
             else if(formatMenuItemNames.contains(entryCheckBox.getKey())) menuMap.get("Format").add(entryCheckBox.getValue());
+            else if(graphicsMenuItemNames.contains(entryCheckBox.getKey())) menuMap.get("Graphics").add(entryCheckBox.getValue());
             System.out.println("Added " + entryCheckBox.getKey());
         }
 
@@ -202,12 +201,15 @@ public class TextEditor extends JFrame implements ActionListener {
      * Changes the editor to use a dark theme
      */
     public void enableDarkTheme(){
+
+        /*Exits the method if the dark theme is already active*/
         if(darkThemeActive) return;
 
+        /*Operations to convert to dark theme*/
         darkThemeActive = true;
         lightThemeActive = false;
-        checkBoxMenuItemsMap.get("Dark Theme").setSelected(true);
-        checkBoxMenuItemsMap.get("Light Theme").setSelected(false);
+        checkBoxMenuItemsMap.get("Dark Theme").setSelected(true); //Enables the tick for the dark theme menu item
+        checkBoxMenuItemsMap.get("Light Theme").setSelected(false); //Disables the tick for the light theme menu item
         mainTextArea.setCaretColor(Color.white);
         mainTextArea.setForeground(Color.white);
         mainTextArea.setBackground(new Color(42, 42, 42));
@@ -217,12 +219,15 @@ public class TextEditor extends JFrame implements ActionListener {
      * Changes the editor to use a light theme
      */
     public void enableLightTheme(){
+
+        /*Exits the method if the light theme is already active*/
         if(lightThemeActive) return;
 
+        /*Operations to convert to light theme*/
         lightThemeActive = true;
         darkThemeActive = false;
-        checkBoxMenuItemsMap.get("Dark Theme").setSelected(false);
-        checkBoxMenuItemsMap.get("Light Theme").setSelected(true);
+        checkBoxMenuItemsMap.get("Dark Theme").setSelected(false); //Disables the tick for the dark theme menu item
+        checkBoxMenuItemsMap.get("Light Theme").setSelected(true); //Enables the tick for the light theme menu item
         mainTextArea.setCaretColor(Color.black);
         mainTextArea.setForeground(Color.black);
         mainTextArea.setBackground(Color.white);
