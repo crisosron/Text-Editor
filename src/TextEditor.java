@@ -1,12 +1,12 @@
+//TODO: Create an update method that tracks if a change was made or not
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileWriter;
 import java.util.*;
 import java.util.List;
-
-import static java.awt.font.TextAttribute.FONT;
 
 public class TextEditor extends JFrame implements ActionListener {
 
@@ -32,6 +32,12 @@ public class TextEditor extends JFrame implements ActionListener {
     private boolean isWrapping = false; //Wrapping of text area is set to false by default
     private boolean lightThemeActive = true; //Light theme on by default
     private boolean darkThemeActive = false;
+    private boolean fileExists = false; //Used for saving
+
+    /*For file management*/
+    private String openedFileName = "";
+    private String openedFileNamePath = "";
+    private boolean hasOpenedFile = false;
 
     /**
      * Constructor - Initialises UI components and collections
@@ -57,7 +63,7 @@ public class TextEditor extends JFrame implements ActionListener {
         menuNames = new HashSet<>(Arrays.asList("File", "Edit", "Format", "Graphics"));
 
         /*Sets that stores the menu items within each respective menu*/
-        fileMenuItemNames = new HashSet<>(Arrays.asList("Open", "Save", "Exit"));
+        fileMenuItemNames = new HashSet<>(Arrays.asList("New", "Open", "Save", "Save As...", "Exit"));
         editMenuItemNames = new HashSet<>(Arrays.asList("Undo", "Cut", "Paste"));
         formatMenuItemNames = new HashSet<>(Arrays.asList("Font", "Word Wrap", "Light Theme", "Dark Theme"));
         graphicsMenuItemNames = new HashSet<>(Arrays.asList("New Graphics Window", "Open Graphics In Current Window"));
@@ -160,8 +166,11 @@ public class TextEditor extends JFrame implements ActionListener {
         String action = event.getActionCommand();
 
         /*File menu actions*/
-        if(action.equals("Open"))openFile();
+        if(action.equals("New"))newDocument();
+        else if(action.equals("Open"))openFile();
         else if(action.equals("Save"))saveFile();
+        else if(action.equals("Save As..."))saveFileAs();
+        else if(action.equals("Exit"))exit();
 
         /*Format menu actions*/
         else if(action.equals("Word Wrap")) setWordWrap();
@@ -183,18 +192,85 @@ public class TextEditor extends JFrame implements ActionListener {
                 /*Getting the text in the opened file and transferring it onto the
                 * mainTextArea component*/
                 File openedFile = openFileChooser.getSelectedFile();
+                openedFileName = openFileChooser.getSelectedFile().getName();
+                openedFileNamePath = openedFile.getAbsolutePath(); //Used for saving to an existing file
+                System.out.println(openedFileNamePath); //////////////////////////////////////////////////////////////////////////////////////////
+                hasOpenedFile = true;
+                System.out.println(hasOpenedFile);
                 Scanner scan = new Scanner(openedFile);
                 String textToDisplay = "";
                 while(scan.hasNext()) textToDisplay += scan.nextLine() + "\n";
                 mainTextArea.setText(textToDisplay);
-                setTitle(openedFile.getName()); //Setting the title of the frame to the name of the opened text file
+                setTitle(openedFileName); //Setting the title of the frame to the name of the opened text file
             }
 
         }catch(Exception e){e.printStackTrace();}
     }
 
+    /**
+     * Called when the Save menu item in the File menu. This method differs from saveFileAs method since
+     * it first checks if the user is trying to save to an existing file. If not, call the saveFileAs method*/
     public void saveFile(){
+        try{
 
+            /*If saving to existing file*/
+            if(hasOpenedFile){
+                File openedFile = new File(openedFileNamePath);
+                FileWriter writeToOpenedFile = new FileWriter(openedFile);
+                mainTextArea.write(writeToOpenedFile);
+                JOptionPane.showMessageDialog(null, "File Saved!");
+                return;
+            }
+
+            /*saveFileAs method is called if the user is trying to save a brand new document*/
+            saveFileAs();
+
+        }catch(Exception e) {e.printStackTrace();}
+    }
+
+    /**
+     *  Method called when the 'Save As ....' menu item is clicked. This will force the showSaveDialog method to happen
+     *  unlike the saveFile method which does not force the showSaveDialog if the file being saved is a file that already
+     *  exists.
+     * */
+    public void saveFileAs(){
+        try {
+            /*Operations to conduct when saving to a brand new file*/
+            JFileChooser saveFileChooser = new JFileChooser();
+            int status = saveFileChooser.showSaveDialog(null);
+            if (status != JFileChooser.APPROVE_OPTION) JOptionPane.showMessageDialog(null, "Save cancelled!");
+            else {
+                File fileToSave = saveFileChooser.getSelectedFile(); //Creates a new file with a title based on the user's input
+                FileWriter writer = new FileWriter(fileToSave); //FileWriter object to write to the newly created file
+                mainTextArea.write(writer); //Gets the text in the mainTextArea component and writes it to the newly created file
+                setTitle(fileToSave.getName());
+                JOptionPane.showMessageDialog(null, "File saved as: " + fileToSave.getName());
+            }
+            hasOpenedFile = true;
+
+        }catch(Exception e){e.printStackTrace();}
+
+    }
+
+    /**
+     * Creates a new untitled document
+     */
+    public void newDocument(){
+        //TODO: Check if the user wants to save any changes made to current document
+        /*Resetting some things*/
+        hasOpenedFile = false;
+        mainTextArea.setText("");
+        openedFileNamePath = "";
+        openedFileName = "";
+
+    }
+
+    /**
+     * Forces a hard exit -Called when the Exit menu item in the File menu is clicked
+     */
+    public void exit(){
+        //TODO: Check if user wants to save any changes made to current document
+        System.exit(EXIT_ON_CLOSE);
     }
 
     /**
@@ -239,7 +315,6 @@ public class TextEditor extends JFrame implements ActionListener {
     public void setWordWrap(){
         isWrapping = !isWrapping;
         mainTextArea.setLineWrap(isWrapping);
-        System.out.println("Wrapping set to " + isWrapping);
     }
 
     public static void main(String[] args){
