@@ -1,6 +1,9 @@
 //TODO: Create an update method that tracks if a change was made or not
 import javax.swing.*;
 import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -64,9 +67,11 @@ public class TextEditor extends JFrame implements ActionListener {
 
         /*Sets that stores the menu items within each respective menu*/
         fileMenuItemNames = new HashSet<>(Arrays.asList("New", "Open", "Save", "Save As...", "Exit"));
-        editMenuItemNames = new HashSet<>(Arrays.asList("Undo", "Cut", "Paste"));
+        editMenuItemNames = new HashSet<>(Arrays.asList("Undo", "Cut", "Copy", "Paste"));
         formatMenuItemNames = new HashSet<>(Arrays.asList("Font", "Word Wrap", "Light Theme", "Dark Theme"));
         graphicsMenuItemNames = new HashSet<>(Arrays.asList("New Graphics Window", "Open Graphics In Current Window"));
+
+        /*Seperate set for JCheckBoxMenuItem objects*/
         checkBoxMenuItemNames = new HashSet<>(Arrays.asList("Word Wrap", "Light Theme", "Dark Theme"));
 
         /*Adding all menu item names into one set*/
@@ -172,7 +177,12 @@ public class TextEditor extends JFrame implements ActionListener {
         else if(action.equals("Save As..."))saveFileAs();
         else if(action.equals("Exit"))exit();
 
-        /*Format menu actions*/
+            /*Edit menu actions*/
+        else if(action.equals("Cut")) cut();
+        else if(action.equals("Paste")) paste();
+        else if(action.equals("Copy")) copy();
+
+            /*Format menu actions*/
         else if(action.equals("Word Wrap")) setWordWrap();
         else if(action.equals("Dark Theme")) enableDarkTheme();
         else if(action.equals("Light Theme")) enableLightTheme();
@@ -190,11 +200,10 @@ public class TextEditor extends JFrame implements ActionListener {
             else{
 
                 /*Getting the text in the opened file and transferring it onto the
-                * mainTextArea component*/
+                 * mainTextArea component*/
                 File openedFile = openFileChooser.getSelectedFile();
                 openedFileName = openFileChooser.getSelectedFile().getName();
                 openedFileNamePath = openedFile.getAbsolutePath(); //Used for saving to an existing file
-                System.out.println(openedFileNamePath); //////////////////////////////////////////////////////////////////////////////////////////
                 hasOpenedFile = true;
                 System.out.println(hasOpenedFile);
                 Scanner scan = new Scanner(openedFile);
@@ -232,7 +241,7 @@ public class TextEditor extends JFrame implements ActionListener {
      *  Method called when the 'Save As ....' menu item is clicked. This will force the showSaveDialog method to happen
      *  unlike the saveFile method which does not force the showSaveDialog if the file being saved is a file that already
      *  exists.
-     * */
+     */
     public void saveFileAs(){
         try {
             /*Operations to conduct when saving to a brand new file*/
@@ -315,6 +324,57 @@ public class TextEditor extends JFrame implements ActionListener {
     public void setWordWrap(){
         isWrapping = !isWrapping;
         mainTextArea.setLineWrap(isWrapping);
+    }
+
+    /**
+     * Method that copies text and removes it from the mainTextArea component
+     */
+    public void cut(){
+
+        /*Text to cut is the selected text in the mainTextArea component*/
+        String textToCut = mainTextArea.getSelectedText();
+
+        /*Clipboard object to store the highlighted text in the mainTextArea component*/
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+
+        /*StringSelection object that holds the highlighted text in the mainTextArea*/
+        StringSelection selectedText = new StringSelection(textToCut);
+
+        /*Storing selected text into system clipboard*/
+        clipboard.setContents(selectedText, selectedText);
+
+        /*Operations to remove the selected text from the mainTextArea component*/
+        mainTextArea.replaceSelection("");
+
+    }
+
+    /**
+     * Method that takes the text stored in the system clipboard and pastes it to
+     * the mainTextArea component
+     */
+    public void paste() {
+        //TODO: Develop this
+        try {
+            String textToPaste = (String) Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor);
+            mainTextArea.insert(textToPaste, mainTextArea.getCaretPosition()); //Inserts the text in the clipboard in the current position of the caret
+        }catch(Exception e){e.printStackTrace();}
+    }
+
+    /**
+     * Copies selected text in mainTextArea into system clipboard without removing the text from the mainTextArea component
+     */
+    public void copy(){
+        StringSelection textToCopy = new StringSelection(mainTextArea.getSelectedText());
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        clipboard.setContents(textToCopy, textToCopy);
+    }
+
+    /**
+     * Undo's most recent action
+     */
+    public void undo(){
+        //TODO: Implement this using a string stack
+
     }
 
     public static void main(String[] args){

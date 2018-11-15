@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="56e28fe7-e4ac-4f50-ac0d-417cbc74c409" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/TextEditor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/TextEditor.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -121,12 +120,12 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/TextEditor.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-7266">
-              <caret column="71" selection-start-column="71" selection-end-column="71" />
+            <state relative-caret-position="529">
+              <caret line="383" lean-forward="true" selection-start-line="383" selection-end-line="383" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#14814#14815#0" expanded="true" />
-                <element signature="e#14870#14871#0" expanded="true" />
+                <element signature="e#16560#16561#0" expanded="true" />
+                <element signature="e#16616#16617#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -161,6 +160,12 @@
       </list>
     </option>
   </component>
+  <component name="MavenProjectNavigator">
+    <treeState>
+      <expand />
+      <select />
+    </treeState>
+  </component>
   <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="-10" />
     <option name="y" value="-10" />
@@ -173,6 +178,7 @@
     </navigator>
     <panes>
       <pane id="Scope" />
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -189,12 +195,11 @@
           <select />
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1542103554774" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../Eclipse Workspace/NotesEditor" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1542250004223" />
+    <property name="last_opened_file_path" value="$USER_HOME$/Eclipse Workspace/NotesEditor" />
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.0" />
@@ -240,10 +245,10 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.16510066" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.1682641" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -252,7 +257,7 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.17221418" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.17124039" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.39956093" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -277,12 +282,12 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/src/TextEditor.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-7266">
-          <caret column="71" selection-start-column="71" selection-end-column="71" />
+        <state relative-caret-position="529">
+          <caret line="383" lean-forward="true" selection-start-line="383" selection-end-line="383" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#14814#14815#0" expanded="true" />
-            <element signature="e#14870#14871#0" expanded="true" />
+            <element signature="e#16560#16561#0" expanded="true" />
+            <element signature="e#16616#16617#0" expanded="true" />
           </folding>
         </state>
       </provider>
