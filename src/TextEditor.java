@@ -4,8 +4,7 @@ import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.io.File;
 import java.io.FileWriter;
 import java.util.*;
@@ -41,6 +40,8 @@ public class TextEditor extends JFrame implements ActionListener {
     private String openedFileName = "";
     private String openedFileNamePath = "";
     private boolean hasOpenedFile = false;
+    private static boolean changesMade = true;
+
 
     /**
      * Constructor - Initialises UI components and collections
@@ -107,6 +108,18 @@ public class TextEditor extends JFrame implements ActionListener {
             entryCheckBoxMenuItem.getValue().addActionListener(this);
         }
 
+        /*Overrides the exit operation on the frame closing button - This ensures that the user is prompted to save
+        * any changes made before exiting*/
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                super.windowClosing(e);
+                if(changesMade){
+                    saveCheck(0);
+                }
+            }
+        });
+
         /*Setting up the GUI*/
         setupGUI();
     }
@@ -120,7 +133,7 @@ public class TextEditor extends JFrame implements ActionListener {
         setLayout(new BorderLayout());
         setTitle("Text Editor");
         setSize(new Dimension(FRAME_WIDTH, FRAME_HEIGHT));
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         setResizable(false); //Disables resizability
 
         /* ---- Setting up the menus ---- */
@@ -177,16 +190,16 @@ public class TextEditor extends JFrame implements ActionListener {
         else if(action.equals("Save As..."))saveFileAs();
         else if(action.equals("Exit"))exit();
 
-            /*Edit menu actions*/
+        /*Edit menu actions*/
         else if(action.equals("Cut")) cut();
         else if(action.equals("Paste")) paste();
         else if(action.equals("Copy")) copy();
 
-            /*Format menu actions*/
+        /*Format menu actions*/
         else if(action.equals("Word Wrap")) setWordWrap();
         else if(action.equals("Dark Theme")) enableDarkTheme();
         else if(action.equals("Light Theme")) enableLightTheme();
-        //TODO: Start implementing functionality here
+        else if(action.equals("Font")) {FontWindow fontWindow = new FontWindow();}
     }
 
     public void openFile(){
@@ -218,7 +231,8 @@ public class TextEditor extends JFrame implements ActionListener {
 
     /**
      * Called when the Save menu item in the File menu. This method differs from saveFileAs method since
-     * it first checks if the user is trying to save to an existing file. If not, call the saveFileAs method*/
+     * it first checks if the user is trying to save to an existing file. If not, call the saveFileAs method
+     */
     public void saveFile(){
         try{
 
@@ -228,6 +242,7 @@ public class TextEditor extends JFrame implements ActionListener {
                 FileWriter writeToOpenedFile = new FileWriter(openedFile);
                 mainTextArea.write(writeToOpenedFile);
                 JOptionPane.showMessageDialog(null, "File Saved!");
+                changesMade = false;
                 return;
             }
 
@@ -256,29 +271,54 @@ public class TextEditor extends JFrame implements ActionListener {
                 JOptionPane.showMessageDialog(null, "File saved as: " + fileToSave.getName());
             }
             hasOpenedFile = true;
+            changesMade = false;
 
         }catch(Exception e){e.printStackTrace();}
 
     }
 
     /**
+     * Method called when the user attempts to create a new document or exit the program without saving
+     * changes made to the current document
+     *
+     * Paramter sourceID notation: 0 = User clicked on exit button on the window
+     *                             1 = User clicked on Exit JMenuItem in the File menu
+     *                             2 = User clicked on New JMenuItem in the File menu without saving current changes
+     */
+    public void saveCheck(int sourceID){
+        int optionInput = JOptionPane.showConfirmDialog(null, "Would you like to save changes made? ");
+        if(optionInput == JOptionPane.YES_OPTION) saveFile();
+        else if(optionInput == JOptionPane.CANCEL_OPTION) return;
+        else{
+            /*If the user clicks exit on the window*/
+            if(sourceID ==  0 || sourceID == 1) {
+                System.exit(0);
+            }
+        }
+    }
+
+    /**
      * Creates a new untitled document
      */
     public void newDocument(){
-        //TODO: Check if the user wants to save any changes made to current document
+
+        /*Checking if the user wants to save an unsaved changes*/
+        if(changesMade) {
+            saveCheck(2);
+        }
+
         /*Resetting some things*/
         hasOpenedFile = false;
         mainTextArea.setText("");
         openedFileNamePath = "";
         openedFileName = "";
-
     }
 
     /**
      * Forces a hard exit -Called when the Exit menu item in the File menu is clicked
      */
     public void exit(){
-        //TODO: Check if user wants to save any changes made to current document
+        saveCheck(1);
         System.exit(EXIT_ON_CLOSE);
     }
 
@@ -353,7 +393,6 @@ public class TextEditor extends JFrame implements ActionListener {
      * the mainTextArea component
      */
     public void paste() {
-        //TODO: Develop this
         try {
             String textToPaste = (String) Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor);
             mainTextArea.insert(textToPaste, mainTextArea.getCaretPosition()); //Inserts the text in the clipboard in the current position of the caret
@@ -379,5 +418,9 @@ public class TextEditor extends JFrame implements ActionListener {
 
     public static void main(String[] args){
         TextEditor textEditor = new TextEditor();
+        while(true){
+            //TODO: Implement some sort of check here that determines whether or not a change was made to the current doc
+
+        }
     }
 }
