@@ -102,12 +102,13 @@ public class FontWindow extends JFrame implements ActionListener {
 
         /*Custom cell renderer for fontFamilyList JList object - makes it so that every individual cell that
         * represents a font is written in the font that it represents*/
-        //TODO: Fix the selection highlighting
+        //TODO: Put this into its own class so that the fontStyleList can also take advantage of this (parameterize)
         ListCellRenderer listCellRenderer = new ListCellRenderer() {
             @Override
             public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
 
                 JLabel label = new JLabel(); //The selected element is a JLabel object
+                label.setOpaque(true); //Allows the selection indication to function
                 label.setText(value.toString());
                 label.setFont(new Font(value.toString(), Font.PLAIN, 12));
 
