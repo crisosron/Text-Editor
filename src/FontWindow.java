@@ -8,13 +8,14 @@ import java.util.*;
 import java.util.List;
 
 public class FontWindow extends JFrame implements ActionListener, ListSelectionListener {
-    //private String[] availableFontFamilyNamesArray;
     private List<String> availableFontFamilyNames;
     private Font[] allAvailableFonts;
     private static final int FONT_WINDOW_WIDTH = 700;
     private static final int FONT_WINDOW_HEIGHT = 600;
     private static final int PANEL_WIDTH = 200;
     private static final int PANEL_HEIGHT = 200;
+    private static final int BUTTON_WIDTH = 100;
+    private static final int BUTTON_HEIGHT = 40;
     private JPanel fontFamilyPanel, fontStylePanel, fontSizePanel, samplePanel;
     public static Set<String> availableFontStylesForSelectedFont = new HashSet<>();
     private JList fontFamilyList, fontStyleList;
@@ -96,10 +97,28 @@ public class FontWindow extends JFrame implements ActionListener, ListSelectionL
     }
 
     public void setupButtons(){
+
+        /*Creating JButton objects*/
         JButton confirmButton = new JButton("Confirm");
         JButton cancelButton = new JButton("Cancel");
+
+        /*x and y coordinates of the top left of the bounding rectangle for the buttons*/
+        int x = 430;
+        int y = 480;
+
+        /*Absolutely positioning the buttons*/
+        confirmButton.setBounds(x, y, BUTTON_WIDTH, BUTTON_HEIGHT);
+        cancelButton.setBounds(x + BUTTON_WIDTH+15, y, BUTTON_WIDTH, BUTTON_HEIGHT);
+
+        /*Adding the buttons to the this frame*/
+        add(confirmButton);
+        add(cancelButton);
+
+        /*Adding action listener and setting action commands for each button*/
         confirmButton.setActionCommand("Confirm");
         cancelButton.setActionCommand("Cancel");
+        confirmButton.addActionListener(this);
+        cancelButton.addActionListener(this);
     }
 
     /**
