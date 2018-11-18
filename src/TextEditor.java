@@ -35,6 +35,9 @@ public class TextEditor extends JFrame implements ActionListener {
     private boolean lightThemeActive = true; //Light theme on by default
     private boolean darkThemeActive = false;
     private boolean fileExists = false; //Used for saving
+    public static final Font DEFAULT_FONT = new Font("Sans-Serif", Font.PLAIN, 20);
+    public static FontWindow fontWindow;
+    public static TextEditor textEditor;
 
     /*For file management*/
     private String openedFileName = "";
@@ -60,7 +63,7 @@ public class TextEditor extends JFrame implements ActionListener {
         menuItemNames = new HashSet<>();
         menuMap = new HashMap<>();
         menuItemsMap = new HashMap<>();
-        mainTextAreaFont = new Font("Sans-Serif", Font.PLAIN, 20);
+        mainTextAreaFont = DEFAULT_FONT;
 
         /* ---- Setting up the collections ---- */
         /*Set that stores the names of all the menus in the editor*/
@@ -199,7 +202,7 @@ public class TextEditor extends JFrame implements ActionListener {
         else if(action.equals("Word Wrap")) setWordWrap();
         else if(action.equals("Dark Theme")) enableDarkTheme();
         else if(action.equals("Light Theme")) enableLightTheme();
-        else if(action.equals("Font")) {FontWindow fontWindow = new FontWindow();}
+        else if(action.equals("Font")) {fontWindow = new FontWindow();}
     }
 
     public void openFile(){
@@ -281,9 +284,9 @@ public class TextEditor extends JFrame implements ActionListener {
      * Method called when the user attempts to create a new document or exit the program without saving
      * changes made to the current document
      *
-     * Paramter sourceID notation: 0 = User clicked on exit button on the window
-     *                             1 = User clicked on Exit JMenuItem in the File menu
-     *                             2 = User clicked on New JMenuItem in the File menu without saving current changes
+     * Parameter sourceID notation: 0 = User clicked on exit button on the window
+     *                              1 = User clicked on Exit JMenuItem in the File menu
+     *                              2 = User clicked on New JMenuItem in the File menu without saving current changes
      */
     public void saveCheck(int sourceID){
         int optionInput = JOptionPane.showConfirmDialog(null, "Would you like to save changes made? ");
@@ -416,8 +419,29 @@ public class TextEditor extends JFrame implements ActionListener {
 
     }
 
+    /**
+     * Sets the font based on what font the user selects
+     */
+    public void setNewFont(String fontFamily, String fontStyle, int fontSize){
+
+        boolean isBold = false;
+        boolean isItalic = false;
+        boolean isBoldAndItalic = false;
+
+        /*Setting the font style boolean variables*/
+        if(fontStyle.contains("Bold") && fontStyle.contains("Italic")) isBoldAndItalic = true;
+        else if(fontStyle.contains("Italic")) isItalic = true;
+        else if(fontStyle.contains("Bold")) isBold = true;
+
+        /*Setting the font*/
+        if(isBoldAndItalic) setFont(new Font(fontFamily, Font.BOLD|Font.ITALIC, fontSize));
+        else if(isItalic) setFont(new Font(fontFamily, Font.ITALIC, fontSize));
+        else if (isBold) setFont(new Font(fontFamily, Font.BOLD, fontSize));
+        else{setFont(new Font(fontFamily, Font.PLAIN, fontSize));}
+    }
+
     public static void main(String[] args){
-        TextEditor textEditor = new TextEditor();
+        textEditor = new TextEditor();
         while(true){
             //TODO: Implement some sort of check here that determines whether or not a change was made to the current doc
 
