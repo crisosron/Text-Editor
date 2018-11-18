@@ -251,6 +251,17 @@ public class FontWindow extends JFrame implements ActionListener, ListSelectionL
         fontStyleList.setModel(listModelFontStyle);
     }
 
+    /**
+     * Method that returns the type of font style in string form
+     * //TODO: Instead of checking make this actully set the font? Need to have JTextArea as a parameter to do this or object parameter
+     */
+    public String fontStyleType(String fontStyle){
+        if(fontStyle.contains("Bold") && fontStyle.contains("Italic")) return "Bold & Italic";
+        else if(fontStyle.contains("Italic")) return "Italic";
+        else if(fontStyle.contains("Bold")) return "Bold";
+        return "Regular";
+    }
+
     public void updateSample(){
         //TODO: Develop this
     }
