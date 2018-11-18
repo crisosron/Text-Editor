@@ -1,3 +1,5 @@
+import org.w3c.dom.Text;
+
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -16,6 +18,8 @@ public class FontWindow extends JFrame implements ActionListener, ListSelectionL
     private static final int PANEL_HEIGHT = 200;
     private static final int BUTTON_WIDTH = 100;
     private static final int BUTTON_HEIGHT = 40;
+    private JTextArea sampleTextArea;
+    private JScrollPane sampleTextAreaScroll;
     private JPanel fontFamilyPanel, fontStylePanel, fontSizePanel, samplePanel;
     public static Set<String> availableFontStylesForSelectedFont = new HashSet<>();
     private JList fontFamilyList, fontStyleList;
@@ -53,6 +57,9 @@ public class FontWindow extends JFrame implements ActionListener, ListSelectionL
         /*Setting up the buttons*/
         setupButtons();
 
+        /*Setting up the sample text area*/
+        setupSampleTextArea();
+
     }
 
     /**
@@ -69,10 +76,6 @@ public class FontWindow extends JFrame implements ActionListener, ListSelectionL
         for(int i = 0; i < tempAvailableFontFamilyNamesArray.length; i++){
             availableFontFamilyNames.add(tempAvailableFontFamilyNamesArray[i]);
         }
-
-        /*Creating titled border for the sample panel (other titled borders are set within JScrollPane objects
-        that accompanies the JList objects)*/
-        samplePanel.setBorder(BorderFactory.createTitledBorder("Sample"));
 
         /*x and y coordinates of the top left of corner of the bounding rectangle for the panels*/
         int x = 20;
@@ -96,6 +99,9 @@ public class FontWindow extends JFrame implements ActionListener, ListSelectionL
 
     }
 
+    /**
+     * Setting up the buttons for this frame
+     */
     public void setupButtons(){
 
         /*Creating JButton objects*/
@@ -137,8 +143,7 @@ public class FontWindow extends JFrame implements ActionListener, ListSelectionL
         JScrollPane fontFamilyListScroll = new JScrollPane(fontFamilyList);
         fontFamilyListScroll.setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
         fontFamilyListScroll.setBorder(BorderFactory.createTitledBorder("Font Family"));
-        fontFamilyList.setSelectedIndex(0); //Selects the first item in the list
-        String selectedFontFamily = fontFamilyList.getModel().getElementAt(fontFamilyList.getSelectedIndex()).toString(); //Gets the selected font family
+        String selectedFontFamily = fontFamilyList.getModel().getElementAt(0).toString(); //Gets the first font family in the list
         setAvailableFontStylesForSelectedFont(selectedFontFamily);
 
         /*Setting up the font style list*/
@@ -152,7 +157,6 @@ public class FontWindow extends JFrame implements ActionListener, ListSelectionL
         fontStyleListScroll.setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
         fontStyleListScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         fontStyleListScroll.setBorder(BorderFactory.createTitledBorder("Font Style"));
-        fontStyleList.setSelectedIndex(0);
 
         /*Setting up the font size list*/
         listModelFontSize = new DefaultListModel<>(); //Used in conjunction with JList since JList class does not have a class that can take integer arrays
@@ -165,7 +169,6 @@ public class FontWindow extends JFrame implements ActionListener, ListSelectionL
         JScrollPane fontSizeListScroll = new JScrollPane(fontSizeList);
         fontSizeListScroll.setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
         fontSizeListScroll.setBorder(BorderFactory.createTitledBorder("Font Size"));
-        fontSizeList.setSelectedIndex(0);
 
         fontFamilyList.addListSelectionListener(this);
         fontStyleList.addListSelectionListener(this);
@@ -174,6 +177,21 @@ public class FontWindow extends JFrame implements ActionListener, ListSelectionL
         fontFamilyPanel.add(fontFamilyListScroll);
         fontStylePanel.add(fontStyleListScroll);
         fontSizePanel.add(fontSizeListScroll);
+    }
+
+    public void setupSampleTextArea(){
+
+        /*Setting initial font that the sample should be displayed in*/
+        sampleTextArea = new JTextArea();
+        sampleTextArea.setFont(TextEditor.DEFAULT_FONT);
+        sampleTextArea.setBorder(BorderFactory.createTitledBorder("Sample"));
+        sampleTextArea.setText("AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz");
+        sampleTextArea.setLineWrap(true);
+        sampleTextAreaScroll = new JScrollPane(sampleTextArea);
+        sampleTextAreaScroll.setPreferredSize(new Dimension(PANEL_WIDTH * 3 + (20*2), PANEL_HEIGHT));
+        sampleTextAreaScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        samplePanel.add(sampleTextAreaScroll);
+
     }
 
     /**
