@@ -10,7 +10,7 @@ import java.io.FileWriter;
 import java.util.*;
 import java.util.List;
 
-public class TextEditor extends JFrame implements ActionListener {
+public class TextEditor extends JFrame implements ActionListener, KeyListener {
 
     /*UI Fields*/
     private JTextArea mainTextArea;
@@ -25,7 +25,7 @@ public class TextEditor extends JFrame implements ActionListener {
     public static final int MAIN_TEXT_AREA_HEIGHT = FRAME_HEIGHT;
 
     /*Collections for UI*/
-    private Set<String> menuNames, menuItemNames, checkBoxMenuItemNames, fileMenuItemNames, editMenuItemNames, formatMenuItemNames, graphicsMenuItemNames;
+    private Set<String> menuNames, menuItemNames, checkBoxMenuItemNames, menuItemsWithKeyShortcuts, fileMenuItemNames, editMenuItemNames, formatMenuItemNames, graphicsMenuItemNames;
     private Map<String, JMenu> menuMap; //Use this map to gain access to menus
     private Map<String, JMenuItem> menuItemsMap; //Use this map to gain access to menu items
     private Map<String, JCheckBoxMenuItem> checkBoxMenuItemsMap = new HashMap<>(); //Use this map to gain access to check box menu items
@@ -43,7 +43,7 @@ public class TextEditor extends JFrame implements ActionListener {
     private String openedFileName = "";
     private String openedFileNamePath = "";
     private boolean hasOpenedFile = false;
-    private static boolean changesMade = true;
+    private static boolean changesMade = false;
 
     /**
      * Constructor - Initialises UI components and collections
@@ -73,6 +73,7 @@ public class TextEditor extends JFrame implements ActionListener {
         editMenuItemNames = new HashSet<>(Arrays.asList("Undo", "Cut", "Copy", "Paste"));
         formatMenuItemNames = new HashSet<>(Arrays.asList("Font", "Word Wrap", "Light Theme", "Dark Theme"));
         graphicsMenuItemNames = new HashSet<>(Arrays.asList("New Graphics Window", "Open Graphics In Current Window"));
+        menuItemsWithKeyShortcuts = new HashSet<>(Arrays.asList("New", "Open", "Save", "Save As...", "Exit", "Undo", "Cut", "Copy", "Paste", "Font"));
 
         /*Seperate set for JCheckBoxMenuItem objects*/
         checkBoxMenuItemNames = new HashSet<>(Arrays.asList("Word Wrap", "Light Theme", "Dark Theme"));
@@ -118,6 +119,8 @@ public class TextEditor extends JFrame implements ActionListener {
                 super.windowClosing(e);
                 if(changesMade){
                     saveCheck(0);
+                }else{
+                    System.exit(0);
                 }
             }
         });
@@ -165,18 +168,31 @@ public class TextEditor extends JFrame implements ActionListener {
         /*Setting this checkbox menu item to true since the light theme is on by default*/
         checkBoxMenuItemsMap.get("Light Theme").setSelected(true);
 
-        /* ---- Setting up the main text area scroll panel (and in turn the main text area itself) ---- */
+        /* ---- Setting up the main text area scroll pane (and in turn the main text area itself) ---- */
+        mainTextArea.setFocusable(true); //For key events
+        mainTextArea.addKeyListener(this); //For key events
         mainTextArea.setFont(mainTextAreaFont);
         mainTextArea.setMargin(new Insets(5, 5, 5, 5));
         mainTextAreaScroll.setBackground(Color.white);
         mainTextAreaScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
         mainTextAreaScroll.setPreferredSize(new Dimension(MAIN_TEXT_AREA_WIDTH, MAIN_TEXT_AREA_HEIGHT));
 
+        setupHotKeys();
+
         /*Adding components to the frame*/
         add(menuBar, BorderLayout.NORTH);
         add(mainTextAreaScroll);
 
         setVisible(true);
+    }
+
+    /**
+     * Handles all the keyboard shortcuts
+     */
+    public void setupHotKeys(){
+        //TODO: Set this up using the menuItemsWithKeyShortcuts set
+        menuItemsMap.get("Open").setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, Event.CTRL_MASK));
+        menuItemsMap.get("Save").setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, Event.CTRL_MASK));
     }
 
     /**
@@ -289,7 +305,7 @@ public class TextEditor extends JFrame implements ActionListener {
      */
     public void saveCheck(int sourceID){
         int optionInput = JOptionPane.showConfirmDialog(null, "Would you like to save changes made? ");
-        if(optionInput == JOptionPane.YES_OPTION) saveFile();
+        if(optionInput == JOptionPane.YES_OPTION) saveFile(); //TODO: Need to do System.exit(0) if source id is 0 or 1 in here
         else if(optionInput == JOptionPane.CANCEL_OPTION) return;
         else{
             /*If the user clicks exit on the window*/
@@ -314,6 +330,7 @@ public class TextEditor extends JFrame implements ActionListener {
         mainTextArea.setText("");
         openedFileNamePath = "";
         openedFileName = "";
+        changesMade = false;
     }
 
     /**
@@ -435,12 +452,19 @@ public class TextEditor extends JFrame implements ActionListener {
         return Font.PLAIN;
     }
 
+    /**
+     * For KeyListener - Sets changesMade to true
+     */
+    public void keyPressed(KeyEvent ke){
+
+        /*Checks if the key pressed is alphabetic*/
+        if(Character.isAlphabetic(ke.getKeyChar()))changesMade = true;
+
+    }
+    public void keyReleased(KeyEvent ke){ }
+    public void keyTyped(KeyEvent ke){ }
 
     public static void main(String[] args){
         textEditor = new TextEditor();
-        while(true){
-            //TODO: Implement some sort of check here that determines whether or not a change was made to the current doc
-
-        }
     }
 }
