@@ -45,7 +45,6 @@ public class TextEditor extends JFrame implements ActionListener {
     private boolean hasOpenedFile = false;
     private static boolean changesMade = true;
 
-
     /**
      * Constructor - Initialises UI components and collections
      */
@@ -423,22 +422,19 @@ public class TextEditor extends JFrame implements ActionListener {
      * Sets the font based on what font the user selects
      */
     public void setNewFont(String fontFamily, String fontStyle, int fontSize){
-
-        boolean isBold = false;
-        boolean isItalic = false;
-        boolean isBoldAndItalic = false;
-
-        /*Setting the font style boolean variables*/
-        if(fontStyle.contains("Bold") && fontStyle.contains("Italic")) isBoldAndItalic = true;
-        else if(fontStyle.contains("Italic")) isItalic = true;
-        else if(fontStyle.contains("Bold")) isBold = true;
-
-        /*Setting the font*/
-        if(isBoldAndItalic) setFont(new Font(fontFamily, Font.BOLD|Font.ITALIC, fontSize));
-        else if(isItalic) setFont(new Font(fontFamily, Font.ITALIC, fontSize));
-        else if (isBold) setFont(new Font(fontFamily, Font.BOLD, fontSize));
-        else{setFont(new Font(fontFamily, Font.PLAIN, fontSize));}
+        mainTextArea.setFont(new Font(fontFamily, fontStyleType(fontStyle), fontSize));
     }
+
+    /**
+     * Method that returns the type of font style in string form
+     */
+    public int fontStyleType(String fontStyle){
+        if(fontStyle.contains("Bold") && fontStyle.contains("Italic")) return Font.BOLD|Font.ITALIC;
+        else if(fontStyle.contains("Italic")) return Font.ITALIC;
+        else if(fontStyle.contains("Bold")) return Font.BOLD;
+        return Font.PLAIN;
+    }
+
 
     public static void main(String[] args){
         textEditor = new TextEditor();

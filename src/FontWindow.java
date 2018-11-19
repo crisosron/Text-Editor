@@ -1,5 +1,3 @@
-import org.w3c.dom.Text;
-
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -143,8 +141,9 @@ public class FontWindow extends JFrame implements ActionListener, ListSelectionL
         JScrollPane fontFamilyListScroll = new JScrollPane(fontFamilyList);
         fontFamilyListScroll.setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
         fontFamilyListScroll.setBorder(BorderFactory.createTitledBorder("Font Family"));
-        String selectedFontFamily = fontFamilyList.getModel().getElementAt(0).toString(); //Gets the first font family in the list
-        setAvailableFontStylesForSelectedFont(selectedFontFamily);
+        String firstFontFamily = fontFamilyList.getModel().getElementAt(0).toString(); //Gets the first font family in the list
+        setAvailableFontStylesForSelectedFont(firstFontFamily);
+        fontFamilyList.setSelectedIndex(0);
 
         /*Setting up the font style list*/
         listModelFontStyle = new DefaultListModel<>();
@@ -157,6 +156,7 @@ public class FontWindow extends JFrame implements ActionListener, ListSelectionL
         fontStyleListScroll.setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
         fontStyleListScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         fontStyleListScroll.setBorder(BorderFactory.createTitledBorder("Font Style"));
+        fontStyleList.setSelectedIndex(0);
 
         /*Setting up the font size list*/
         listModelFontSize = new DefaultListModel<>(); //Used in conjunction with JList since JList class does not have a class that can take integer arrays
@@ -169,21 +169,38 @@ public class FontWindow extends JFrame implements ActionListener, ListSelectionL
         JScrollPane fontSizeListScroll = new JScrollPane(fontSizeList);
         fontSizeListScroll.setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
         fontSizeListScroll.setBorder(BorderFactory.createTitledBorder("Font Size"));
+        fontSizeList.setSelectedIndex(5);
 
+        /*Setting the initial selected font combination*/
+        selectedFontFamily = fontFamilyList.getSelectedValue().toString();
+        selectedFontStyle = fontStyleList.getSelectedValue().toString();
+        selectedFontSize = fontSizeList.getSelectedValue();
+
+        /*Adding list selection listeners to the lists*/
         fontFamilyList.addListSelectionListener(this);
         fontStyleList.addListSelectionListener(this);
         fontSizeList.addListSelectionListener(this);
 
+        /*adding the scroll panes of each list to the corresponding panel*/
         fontFamilyPanel.add(fontFamilyListScroll);
         fontStylePanel.add(fontStyleListScroll);
         fontSizePanel.add(fontSizeListScroll);
     }
 
+    /**
+     * Method that sets up the sample text area - This includes the first font,
+     * absolute positioning and the sample text contained within the text area
+     */
     public void setupSampleTextArea(){
+
+        String initFontFamily = fontFamilyList.getSelectedValue().toString();
+        String initFontStyle = fontStyleList.getSelectedValue().toString();
+        int initFontSize = fontSizeList.getSelectedValue();
+        System.out.println(initFontFamily + " " + initFontStyle + " " + initFontSize);
 
         /*Setting initial font that the sample should be displayed in*/
         sampleTextArea = new JTextArea();
-        sampleTextArea.setFont(TextEditor.DEFAULT_FONT);
+        sampleTextArea.setFont(new Font(initFontFamily, fontStyleType(initFontStyle), 12));
         sampleTextArea.setBorder(BorderFactory.createTitledBorder("Sample"));
         sampleTextArea.setText("AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz");
         sampleTextArea.setLineWrap(true);
@@ -207,6 +224,9 @@ public class FontWindow extends JFrame implements ActionListener, ListSelectionL
         }
     }
 
+    /**
+     * Handles button clicking events
+     */
     public void actionPerformed(ActionEvent e){
         String action = e.getActionCommand();
         if(action.equals("Confirm")) confirm();
@@ -219,22 +239,31 @@ public class FontWindow extends JFrame implements ActionListener, ListSelectionL
     public void valueChanged(ListSelectionEvent e){
         if(!e.getValueIsAdjusting()){
             JList list = (JList)e.getSource();
+
+            //TODO: Clean this up by using list models in the conditions instead of the other collections
+            /*If change was within the fontFamilyList JList object - other conditions are needed to handle any special circumstances to prevent errors*/
             if((availableFontFamilyNames.contains(list.getSelectedValue()) && availableFontStylesForSelectedFont.contains(list.getSelectedValue()) && availableFontStylesForSelectedFont.size() == 1)
             || availableFontFamilyNames.contains(list.getSelectedValue()) && availableFontStylesForSelectedFont.contains(list.getSelectedValue())){
                 selectedFontFamily = list.getSelectedValue().toString();
                 selectedFontStyle = list.getSelectedValue().toString();
+                updateSample();
 
-            }else if(availableFontFamilyNames.contains(list.getSelectedValue())){ //TODO: Need to handle when both the font family and the font style are the same
+            /*If change was within the fontFamilyList JList object*/
+            }else if(availableFontFamilyNames.contains(list.getSelectedValue())){
                 selectedFontFamily = list.getSelectedValue().toString();
                 setAvailableFontStylesForSelectedFont(selectedFontFamily);
                 updateFontStylesList();
+                updateSample();
 
+            /*If the change was within the fontStyleList JList object*/
             }else if(availableFontStylesForSelectedFont.contains(list.getSelectedValue())){
                 selectedFontStyle = list.getSelectedValue().toString();
+                updateSample();
 
+            /*If the change was within the fontSizeList JList object*/
             }else if(listModelFontSize.contains(list.getSelectedValue())){
                 selectedFontSize = (int)list.getSelectedValue();
-                System.out.println(selectedFontSize);
+                updateSample();
             }
         }
     }
@@ -248,26 +277,36 @@ public class FontWindow extends JFrame implements ActionListener, ListSelectionL
         for(String fontStyle : availableFontStylesForSelectedFont){
             listModelFontStyle.addElement(fontStyle);
         }
-        fontStyleList.setModel(listModelFontStyle);
+        fontStyleList.setModel(listModelFontStyle); //Updates fontStyleList with new model
+        fontStyleList.setSelectedIndex(0);
+    }
+
+    /**
+     * Updates the sample text area font
+     */
+    public void updateSample(){
+        String fontFamily = fontFamilyList.getSelectedValue().toString();
+        String fontStyle = fontStyleList.getSelectedValue().toString();
+        int fontSize = fontSizeList.getSelectedValue();
+        sampleTextArea.setFont(new Font(fontFamily, fontStyleType(fontStyle), fontSize));
     }
 
     /**
      * Method that returns the type of font style in string form
-     * //TODO: Instead of checking make this actully set the font? Need to have JTextArea as a parameter to do this or object parameter
      */
-    public String fontStyleType(String fontStyle){
-        if(fontStyle.contains("Bold") && fontStyle.contains("Italic")) return "Bold & Italic";
-        else if(fontStyle.contains("Italic")) return "Italic";
-        else if(fontStyle.contains("Bold")) return "Bold";
-        return "Regular";
+    public int fontStyleType(String fontStyle){
+        if(fontStyle.contains("Bold") && fontStyle.contains("Italic")) return Font.BOLD|Font.ITALIC;
+        else if(fontStyle.contains("Italic")) return Font.ITALIC;
+        else if(fontStyle.contains("Bold")) return Font.BOLD;
+        else {return Font.PLAIN;}
     }
 
-    public void updateSample(){
-        //TODO: Develop this
-    }
-
+    /**
+     * Sends the selected combination through and sets the new font
+     */
     public void confirm(){
-        //TODO: Add functionality here
         TextEditor.textEditor.setNewFont(selectedFontFamily, selectedFontStyle, selectedFontSize);
+        dispose(); //Closes the font window
+        JOptionPane.showMessageDialog(null, "Updated Font!");
     }
 }
