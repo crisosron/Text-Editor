@@ -25,10 +25,13 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener {
     public static final int MAIN_TEXT_AREA_HEIGHT = FRAME_HEIGHT;
 
     /*Collections for UI*/
-    private Set<String> menuNames, menuItemNames, checkBoxMenuItemNames, menuItemsWithKeyShortcuts, fileMenuItemNames, editMenuItemNames, formatMenuItemNames, graphicsMenuItemNames;
+    private Set<String> menuNames, menuItemNames, checkBoxMenuItemNames, fileMenuItemNames, editMenuItemNames, formatMenuItemNames, graphicsMenuItemNames;
     private Map<String, JMenu> menuMap; //Use this map to gain access to menus
     private Map<String, JMenuItem> menuItemsMap; //Use this map to gain access to menu items
     private Map<String, JCheckBoxMenuItem> checkBoxMenuItemsMap = new HashMap<>(); //Use this map to gain access to check box menu items
+
+    /*Sets that are used for keyboard shortcuts*/
+    private Set<String> menuItemsWithBasicShortcuts, menuItemsWithStandardShortcuts, allMenuItemsWithShortcuts, menuItemsWithShiftShortCuts;
 
     /*Other fields*/
     private boolean isWrapping = false; //Wrapping of text area is set to false by default
@@ -73,10 +76,24 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener {
         editMenuItemNames = new HashSet<>(Arrays.asList("Undo", "Cut", "Copy", "Paste"));
         formatMenuItemNames = new HashSet<>(Arrays.asList("Font", "Word Wrap", "Light Theme", "Dark Theme"));
         graphicsMenuItemNames = new HashSet<>(Arrays.asList("New Graphics Window", "Open Graphics In Current Window"));
-        menuItemsWithKeyShortcuts = new HashSet<>(Arrays.asList("New", "Open", "Save", "Save As...", "Exit", "Undo", "Cut", "Copy", "Paste", "Font"));
 
         /*Seperate set for JCheckBoxMenuItem objects*/
         checkBoxMenuItemNames = new HashSet<>(Arrays.asList("Word Wrap", "Light Theme", "Dark Theme"));
+
+        /*Explanation of the 3 Collections:
+        *   menuItemsWithBasic is a collection of menu items whose shortcut is CTRL + [first character of the menu item name]
+        *   menuItemsWithStandardShortcuts is a collection of menu items whose shortcut adheres to the standard eg paste is CTRL+V etc
+        *   menuItemsWithShiftShortcuts is a collection of menu items whose shortcut is CTRL + SHIFT + [first character of the menu item name]
+        */
+        menuItemsWithBasicShortcuts = new HashSet<>(Arrays.asList("New", "Open", "Save", "Copy", "Font"));
+        menuItemsWithStandardShortcuts = new HashSet<>(Arrays.asList("Undo", "Cut", "Paste"));
+        menuItemsWithShiftShortCuts = new HashSet<>(Arrays.asList("Save As...", "Exit"));
+
+        /*Adding all the menu items with a keyboard shortcut to a single set*/
+        allMenuItemsWithShortcuts = new HashSet<>();
+        allMenuItemsWithShortcuts.addAll(menuItemsWithBasicShortcuts);
+        allMenuItemsWithShortcuts.addAll(menuItemsWithShiftShortCuts);
+        allMenuItemsWithShortcuts.addAll(menuItemsWithStandardShortcuts);
 
         /*Adding all menu item names into one set*/
         menuItemNames.addAll(fileMenuItemNames);
@@ -190,9 +207,25 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener {
      * Handles all the keyboard shortcuts
      */
     public void setupHotKeys(){
-        //TODO: Set this up using the menuItemsWithKeyShortcuts set
-        menuItemsMap.get("Open").setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, Event.CTRL_MASK));
-        menuItemsMap.get("Save").setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, Event.CTRL_MASK));
+
+        /*Looping through all the menu items with key shortcuts and setting the shortcuts*/
+        for(String menuItemWithKeyShortCut : allMenuItemsWithShortcuts){
+            JMenuItem menuItem = menuItemsMap.get(menuItemWithKeyShortCut);
+            char firstChar = menuItemWithKeyShortCut.charAt(0);
+
+            /*'CTRL + [First character of menu item name]'*/
+            if(menuItemsWithBasicShortcuts.contains(menuItemWithKeyShortCut)) menuItem.setAccelerator(KeyStroke.getKeyStroke(getKeyEventForChar(firstChar), ActionEvent.CTRL_MASK));
+
+            /*'CTRL + SHIFT + [First character of menu item name]'*/
+            else if(menuItemsWithShiftShortCuts.contains(menuItemWithKeyShortCut)) menuItem.setAccelerator(KeyStroke.getKeyStroke(getKeyEventForChar(firstChar), ActionEvent.CTRL_MASK|ActionEvent.SHIFT_MASK));
+
+            /*Menu items that have short cuts that adhere to the established standard (instead of using the first character of the menu item name)*/
+            else if (menuItemsWithStandardShortcuts.contains(menuItemWithKeyShortCut)){
+                if(menuItemWithKeyShortCut.equals("Undo")) menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, ActionEvent.CTRL_MASK));
+                else if(menuItemWithKeyShortCut.equals("Cut")) menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, ActionEvent.CTRL_MASK));
+                else if(menuItemWithKeyShortCut.equals("Paste")) menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, ActionEvent.CTRL_MASK));
+            }
+        }
     }
 
     /**
@@ -464,6 +497,42 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener {
     public void keyReleased(KeyEvent ke){ }
     public void keyTyped(KeyEvent ke){ }
 
+    /**
+     * Returns the KeyEvent constant that corresponds to the character passed
+     * into the method
+     * */
+    public int getKeyEventForChar(char character){
+        switch(character){
+            case 'A': return KeyEvent.VK_A;
+            case 'B': return KeyEvent.VK_B;
+            case 'C': return KeyEvent.VK_C;
+            case 'D': return KeyEvent.VK_D;
+            case 'E': return KeyEvent.VK_E;
+            case 'F': return KeyEvent.VK_F;
+            case 'G': return KeyEvent.VK_G;
+            case 'H': return KeyEvent.VK_H;
+            case 'I': return KeyEvent.VK_I;
+            case 'J': return KeyEvent.VK_J;
+            case 'K': return KeyEvent.VK_K;
+            case 'L': return KeyEvent.VK_L;
+            case 'M': return KeyEvent.VK_M;
+            case 'N': return KeyEvent.VK_N;
+            case 'O': return KeyEvent.VK_O;
+            case 'P': return KeyEvent.VK_P;
+            case 'Q': return KeyEvent.VK_Q;
+            case 'R': return KeyEvent.VK_R;
+            case 'S': return KeyEvent.VK_S;
+            case 'T': return KeyEvent.VK_T;
+            case 'U': return KeyEvent.VK_U;
+            case 'V': return KeyEvent.VK_V;
+            case 'W': return KeyEvent.VK_W;
+            case 'X': return KeyEvent.VK_X;
+            case 'Y': return KeyEvent.VK_Y;
+            case 'Z': return KeyEvent.VK_Z;
+        }
+
+        return 0;
+    }
     public static void main(String[] args){
         textEditor = new TextEditor();
     }

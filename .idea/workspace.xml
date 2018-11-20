@@ -3,9 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="56e28fe7-e4ac-4f50-ac0d-417cbc74c409" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/TextEditor/FontWindow.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/TextEditor/FontWindow.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/TextEditor/TextEditor.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/TextEditor/TextEditor.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/FontJListCellRenderer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/FontJListCellRenderer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/TextEditor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/TextEditor.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -49,22 +46,23 @@
     <session id="-843688431">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="5" />
+          <entry key="project.closed" value="6" />
           <entry key="project.open.time.3" value="1" />
           <entry key="project.open.time.6" value="4" />
+          <entry key="project.open.time.7" value="1" />
           <entry key="project.open.time.8" value="2" />
-          <entry key="project.opened" value="7" />
+          <entry key="project.opened" value="8" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="dummy" value="30" />
-          <entry key="java" value="35334" />
+          <entry key="java" value="40118" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JAVA" value="35334" />
+          <entry key="JAVA" value="40118" />
           <entry key="PLAIN_TEXT" value="30" />
         </counts>
       </usages-collector>
@@ -135,15 +133,15 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/TextEditor.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="4258">
-              <caret line="435" column="5" selection-start-line="432" selection-start-column="22" selection-end-line="435" selection-end-column="5" />
+            <state relative-caret-position="508">
+              <caret line="222" column="145" selection-start-line="222" selection-start-column="145" selection-end-line="222" selection-end-column="145" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#20072#20073#0" expanded="true" />
-                <element signature="e#20117#20118#0" expanded="true" />
+                <element signature="e#23488#23489#0" expanded="true" />
+                <element signature="e#23533#23534#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -152,16 +150,16 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/FontWindow.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="361">
-              <caret line="308" column="43" lean-forward="true" selection-start-line="308" selection-start-column="43" selection-end-line="308" selection-end-column="43" />
+            <state relative-caret-position="7224">
+              <caret line="308" column="43" selection-start-line="308" selection-start-column="43" selection-end-line="308" selection-end-column="43" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/FontJListCellRenderer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="624">
+            <state relative-caret-position="864">
               <caret line="37" selection-start-line="37" selection-end-line="37" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -190,10 +188,11 @@
       <find>exit</find>
       <find>mainTextAreaFont</find>
       <find>availableFontFa</find>
-      <find>selectedFontFamily</find>
       <find>setFont</find>
       <find>JTextArea</find>
       <find>JMenuItem</find>
+      <find>selectedFontFamily</find>
+      <find>menuItemsWithAltShortcuts</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -205,8 +204,8 @@
         <option value="$PROJECT_DIR$/src/JListElementRenderer.java" />
         <option value="$PROJECT_DIR$/src/CustomJListCellRenderer.java" />
         <option value="$PROJECT_DIR$/src/FontWindow.java" />
-        <option value="$PROJECT_DIR$/src/TextEditor.java" />
         <option value="$PROJECT_DIR$/src/FontJListCellRenderer.java" />
+        <option value="$PROJECT_DIR$/src/TextEditor.java" />
       </list>
     </option>
   </component>
@@ -243,12 +242,12 @@
           <select />
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
       <pane id="Scope" />
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1542604862026" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1542604939207" />
     <property name="last_opened_file_path" value="$USER_HOME$/Eclipse Workspace/NotesEditor" />
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.15" />
@@ -298,7 +297,7 @@
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.13525027" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.13631523" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -307,12 +306,12 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.2360044" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.2360044" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.1470911" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Terminal" order="7" weight="0.11745335" />
+      <window_info anchor="bottom" id="Terminal" order="7" weight="0.0" />
       <window_info anchor="bottom" id="Event Log" order="8" side_tool="true" />
       <window_info anchor="bottom" id="Version Control" order="9" show_stripe_button="false" />
       <window_info anchor="bottom" id="Messages" order="10" weight="0.32930845" />
@@ -342,28 +341,28 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/FontWindow.java">
+    <entry file="file://$PROJECT_DIR$/src/TextEditor.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="361">
-          <caret line="308" column="43" lean-forward="true" selection-start-line="308" selection-start-column="43" selection-end-line="308" selection-end-column="43" />
+        <state relative-caret-position="508">
+          <caret line="222" column="145" selection-start-line="222" selection-start-column="145" selection-end-line="222" selection-end-column="145" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#23488#23489#0" expanded="true" />
+            <element signature="e#23533#23534#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/TextEditor.java">
+    <entry file="file://$PROJECT_DIR$/src/FontWindow.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4258">
-          <caret line="435" column="5" selection-start-line="432" selection-start-column="22" selection-end-line="435" selection-end-column="5" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#20072#20073#0" expanded="true" />
-            <element signature="e#20117#20118#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="7224">
+          <caret line="308" column="43" selection-start-line="308" selection-start-column="43" selection-end-line="308" selection-end-column="43" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/FontJListCellRenderer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="624">
+        <state relative-caret-position="864">
           <caret line="37" selection-start-line="37" selection-end-line="37" />
           <folding>
             <element signature="imports" expanded="true" />
