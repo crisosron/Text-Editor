@@ -45,7 +45,7 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener {
     /*For file management*/
     private String openedFileName = "";
     private String openedFileNamePath = "";
-    private boolean hasOpenedFile = false;
+    private static boolean hasOpenedFile = false;
     private static boolean changesMade = false;
 
     /**
@@ -269,7 +269,6 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener {
                 openedFileName = openFileChooser.getSelectedFile().getName();
                 openedFileNamePath = openedFile.getAbsolutePath(); //Used for saving to an existing file
                 hasOpenedFile = true;
-                System.out.println(hasOpenedFile);
                 Scanner scan = new Scanner(openedFile);
                 String textToDisplay = "";
                 while(scan.hasNext()) textToDisplay += scan.nextLine() + "\n";
@@ -338,7 +337,10 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener {
      */
     public void saveCheck(int sourceID){
         int optionInput = JOptionPane.showConfirmDialog(null, "Would you like to save changes made? ");
-        if(optionInput == JOptionPane.YES_OPTION) saveFile(); //TODO: Need to do System.exit(0) if source id is 0 or 1 in here
+        if(optionInput == JOptionPane.YES_OPTION) {
+            saveFile();
+            if(sourceID == 0 || sourceID == 1) System.exit(0);
+        }
         else if(optionInput == JOptionPane.CANCEL_OPTION) return;
         else{
             /*If the user clicks exit on the window*/
@@ -370,8 +372,8 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener {
      * Forces a hard exit -Called when the Exit menu item in the File menu is clicked
      */
     public void exit(){
-        saveCheck(1);
-        System.exit(EXIT_ON_CLOSE);
+        if(changesMade)saveCheck(1);
+        else System.exit(EXIT_ON_CLOSE);
     }
 
     /**
@@ -494,13 +496,19 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener {
         if(Character.isAlphabetic(ke.getKeyChar()))changesMade = true;
 
     }
-    public void keyReleased(KeyEvent ke){ }
+
+    /**
+     * For KeyListener - Sets changesMade to false if the mainTextArea component is empty and the user has not opened a file
+     */
+    public void keyReleased(KeyEvent ke){
+        if(mainTextArea.getText().equals("") && !hasOpenedFile) changesMade = false;
+    }
     public void keyTyped(KeyEvent ke){ }
 
     /**
      * Returns the KeyEvent constant that corresponds to the character passed
      * into the method
-     * */
+     */
     public int getKeyEventForChar(char character){
         switch(character){
             case 'A': return KeyEvent.VK_A;

@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="56e28fe7-e4ac-4f50-ac0d-417cbc74c409" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/TextEditor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/TextEditor.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -57,12 +56,12 @@
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="dummy" value="30" />
-          <entry key="java" value="40118" />
+          <entry key="java" value="40632" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JAVA" value="40118" />
+          <entry key="JAVA" value="40632" />
           <entry key="PLAIN_TEXT" value="30" />
         </counts>
       </usages-collector>
@@ -136,12 +135,12 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/TextEditor.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="508">
-              <caret line="222" column="145" selection-start-line="222" selection-start-column="145" selection-end-line="222" selection-end-column="145" />
+            <state relative-caret-position="89">
+              <caret line="501" column="5" lean-forward="true" selection-start-line="501" selection-start-column="5" selection-end-line="501" selection-end-column="5" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#23488#23489#0" expanded="true" />
-                <element signature="e#23533#23534#0" expanded="true" />
+                <element signature="e#24192#24193#0" expanded="true" />
+                <element signature="e#24237#24238#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -343,12 +342,12 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/TextEditor.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="508">
-          <caret line="222" column="145" selection-start-line="222" selection-start-column="145" selection-end-line="222" selection-end-column="145" />
+        <state relative-caret-position="89">
+          <caret line="501" column="5" lean-forward="true" selection-start-line="501" selection-start-column="5" selection-end-line="501" selection-end-column="5" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#23488#23489#0" expanded="true" />
-            <element signature="e#23533#23534#0" expanded="true" />
+            <element signature="e#24192#24193#0" expanded="true" />
+            <element signature="e#24237#24238#0" expanded="true" />
           </folding>
         </state>
       </provider>
