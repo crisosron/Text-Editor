@@ -3,8 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="56e28fe7-e4ac-4f50-ac0d-417cbc74c409" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/TextEditor/PaintWindow.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/TextEditor/PaintWindow.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/PaintWindow.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/PaintWindow.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/TextEditor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/TextEditor.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -59,12 +59,12 @@
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="dummy" value="30" />
-          <entry key="java" value="49368" />
+          <entry key="java" value="49788" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JAVA" value="49368" />
+          <entry key="JAVA" value="49788" />
           <entry key="PLAIN_TEXT" value="30" />
         </counts>
       </usages-collector>
@@ -135,11 +135,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/TextEditor.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="214">
-              <caret line="259" selection-start-line="259" selection-end-line="259" />
+            <state relative-caret-position="454">
+              <caret line="230" column="147" selection-start-line="230" selection-start-column="147" selection-end-line="230" selection-end-column="147" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -147,11 +147,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/PaintWindow.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-318">
-              <caret line="131" column="7" lean-forward="true" selection-start-line="131" selection-start-column="7" selection-end-line="131" selection-end-column="7" />
+            <state relative-caret-position="425">
+              <caret line="75" column="67" lean-forward="true" selection-start-line="75" selection-start-column="67" selection-end-line="75" selection-end-column="67" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -215,9 +215,9 @@
         <option value="$PROJECT_DIR$/src/CustomJListCellRenderer.java" />
         <option value="$PROJECT_DIR$/src/FontWindow.java" />
         <option value="$PROJECT_DIR$/src/FontJListCellRenderer.java" />
-        <option value="$PROJECT_DIR$/src/TextEditor.java" />
         <option value="$PROJECT_DIR$/src/ColorButton.java" />
         <option value="$PROJECT_DIR$/src/PaintWindow.java" />
+        <option value="$PROJECT_DIR$/src/TextEditor.java" />
       </list>
     </option>
   </component>
@@ -259,7 +259,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1542786032772" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1542786486000" />
     <property name="last_opened_file_path" value="$USER_HOME$/Eclipse Workspace/NotesEditor" />
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.15" />
@@ -386,20 +386,20 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/TextEditor.java">
+    <entry file="file://$PROJECT_DIR$/src/PaintWindow.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="214">
-          <caret line="259" selection-start-line="259" selection-end-line="259" />
+        <state relative-caret-position="425">
+          <caret line="75" column="67" lean-forward="true" selection-start-line="75" selection-start-column="67" selection-end-line="75" selection-end-column="67" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/PaintWindow.java">
+    <entry file="file://$PROJECT_DIR$/src/TextEditor.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-318">
-          <caret line="131" column="7" lean-forward="true" selection-start-line="131" selection-start-column="7" selection-end-line="131" selection-end-column="7" />
+        <state relative-caret-position="454">
+          <caret line="230" column="147" selection-start-line="230" selection-start-column="147" selection-end-line="230" selection-end-column="147" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

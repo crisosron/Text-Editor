@@ -90,8 +90,8 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener {
         *   menuItemsWithShiftShortcuts is a collection of menu items whose shortcut is CTRL + SHIFT + [first character of the menu item name]
         */
         menuItemsWithBasicShortcuts = new HashSet<>(Arrays.asList("New", "Open", "Save", "Copy", "Font"));
-        menuItemsWithStandardShortcuts = new HashSet<>(Arrays.asList("Undo", "Cut", "Paste"));
-        menuItemsWithShiftShortCuts = new HashSet<>(Arrays.asList("Save As...", "Exit"));
+        menuItemsWithStandardShortcuts = new HashSet<>(Arrays.asList("Undo", "Cut", "Paste", "Exit"));
+        menuItemsWithShiftShortCuts = new HashSet<>(Arrays.asList("Save As..."));
 
         /*Adding all the menu items with a keyboard shortcut to a single set*/
         allMenuItemsWithShortcuts = new HashSet<>();
@@ -228,6 +228,7 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener {
                 if(menuItemWithKeyShortCut.equals("Undo")) menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, ActionEvent.CTRL_MASK));
                 else if(menuItemWithKeyShortCut.equals("Cut")) menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, ActionEvent.CTRL_MASK));
                 else if(menuItemWithKeyShortCut.equals("Paste")) menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, ActionEvent.CTRL_MASK));
+                else if(menuItemWithKeyShortCut.equals("Exit")) menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W, ActionEvent.CTRL_MASK));
             }
         }
     }

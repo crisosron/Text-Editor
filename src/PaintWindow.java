@@ -68,6 +68,11 @@ public class PaintWindow extends JFrame implements MouseListener, MouseMotionLis
         createPanel("Other Actions", 25, TOOL_PANEL_HEIGHT + COLOR_PANEL_HEIGHT + FILL_PANEL_HEIGHT + 20, OTHER_ACTIONS_PANEL_WIDTH, OTHER_ACTIONS_PANEL_HEIGHT);
         createPanel("Side Panel", 0, 0, SIDE_PANEL_WIDTH, SIDE_PANEL_HEIGHT);
 
+        /*Setting the background of all panels to white*/
+        for(Map.Entry<String, JPanel> panelEntry : panelMap.entrySet()){
+            panelEntry.getValue().setBackground(Color.white);
+        }
+
         /*Setting the layout of the color panel to null so that the
         * buttons being added can be positioned absolutely*/
         panelMap.get("Color").setLayout(null);
@@ -138,7 +143,9 @@ public class PaintWindow extends JFrame implements MouseListener, MouseMotionLis
         add(newPanel);
     }
 
-    /*Creates a button that represents a color - Used for color selection*/
+    /**
+     * Creates a button that represents a color - Used for color selection
+     */
     public JButton createColorButton(Color color, int x, int y){
         JButton colorButton = new JButton();
         colorButton.setContentAreaFilled(false); //Removes default fill of button
