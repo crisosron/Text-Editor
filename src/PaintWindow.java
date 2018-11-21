@@ -13,6 +13,7 @@ public class PaintWindow extends JFrame implements MouseListener, MouseMotionLis
 
     /*2D Array for Color Buttons*/
     JButton colorButtons[][];
+    private Map<String, Color> colorCommandsMap;
 
     private Set<String> generatedHues;
     private List<String> availableHues;
@@ -44,6 +45,7 @@ public class PaintWindow extends JFrame implements MouseListener, MouseMotionLis
         colorButtons = new JButton[numRow][numCol];
         availableHues = new ArrayList<>(Arrays.asList("Black", "Red", "Green", "Blue", "Yellow", "Cyan", "Magenta", "Orange", "Violet", "Brown"));
         generatedHues = new HashSet<>();
+        colorCommandsMap = new HashMap<>();
 
         setupPaintWindowUI();
     }
@@ -98,7 +100,9 @@ public class PaintWindow extends JFrame implements MouseListener, MouseMotionLis
             * vividness as the number of columns within the row increases*/
             for(int col = 0; col < colorButtons[row].length; col++){
                 Color color = new Color(r, g, b);
-                JButton colorButton = createColorButton(color, x, y);
+                String colorCommand = availableHues.get(hueCount) +  "[" + r + g + b + "]";
+                System.out.println(colorCommand);
+                JButton colorButton = createColorButton(color, x, y, colorCommand);
                 colorButtons[row][col] = colorButton;
                 x += COLOR_BUTTON_SIZE;
                 if(r + 20 >= 255) r = 255;
@@ -146,15 +150,17 @@ public class PaintWindow extends JFrame implements MouseListener, MouseMotionLis
     /**
      * Creates a button that represents a color - Used for color selection
      */
-    public JButton createColorButton(Color color, int x, int y){
+    public JButton createColorButton(Color color, int x, int y, String colorCommand){
         JButton colorButton = new JButton();
         colorButton.setContentAreaFilled(false); //Removes default fill of button
         colorButton.setOpaque(true); //Allows for custom fill
         colorButton.setBackground(color);
         colorButton.setForeground(color);
         colorButton.setBounds(x, y, COLOR_BUTTON_SIZE, COLOR_BUTTON_SIZE);
-        colorButton.setActionCommand("Set Color " + color);
+        colorButton.setActionCommand(colorCommand);
+        colorCommandsMap.put(colorCommand, color);
         panelMap.get("Color").add(colorButton);
+        colorButton.addActionListener(this);
         return colorButton;
     }
 
@@ -170,6 +176,9 @@ public class PaintWindow extends JFrame implements MouseListener, MouseMotionLis
     public void mouseMoved(MouseEvent mouseEvent){}
 
     /*For ActionListener*/
-    public void actionPerformed(ActionEvent actionEvent){}
+    public void actionPerformed(ActionEvent actionEvent){
+        String action = actionEvent.getActionCommand();
+        if(colorCommandsMap.containsKey(action))panelMap.get("Canvas Panel").setBackground(colorCommandsMap.get(action)); //TODO: This is temporary
+    }
 
 }
