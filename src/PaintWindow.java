@@ -37,7 +37,6 @@ public class PaintWindow extends JFrame implements MouseListener, MouseMotionLis
     private final int OTHER_ACTIONS_PANEL_HEIGHT = 310;
     private final int COLOR_BUTTON_SIZE = 20;
 
-
     public PaintWindow(){
 
         /*Initializing some collections*/
@@ -99,16 +98,24 @@ public class PaintWindow extends JFrame implements MouseListener, MouseMotionLis
             /*Processing the hue for each column in the row - There should be a decrease in
             * vividness as the number of columns within the row increases*/
             for(int col = 0; col < colorButtons[row].length; col++){
+
+                /*Creating the color, color command and the color button and placing into 2d array*/
                 Color color = new Color(r, g, b);
                 String colorCommand = availableHues.get(hueCount) +  "[" + r + g + b + "]";
-                System.out.println(colorCommand);
                 JButton colorButton = createColorButton(color, x, y, colorCommand);
                 colorButtons[row][col] = colorButton;
                 x += COLOR_BUTTON_SIZE;
+
+                /*Incrementing each of rgb by the same amount to get an overall decrease in saturation*/
+                /*Setting r to max if it is about to exceed the max value*/
                 if(r + 20 >= 255) r = 255;
                 else r += 20;
+
+                /*Setting r to max if it is about to exceed the max value*/
                 if(g + 20 >= 255) g = 255;
                 else g += 20;
+
+                /*Setting r to max if it is about to exceed the max value*/
                 if(b + 20 >= 255) b = 255;
                 else b += 20;
             }
