@@ -10,14 +10,15 @@ public class PaintWindow extends JFrame implements MouseListener, MouseMotionLis
 
     /*Collections to manage panels*/
     private Map<String, JPanel> panelMap;
-    private Set<String> panelNamesSet;
 
     /*Collections for color buttons*/
     JButton colorButtons[][];
-    private Map<String, Color> colorCommandsMap;
     private List<String> availableHues;
 
+    /*Collections for command management for the action listener*/
     private Set<String> toolCommands;
+    private Map<String, Color> colorCommandsMap;
+
     /*Rows and columns for colorButtons 2D Array*/
     int numRow = 10;
     int numCol = 8;
@@ -39,6 +40,9 @@ public class PaintWindow extends JFrame implements MouseListener, MouseMotionLis
     private final int TOOL_BUTTON_SIZE = 35;
 
     private String selectedTool;
+    private Color selectedColor;
+
+    private Point shapeStart, shapeEnd;
 
     public PaintWindow(){
 
@@ -48,6 +52,8 @@ public class PaintWindow extends JFrame implements MouseListener, MouseMotionLis
         availableHues = new ArrayList<>(Arrays.asList("Black", "Red", "Green", "Blue", "Yellow", "Cyan", "Magenta", "Orange", "Violet", "Brown"));
         colorCommandsMap = new HashMap<>();
         toolCommands = new HashSet<>();
+        selectedTool = "line";
+        selectedColor = Color.black;
 
         setupPaintWindowUI();
     }
@@ -62,10 +68,8 @@ public class PaintWindow extends JFrame implements MouseListener, MouseMotionLis
         setVisible(true);
         setResizable(false);
 
-        panelNamesSet = new HashSet<>(Arrays.asList("Menu", "Canvas"));
-
         /*Creating new panels - Note that the order matters in terms of their creation since absolute positioning is being used*/
-        createPanel("Canvas Panel", SIDE_PANEL_WIDTH, 0, CANVAS_PANEL_WIDTH, CANVAS_PANEL_HEIGHT);
+        createPanel("Canvas", SIDE_PANEL_WIDTH, 0, CANVAS_PANEL_WIDTH, CANVAS_PANEL_HEIGHT);
         createPanel("Tool", 25, 20, TOOL_PANEL_WIDTH, TOOL_PANEL_HEIGHT);
         createPanel("Color", 25, TOOL_PANEL_HEIGHT + 20, COLOR_PANEL_WIDTH, COLOR_PANEL_HEIGHT);
         createPanel("Fill", 25, TOOL_PANEL_HEIGHT + COLOR_PANEL_HEIGHT + 20, FILL_PANEL_WIDTH, FILL_PANEL_HEIGHT);
@@ -76,6 +80,9 @@ public class PaintWindow extends JFrame implements MouseListener, MouseMotionLis
         for(Map.Entry<String, JPanel> panelEntry : panelMap.entrySet()){
             panelEntry.getValue().setBackground(Color.white);
         }
+
+        panelMap.get("Canvas").addMouseListener(this);
+        panelMap.get("Canvas").addMouseMotionListener(this);
 
         /*Setting up the color buttons*/
         setupColorButtons();
@@ -241,27 +248,58 @@ public class PaintWindow extends JFrame implements MouseListener, MouseMotionLis
         validate();
     }
 
-
+    /**
+     * Sets the tool - Called when a tool button is clicked
+     */
     public void setTool(String tool){
         selectedTool = tool;
-        System.out.println("Selected Tool: " + selectedTool);
     }
 
     /*For MouseListener*/
     public void mouseClicked(MouseEvent mouseEvent){}
-    public void mousePressed(MouseEvent mouseEvent){}
-    public void mouseReleased(MouseEvent mouseEvent){}
+    public void mousePressed(MouseEvent mouseEvent){
+        shapeStart = new Point(mouseEvent.getX(), mouseEvent.getY());
+        shapeEnd = shapeStart;
+    }
+
+    /**
+     * mouseReleased event handler - When the mouse is released after pressing, the shape is drawn
+     */
+    public void mouseReleased(MouseEvent mouseEvent){
+        shapeEnd = new Point(mouseEvent.getX(), mouseEvent.getY());
+
+        /*Getting the graphics only for the Canvas panel so the shapes drawn are relative to that panel*/
+        Graphics canvasPanelGraphics = panelMap.get("Canvas").getGraphics();
+        if(selectedTool.equals("line"))drawNewLine(canvasPanelGraphics);
+
+    }
+
     public void mouseEntered(MouseEvent mouseEvent){}
     public void mouseExited(MouseEvent mouseEvent){}
 
     /*For MouseMotionListener*/
-    public void mouseDragged(MouseEvent mouseEvent){}
+    public void mouseDragged(MouseEvent mouseEvent){
+
+    }
     public void mouseMoved(MouseEvent mouseEvent){}
 
     /*For ActionListener*/
     public void actionPerformed(ActionEvent actionEvent) {
         String action = actionEvent.getActionCommand();
-        if (colorCommandsMap.containsKey(action)) panelMap.get("Canvas Panel").setBackground(colorCommandsMap.get(action)); //TODO: This is temporary
+        if (colorCommandsMap.containsKey(action)) selectedColor = colorCommandsMap.get(action);
         else if (toolCommands.contains(action)) setTool(action);
     }
+
+
+    /**
+     * Draws a new line based on the start and end coordinates attained using the mousePressed and mouseReleased
+     */
+    public void drawNewLine(Graphics g){
+        Graphics2D graphics2D = (Graphics2D)g;
+        graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON); //Improves visual artifacts (jagged edges)
+        graphics2D.setColor(selectedColor);
+        graphics2D.drawLine(shapeStart.x, shapeStart.y, shapeEnd.x, shapeEnd.y);
+
+    }
+
 }
