@@ -44,6 +44,8 @@ public class PaintWindow extends JFrame implements MouseListener, MouseMotionLis
 
     private Point shapeStart, shapeEnd;
 
+    private Drawer drawer;
+
     public PaintWindow(){
 
         /*Initializing some collections*/
@@ -81,8 +83,12 @@ public class PaintWindow extends JFrame implements MouseListener, MouseMotionLis
             panelEntry.getValue().setBackground(Color.white);
         }
 
+        /*Adding mouse and mouse motion listeners to the canvas panel*/
         panelMap.get("Canvas").addMouseListener(this);
         panelMap.get("Canvas").addMouseMotionListener(this);
+
+        /*Getting the graphics for the canvas panel and using it to create to initialize the Drawer object*/
+        drawer = new Drawer(panelMap.get("Canvas").getGraphics());
 
         /*Setting up the color buttons*/
         setupColorButtons();
@@ -257,6 +263,10 @@ public class PaintWindow extends JFrame implements MouseListener, MouseMotionLis
 
     /*For MouseListener*/
     public void mouseClicked(MouseEvent mouseEvent){}
+
+    /**
+     * mousePressed event handler - Mainly used for getting start points for shapes
+     * */
     public void mousePressed(MouseEvent mouseEvent){
         shapeStart = new Point(mouseEvent.getX(), mouseEvent.getY());
         shapeEnd = shapeStart;
@@ -269,9 +279,9 @@ public class PaintWindow extends JFrame implements MouseListener, MouseMotionLis
         shapeEnd = new Point(mouseEvent.getX(), mouseEvent.getY());
 
         /*Getting the graphics only for the Canvas panel so the shapes drawn are relative to that panel*/
-        Graphics canvasPanelGraphics = panelMap.get("Canvas").getGraphics();
-        if(selectedTool.equals("line"))drawNewLine(canvasPanelGraphics);
-
+        if(selectedTool.equals("line")) drawer.drawNewLine(shapeStart.x, shapeStart.y, shapeEnd.x, shapeEnd.y, selectedColor);
+        else if(selectedTool.equals("rectangle")) drawer.drawNewRectangle(shapeStart.x, shapeStart.y, shapeEnd.x, shapeEnd.y, selectedColor);
+        else if(selectedTool.equals("ellipse")) drawer.drawNewOval(shapeStart.x, shapeStart.y, shapeEnd.x, shapeEnd.y, selectedColor);
     }
 
     public void mouseEntered(MouseEvent mouseEvent){}
@@ -288,18 +298,6 @@ public class PaintWindow extends JFrame implements MouseListener, MouseMotionLis
         String action = actionEvent.getActionCommand();
         if (colorCommandsMap.containsKey(action)) selectedColor = colorCommandsMap.get(action);
         else if (toolCommands.contains(action)) setTool(action);
-    }
-
-
-    /**
-     * Draws a new line based on the start and end coordinates attained using the mousePressed and mouseReleased
-     */
-    public void drawNewLine(Graphics g){
-        Graphics2D graphics2D = (Graphics2D)g;
-        graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON); //Improves visual artifacts (jagged edges)
-        graphics2D.setColor(selectedColor);
-        graphics2D.drawLine(shapeStart.x, shapeStart.y, shapeEnd.x, shapeEnd.y);
-
     }
 
 }
