@@ -38,6 +38,8 @@ public class PaintWindow extends JFrame implements MouseListener, MouseMotionLis
     private final int COLOR_BUTTON_SIZE = 20;
     private final int TOOL_BUTTON_SIZE = 35;
 
+    private String selectedTool;
+
     public PaintWindow(){
 
         /*Initializing some collections*/
@@ -162,7 +164,7 @@ public class PaintWindow extends JFrame implements MouseListener, MouseMotionLis
             String iconFileName = iconFiles[i].getName();
 
             /*Removes the 'Icon.gif' part of the icon file and sets just the tool name as part of the command*/
-            String toolCommand = "Set Tool " + iconFileName.replace("Icon.gif", "");
+            String toolCommand = iconFileName.replace("Icon.gif", "");
 
             /*Creating the actual tool button*/
             createToolButton(iconFileName, x, y, toolCommand);
@@ -239,6 +241,12 @@ public class PaintWindow extends JFrame implements MouseListener, MouseMotionLis
         validate();
     }
 
+
+    public void setTool(String tool){
+        selectedTool = tool;
+        System.out.println("Selected Tool: " + selectedTool);
+    }
+
     /*For MouseListener*/
     public void mouseClicked(MouseEvent mouseEvent){}
     public void mousePressed(MouseEvent mouseEvent){}
@@ -251,11 +259,9 @@ public class PaintWindow extends JFrame implements MouseListener, MouseMotionLis
     public void mouseMoved(MouseEvent mouseEvent){}
 
     /*For ActionListener*/
-    public void actionPerformed(ActionEvent actionEvent){
+    public void actionPerformed(ActionEvent actionEvent) {
         String action = actionEvent.getActionCommand();
-        if(colorCommandsMap.containsKey(action))panelMap.get("Canvas Panel").setBackground(colorCommandsMap.get(action)); //TODO: This is temporary
-        else if(toolCommands.contains(action)){
-            System.out.println("Tool Selected");
-        }
+        if (colorCommandsMap.containsKey(action)) panelMap.get("Canvas Panel").setBackground(colorCommandsMap.get(action)); //TODO: This is temporary
+        else if (toolCommands.contains(action)) setTool(action);
     }
 }
