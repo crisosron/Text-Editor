@@ -87,7 +87,8 @@ public class PaintWindow extends JFrame implements MouseListener, MouseMotionLis
         panelMap.get("Canvas").addMouseListener(this);
         panelMap.get("Canvas").addMouseMotionListener(this);
 
-        /*Getting the graphics for the canvas panel and using it to create to initialize the Drawer object*/
+        /*Getting the graphics for the canvas panel (so all the graphics
+        are relative only to this panel) and using it to create to initialize the Drawer object*/
         drawer = new Drawer(panelMap.get("Canvas").getGraphics());
 
         /*Setting up the color buttons*/
