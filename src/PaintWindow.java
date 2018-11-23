@@ -40,7 +40,7 @@ public class PaintWindow extends JFrame implements MouseListener, MouseMotionLis
     private final int TOOL_BUTTON_SIZE = 35;
 
     private String selectedTool;
-    private Color selectedColor;
+    public Color selectedColor;
 
     private Point shapeStart, shapeEnd;
 
@@ -279,9 +279,9 @@ public class PaintWindow extends JFrame implements MouseListener, MouseMotionLis
         shapeEnd = new Point(mouseEvent.getX(), mouseEvent.getY());
 
         /*Getting the graphics only for the Canvas panel so the shapes drawn are relative to that panel*/
-        if(selectedTool.equals("line")) drawer.drawNewLine(shapeStart.x, shapeStart.y, shapeEnd.x, shapeEnd.y, selectedColor);
-        else if(selectedTool.equals("rectangle")) drawer.drawNewRectangle(shapeStart.x, shapeStart.y, shapeEnd.x, shapeEnd.y, selectedColor);
-        else if(selectedTool.equals("ellipse")) drawer.drawNewOval(shapeStart.x, shapeStart.y, shapeEnd.x, shapeEnd.y, selectedColor);
+        if(selectedTool.equals("line")) drawer.drawNewLine(shapeStart.x, shapeStart.y, shapeEnd.x, shapeEnd.y);
+        else if(selectedTool.equals("rectangle")) drawer.drawNewRectangle(shapeStart.x, shapeStart.y, shapeEnd.x, shapeEnd.y);
+        else if(selectedTool.equals("ellipse")) drawer.drawNewOval(shapeStart.x, shapeStart.y, shapeEnd.x, shapeEnd.y);
     }
 
     public void mouseEntered(MouseEvent mouseEvent){}
