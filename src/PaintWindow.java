@@ -2,11 +2,12 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.geom.Rectangle2D;
 import java.io.File;
 import java.util.*;
 import java.util.List;
 
-public class PaintWindow extends JFrame implements MouseListener, MouseMotionListener, ActionListener {
+public class PaintWindow extends JFrame implements ActionListener {
 
     /*Collections to manage panels*/
     private Map<String, JPanel> panelMap;
@@ -39,12 +40,10 @@ public class PaintWindow extends JFrame implements MouseListener, MouseMotionLis
     private final int COLOR_BUTTON_SIZE = 20;
     private final int TOOL_BUTTON_SIZE = 35;
 
-    private String selectedTool;
+    public String selectedTool;
     public Color selectedColor;
 
-    private Point shapeStart, shapeEnd;
-
-    private Drawer drawer;
+    private Canvas canvas;
 
     public PaintWindow(){
 
@@ -70,8 +69,12 @@ public class PaintWindow extends JFrame implements MouseListener, MouseMotionLis
         setVisible(true);
         setResizable(false);
 
+        /*Creating the canvas and adding to the frame*/
+        canvas = new Canvas(SIDE_PANEL_WIDTH, 0, CANVAS_PANEL_WIDTH, CANVAS_PANEL_HEIGHT);
+        add(canvas);
+
         /*Creating new panels - Note that the order matters in terms of their creation since absolute positioning is being used*/
-        createPanel("Canvas", SIDE_PANEL_WIDTH, 0, CANVAS_PANEL_WIDTH, CANVAS_PANEL_HEIGHT);
+        //createPanel("Canvas", SIDE_PANEL_WIDTH, 0, CANVAS_PANEL_WIDTH, CANVAS_PANEL_HEIGHT);
         createPanel("Tool", 25, 20, TOOL_PANEL_WIDTH, TOOL_PANEL_HEIGHT);
         createPanel("Color", 25, TOOL_PANEL_HEIGHT + 20, COLOR_PANEL_WIDTH, COLOR_PANEL_HEIGHT);
         createPanel("Fill", 25, TOOL_PANEL_HEIGHT + COLOR_PANEL_HEIGHT + 20, FILL_PANEL_WIDTH, FILL_PANEL_HEIGHT);
@@ -82,14 +85,6 @@ public class PaintWindow extends JFrame implements MouseListener, MouseMotionLis
         for(Map.Entry<String, JPanel> panelEntry : panelMap.entrySet()){
             panelEntry.getValue().setBackground(Color.white);
         }
-
-        /*Adding mouse and mouse motion listeners to the canvas panel*/
-        panelMap.get("Canvas").addMouseListener(this);
-        panelMap.get("Canvas").addMouseMotionListener(this);
-
-        /*Getting the graphics for the canvas panel (so all the graphics
-        are relative only to this panel) and using it to create to initialize the Drawer object*/
-        drawer = new Drawer(panelMap.get("Canvas").getGraphics());
 
         /*Setting up the color buttons*/
         setupColorButtons();
@@ -262,43 +257,10 @@ public class PaintWindow extends JFrame implements MouseListener, MouseMotionLis
         selectedTool = tool;
     }
 
-    /*For MouseListener*/
-    public void mouseClicked(MouseEvent mouseEvent){}
-
-    /**
-     * mousePressed event handler - Mainly used for getting start points for shapes
-     * */
-    public void mousePressed(MouseEvent mouseEvent){
-        shapeStart = new Point(mouseEvent.getX(), mouseEvent.getY());
-        shapeEnd = shapeStart;
-    }
-
-    /**
-     * mouseReleased event handler - When the mouse is released after pressing, the shape is drawn
-     */
-    public void mouseReleased(MouseEvent mouseEvent){
-        shapeEnd = new Point(mouseEvent.getX(), mouseEvent.getY());
-
-        /*Getting the graphics only for the Canvas panel so the shapes drawn are relative to that panel*/
-        if(selectedTool.equals("line")) drawer.drawNewLine(shapeStart.x, shapeStart.y, shapeEnd.x, shapeEnd.y);
-        else if(selectedTool.equals("rectangle")) drawer.drawNewRectangle(shapeStart.x, shapeStart.y, shapeEnd.x, shapeEnd.y);
-        else if(selectedTool.equals("ellipse")) drawer.drawNewOval(shapeStart.x, shapeStart.y, shapeEnd.x, shapeEnd.y);
-    }
-
-    public void mouseEntered(MouseEvent mouseEvent){}
-    public void mouseExited(MouseEvent mouseEvent){}
-
-    /*For MouseMotionListener*/
-    public void mouseDragged(MouseEvent mouseEvent){
-
-    }
-    public void mouseMoved(MouseEvent mouseEvent){}
-
     /*For ActionListener*/
     public void actionPerformed(ActionEvent actionEvent) {
         String action = actionEvent.getActionCommand();
         if (colorCommandsMap.containsKey(action)) selectedColor = colorCommandsMap.get(action);
         else if (toolCommands.contains(action)) setTool(action);
     }
-
 }
