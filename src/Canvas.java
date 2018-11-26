@@ -48,7 +48,7 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
         /*Drawing all the shapes*/
         for(ShapeItem shapeItem : shapeItems){
             graphics2D.setColor(shapeItem.getShapeColor());
-            if(!whiteEraserCircleShapeItems.contains(shapeItem)) {
+            if(!shapeItem.isFilled()) {
                 graphics2D.draw(shapeItem.getShape());
             }else{
                 graphics2D.fill(shapeItem.getShape());
@@ -73,9 +73,10 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
             }else if(TextEditor.paintWindow.selectedTool.equals("erase")){
                 //TODO: Develop this
                 /*
-                graphics2D.setColor(Color.black);
                 Ellipse2D.Float guideEraser = new Ellipse2D.Float(shapeStart.x - eraserWidth/2, shapeStart.y - eraserHeight/2, eraserWidth, eraserHeight);
-                graphics2D.draw(guideEraser);
+                ShapeItem guideEraserShapeItem = new ShapeItem(guideEraser, Color.black);
+                shapeItems.add(guideEraserShapeItem);
+                whiteEraserCircleShapeItems.add(guideEraserShapeItem);
                 */
             }
         }
@@ -90,7 +91,7 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
         int width = Math.abs(endX - startX);
         int height = Math.abs(endY - startY);
         Rectangle2D.Float newRect = new Rectangle2D.Float(x, y, width, height);
-        ShapeItem shapeItem = new ShapeItem(newRect, TextEditor.paintWindow.selectedColor);
+        ShapeItem shapeItem = new ShapeItem(newRect, TextEditor.paintWindow.selectedColor, TextEditor.paintWindow.filling);
         shapeItems.add(shapeItem);
     }
 
@@ -99,7 +100,7 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
      */
     public void createLine(int startX, int startY, int endX, int endY){
         Line2D.Float newLine = new Line2D.Float(startX, startY, endX, endY);
-        ShapeItem shapeItem = new ShapeItem(newLine, TextEditor.paintWindow.selectedColor);
+        ShapeItem shapeItem = new ShapeItem(newLine, TextEditor.paintWindow.selectedColor, TextEditor.paintWindow.filling);
         shapeItems.add(shapeItem);
      }
 
@@ -112,7 +113,7 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
         int width = Math.abs(endX - startX);
         int height = Math.abs(endY - startY);
         Ellipse2D.Float newOval = new Ellipse2D.Float(x, y, width, height);
-        ShapeItem shapeItem = new ShapeItem(newOval, TextEditor.paintWindow.selectedColor);
+        ShapeItem shapeItem = new ShapeItem(newOval, TextEditor.paintWindow.selectedColor, TextEditor.paintWindow.filling);
         shapeItems.add(shapeItem);
     }
 
@@ -123,7 +124,7 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
         float x = shapeStart.x - eraserWidth/2;
         float y = shapeStart.y - eraserHeight/2;
         Ellipse2D.Float whiteEraseShape = new Ellipse2D.Float(x, y, eraserWidth, eraserHeight);
-        ShapeItem shapeItem = new ShapeItem(whiteEraseShape, Color.white);
+        ShapeItem shapeItem = new ShapeItem(whiteEraseShape, Color.white, true);
         shapeItems.add(shapeItem);
         whiteEraserCircleShapeItems.add(shapeItem);
     }
@@ -146,7 +147,6 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
         if(TextEditor.paintWindow.selectedTool.equals("line")) createLine(shapeStart.x, shapeStart.y, shapeEnd.x, shapeEnd.y);
         else if(TextEditor.paintWindow.selectedTool.equals("rectangle")) createRect(shapeStart.x, shapeStart.y, shapeEnd.x, shapeEnd.y);
         else if(TextEditor.paintWindow.selectedTool.equals("ellipse")) createOval(shapeStart.x, shapeStart.y, shapeEnd.x, shapeEnd.y);
-        else if(TextEditor.paintWindow.selectedTool.equals("erase")) createEraseCircle();
         repaint();
     }
 
@@ -156,11 +156,10 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
     /*Setting the end point of the shape being drawn*/
     public void mouseDragged(MouseEvent mouseEvent){
         shapeEnd = new Point(mouseEvent.getX(), mouseEvent.getY());
-        if(TextEditor.paintWindow.selectedTool.equals("erase")) createEraseCircle();
         repaint();
     }
-    public void mouseMoved(MouseEvent mouseEvent){}
 
-
+    public void mouseMoved(MouseEvent mouseEvent){
+    }
 
 }

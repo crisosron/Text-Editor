@@ -13,12 +13,14 @@ public class PaintWindow extends JFrame implements ActionListener {
     private Map<String, JPanel> panelMap;
 
     /*Collections for color buttons*/
-    JButton colorButtons[][];
+    private JButton colorButtons[][];
     private List<String> availableHues;
 
     /*Collections for command management for the action listener*/
     private Set<String> toolCommands;
     private Map<String, Color> colorCommandsMap;
+
+    private JToggleButton fillToggleButton;
 
     /*Rows and columns for colorButtons 2D Array*/
     int numRow = 10;
@@ -42,7 +44,9 @@ public class PaintWindow extends JFrame implements ActionListener {
 
     public String selectedTool;
     public Color selectedColor;
+    public boolean filling = false;
 
+    /*Canvas object where all the graphics will be handled*/
     private Canvas canvas;
 
     public PaintWindow(){
@@ -55,6 +59,7 @@ public class PaintWindow extends JFrame implements ActionListener {
         toolCommands = new HashSet<>();
         selectedTool = "line";
         selectedColor = Color.black;
+        fillToggleButton = new JToggleButton("Fill", false);
 
         setupPaintWindowUI();
     }
@@ -74,7 +79,6 @@ public class PaintWindow extends JFrame implements ActionListener {
         add(canvas);
 
         /*Creating new panels - Note that the order matters in terms of their creation since absolute positioning is being used*/
-        //createPanel("Canvas", SIDE_PANEL_WIDTH, 0, CANVAS_PANEL_WIDTH, CANVAS_PANEL_HEIGHT);
         createPanel("Tool", 25, 20, TOOL_PANEL_WIDTH, TOOL_PANEL_HEIGHT);
         createPanel("Color", 25, TOOL_PANEL_HEIGHT + 20, COLOR_PANEL_WIDTH, COLOR_PANEL_HEIGHT);
         createPanel("Fill", 25, TOOL_PANEL_HEIGHT + COLOR_PANEL_HEIGHT + 20, FILL_PANEL_WIDTH, FILL_PANEL_HEIGHT);
@@ -91,6 +95,9 @@ public class PaintWindow extends JFrame implements ActionListener {
 
         /*Setting up the tool buttons*/
         setupToolButtons();
+
+        /*Setup fill button*/
+        setupFillButton();
     }
 
     /**
@@ -251,16 +258,21 @@ public class PaintWindow extends JFrame implements ActionListener {
     }
 
     /**
-     * Sets the tool - Called when a tool button is clicked
+     * Sets up the fill toggle button
      */
-    public void setTool(String tool){
-        selectedTool = tool;
+    public void setupFillButton(){
+        panelMap.get("Fill").setLayout(null);
+        fillToggleButton.setBounds(25, 15, 150, 30);
+        fillToggleButton.setActionCommand("Set Fill");
+        fillToggleButton.addActionListener(this);
+        panelMap.get("Fill").add(fillToggleButton);
     }
 
     /*For ActionListener*/
     public void actionPerformed(ActionEvent actionEvent) {
         String action = actionEvent.getActionCommand();
         if (colorCommandsMap.containsKey(action)) selectedColor = colorCommandsMap.get(action);
-        else if (toolCommands.contains(action)) setTool(action);
+        else if (toolCommands.contains(action)) selectedTool = action;
+        else if (action.equals("Set Fill")) filling = !filling;
     }
 }

@@ -6,10 +6,13 @@ import java.awt.*;
 public class ShapeItem {
     private Shape shape;
     private Color color;
-    public ShapeItem(Shape shape, Color color){
+    private boolean hasFill;
+    public ShapeItem(Shape shape, Color color, boolean hasFill){
         this.shape = shape;
         this.color = color;
+        this.hasFill = hasFill;
     }
     public Shape getShape(){ return shape;}
     public Color getShapeColor(){return color;}
+    public boolean isFilled(){return hasFill;}
 }
