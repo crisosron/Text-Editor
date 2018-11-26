@@ -19,6 +19,10 @@ public class PaintWindow extends JFrame implements ActionListener {
     /*Collections for command management for the action listener*/
     private Set<String> toolCommands;
     private Map<String, Color> colorCommandsMap;
+    private Set<String> otherActionsCommands;
+
+    private List<String> otherActionsButtonNames;
+    private List<JButton> otherActionsButtons;
 
     private JToggleButton fillToggleButton;
 
@@ -55,11 +59,13 @@ public class PaintWindow extends JFrame implements ActionListener {
         panelMap = new HashMap<>();
         colorButtons = new JButton[numRow][numCol];
         availableHues = new ArrayList<>(Arrays.asList("Black", "Red", "Green", "Blue", "Yellow", "Cyan", "Magenta", "Orange", "Violet", "Brown"));
+        otherActionsButtonNames = new ArrayList<>(Arrays.asList("New", "Open", "Save", "Clear"));
         colorCommandsMap = new HashMap<>();
         toolCommands = new HashSet<>();
         selectedTool = "line";
         selectedColor = Color.black;
         fillToggleButton = new JToggleButton("Fill", false);
+        otherActionsButtons = new ArrayList<>();
 
         setupPaintWindowUI();
     }
@@ -98,6 +104,9 @@ public class PaintWindow extends JFrame implements ActionListener {
 
         /*Setup fill button*/
         setupFillButton();
+
+        /*Setting up the other actions buttons*/
+        setupOtherActionsButtons();
     }
 
     /**
@@ -189,6 +198,21 @@ public class PaintWindow extends JFrame implements ActionListener {
     }
 
     /**
+     * Sets up the other actions buttons
+     */
+    public void setupOtherActionsButtons(){
+        int x = 25;
+        int y = 15;
+        int width = 150;
+        int height = 30;
+        panelMap.get("Other Actions").setLayout(null);
+        for(String buttonName : otherActionsButtonNames){
+            createOtherActionButton(buttonName, x, y, width, height);
+            y += height + 10;
+        }
+    }
+
+    /**
      * Method used to determine what hue should be generated for the color buttons (used to determine hue for row)
      * Returns a List with rgb values in order
      */
@@ -258,6 +282,18 @@ public class PaintWindow extends JFrame implements ActionListener {
     }
 
     /**
+     * Creates a button that is placed in the 'Other Actions' panel
+     */
+    public void createOtherActionButton(String name, int x, int y, int width, int height){
+        JButton otherActionButton = new JButton(name);
+        otherActionButton.setBounds(x, y, width, height);
+        otherActionButton.addActionListener(this);
+        otherActionsButtons.add(otherActionButton);
+        panelMap.get("Other Actions").add(otherActionButton);
+
+    }
+
+    /**
      * Sets up the fill toggle button
      */
     public void setupFillButton(){
@@ -271,8 +307,20 @@ public class PaintWindow extends JFrame implements ActionListener {
     /*For ActionListener*/
     public void actionPerformed(ActionEvent actionEvent) {
         String action = actionEvent.getActionCommand();
+
+        /*For color button actions*/
         if (colorCommandsMap.containsKey(action)) selectedColor = colorCommandsMap.get(action);
+
+        /*For tool button actions*/
         else if (toolCommands.contains(action)) selectedTool = action;
+
+        /*Fill Toggle Button*/
         else if (action.equals("Set Fill")) filling = !filling;
+
+        /*Other Actions Panel Button Actions*/
+        else if (action.equals("New")) canvas.createNew();
+        else if (action.equals("Save")) canvas.save();
+        else if (action.equals("Clear")) canvas.clear();
+        else if (action.equals("Open")) canvas.open();
     }
 }

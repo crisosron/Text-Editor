@@ -162,4 +162,11 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
     public void mouseMoved(MouseEvent mouseEvent){
     }
 
+    public void createNew(){}
+    public void save(){}
+    public void clear(){
+        shapeItems.clear();
+        repaint();
+    }
+    public void open(){}
 }
