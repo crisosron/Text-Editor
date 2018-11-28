@@ -96,7 +96,7 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
         Rectangle2D.Float newRect = new Rectangle2D.Float(x, y, width, height);
         Point firstPoint = new Point(startX, startY);
         Point secondPoint = new Point(endX, endY);
-        ShapeItem shapeItem = new ShapeItem(newRect, TextEditor.paintWindow.selectedColor, hasFill, firstPoint, secondPoint, "Rectangle");
+        ShapeItem shapeItem = new ShapeItem(newRect, color, hasFill, firstPoint, secondPoint, "Rectangle");
         shapeItems.add(shapeItem);
     }
 
@@ -107,7 +107,7 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
         Line2D.Float newLine = new Line2D.Float(startX, startY, endX, endY);
         Point firstPoint = new Point(startX, startY);
         Point secondPoint = new Point(endX, endY);
-        ShapeItem shapeItem = new ShapeItem(newLine, TextEditor.paintWindow.selectedColor, false, firstPoint, secondPoint, "Line"); //Line has no fill by default
+        ShapeItem shapeItem = new ShapeItem(newLine, color, false, firstPoint, secondPoint, "Line"); //Line has no fill by default
         shapeItems.add(shapeItem);
         lineShapes.add(shapeItem);
      }
@@ -123,7 +123,7 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
         Ellipse2D.Float newOval = new Ellipse2D.Float(x, y, width, height);
         Point firstPoint = new Point(startX, startY);
         Point secondPoint = new Point(endX, endY);
-        ShapeItem shapeItem = new ShapeItem(newOval, TextEditor.paintWindow.selectedColor, hasFill, firstPoint, secondPoint, "Oval");
+        ShapeItem shapeItem = new ShapeItem(newOval, color, hasFill, firstPoint, secondPoint, "Oval");
         shapeItems.add(shapeItem);
     }
 
@@ -257,7 +257,6 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
                 else if(shapeType.equals("Rectangle")) createRect(x1, y1, x2, y2, shapeIsFilled, shapeColor);
                 repaint();
 
-                //TODO: Fix so that each shape uses its own individual color
             }
 
         }catch(Exception e){e.printStackTrace();}
