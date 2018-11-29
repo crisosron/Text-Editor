@@ -185,6 +185,8 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
            /*File object to write to and PrintStream object to write to the file*/
            File saveToFile = new File("paint.txt");
            PrintStream printStreamWriter = new PrintStream(saveToFile);
+           printStreamWriter.println("File: Shapes File"); //Indicator that marks the created file as a shapes file (used to determine if a file being opened is valid)
+
            //TODO: Make it so that the save as dialog appears and allows the user to name their file
 
            /*Looping through shapeItems to write each shape's info to the file*/
@@ -213,7 +215,6 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
     /**
      * Open's a file with shape info
      */
-    //TODO: Make it check if the file is a valid shapes file or not (maybe write to the file that the file is indeed a shapes file and check if the apppears here?)
     public void open(){
         clear();
         try{
@@ -227,6 +228,13 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
             }
             File selectedFile = openFileChooser.getSelectedFile();
             Scanner scanFile = new Scanner(selectedFile);
+
+            //TODO: Make it so that the 'No Line Found' error is caught
+            /*Checks if the file is a valid file that contains info about shapes*/
+            if(!scanFile.hasNextLine() || !scanFile.nextLine().equals("File: Shapes File")){
+                JOptionPane.showMessageDialog(null, "Invalid File - Aborting");
+                return;
+            }
 
             /*Scanning the file to get the shapes to display*/
             while(scanFile.hasNext()){

@@ -1,6 +1,1 @@
-Rectangle 0 0 0 false 166.0 135.0 240.0 234.0
-Rectangle 0 0 0 false 291.0 330.0 396.0 489.0
-Rectangle 0 0 0 false 458.0 497.0 463.0 304.0
-Rectangle 0 0 0 false 492.0 237.0 522.0 224.0
-Rectangle 60 60 255 false 156.0 366.0 238.0 546.0
-Line 60 60 255 false 54.0 324.0 616.0 164.0
+File: Shapes File
