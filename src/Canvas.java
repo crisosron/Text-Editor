@@ -182,12 +182,18 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
     public void save(){
        try{
 
-           /*File object to write to and PrintStream object to write to the file*/
-           File saveToFile = new File("paint.txt");
+           /*Prompting the user to save the file as*/
+           JFileChooser saveFileChooser = new JFileChooser();
+           int status = saveFileChooser.showSaveDialog(null);
+           if(status != JFileChooser.APPROVE_OPTION){
+               JOptionPane.showMessageDialog(null, "Save Cancelled");
+               return;
+           }
+
+           /*File object and PrintStream object to write to the file*/
+           File saveToFile = new File(saveFileChooser.getSelectedFile().getName());
            PrintStream printStreamWriter = new PrintStream(saveToFile);
            printStreamWriter.println("File: Shapes File"); //Indicator that marks the created file as a shapes file (used to determine if a file being opened is valid)
-
-           //TODO: Make it so that the save as dialog appears and allows the user to name their file
 
            /*Looping through shapeItems to write each shape's info to the file*/
            for(ShapeItem shapeItem : shapeItems){
