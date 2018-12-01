@@ -1,5 +1,3 @@
-import org.w3c.dom.Text;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -190,6 +188,13 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
      * Saves all shapes to a file
      */
     public void save(){
+
+        /*Checks if there is anything to actually save*/
+        if(shapeItems.isEmpty()){
+            JOptionPane.showMessageDialog(null, "No contents to save!");
+            return;
+        }
+
        try{
 
            /*Prompting the user to save the file as*/
@@ -245,9 +250,8 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
             File selectedFile = openFileChooser.getSelectedFile();
             Scanner scanFile = new Scanner(selectedFile);
 
-            //TODO: Make it so that the 'No Line Found' error is caught
             /*Checks if the file is a valid file that contains info about shapes*/
-            if(!scanFile.hasNextLine() || !scanFile.nextLine().equals("File: Shapes File")){
+            if(!scanFile.nextLine().equals("File: Shapes File")){
                 JOptionPane.showMessageDialog(null, "Invalid File - Aborting");
                 return;
             }
