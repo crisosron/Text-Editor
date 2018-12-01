@@ -1,3 +1,5 @@
+import org.w3c.dom.Text;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -60,20 +62,21 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
 
         /*Shape being drawn when the mouse is being dragged*/
         if(shapeEnd != null && shapeStart != null){
-            if(TextEditor.paintWindow.selectedTool.equals("line")){
+            String selectedTool = TextEditor.textEditor.getPaintWindow().getSelectedTool();
+            if(selectedTool.equals("line")){
                 Line2D.Float guideLine = new Line2D.Float(shapeStart.x, shapeStart.y, shapeEnd.x, shapeEnd.y);
                 graphics2D.draw(guideLine);
 
-            }else if(TextEditor.paintWindow.selectedTool.equals("rectangle")){
+            }else if(selectedTool.equals("rectangle")){
                 Rectangle2D.Float guideLine = new Rectangle2D.Float(Math.min(shapeStart.x,shapeEnd.x), Math.min(shapeStart.y, shapeEnd.y), Math.abs(shapeStart.x - shapeEnd.x), Math.abs(shapeStart.y - shapeEnd.y));
                 graphics2D.draw(guideLine);
 
 
-            }else if(TextEditor.paintWindow.selectedTool.equals("ellipse")){
+            }else if(selectedTool.equals("ellipse")){
                 Ellipse2D.Float guideLine = new Ellipse2D.Float(Math.min(shapeStart.x,shapeEnd.x), Math.min(shapeStart.y, shapeEnd.y), Math.abs(shapeStart.x - shapeEnd.x), Math.abs(shapeStart.y - shapeEnd.y));
                 graphics2D.draw(guideLine);
 
-            }else if(TextEditor.paintWindow.selectedTool.equals("erase")){
+            }else if(selectedTool.equals("erase")){
                 //TODO: Develop this
                 /*
                 Ellipse2D.Float guideEraser = new Ellipse2D.Float(shapeStart.x - eraserWidth/2, shapeStart.y - eraserHeight/2, eraserWidth, eraserHeight);
@@ -156,9 +159,16 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
      * When the mouse is released, that is when the shape is added to the shapes list for drawing
      */
     public void mouseReleased(MouseEvent mouseEvent){
-        if(TextEditor.paintWindow.selectedTool.equals("line")) createLine(shapeStart.x, shapeStart.y, shapeEnd.x, shapeEnd.y, TextEditor.paintWindow.selectedColor);
-        else if(TextEditor.paintWindow.selectedTool.equals("rectangle")) createRect(shapeStart.x, shapeStart.y, shapeEnd.x, shapeEnd.y, TextEditor.paintWindow.filling, TextEditor.paintWindow.selectedColor);
-        else if(TextEditor.paintWindow.selectedTool.equals("ellipse")) createOval(shapeStart.x, shapeStart.y, shapeEnd.x, shapeEnd.y, TextEditor.paintWindow.filling, TextEditor.paintWindow.selectedColor);
+
+        /*Variables*/
+        Color selectedColor = TextEditor.textEditor.getPaintWindow().getSelectedColor();
+        boolean filling = TextEditor.textEditor.getPaintWindow().isFilling();
+        String selectedTool = TextEditor.textEditor.getPaintWindow().getSelectedTool();
+
+        /*Conditional statements to determine what shape to create*/
+        if(selectedTool.equals("line")) createLine(shapeStart.x, shapeStart.y, shapeEnd.x, shapeEnd.y, selectedColor);
+        else if(selectedTool.equals("rectangle")) createRect(shapeStart.x, shapeStart.y, shapeEnd.x, shapeEnd.y, filling, selectedColor);
+        else if(selectedTool.equals("ellipse")) createOval(shapeStart.x, shapeStart.y, shapeEnd.x, shapeEnd.y, filling, selectedColor);
         repaint();
     }
 
@@ -191,7 +201,7 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
            }
 
            /*File object and PrintStream object to write to the file*/
-           File saveToFile = new File(saveFileChooser.getSelectedFile().getName());
+           File saveToFile = saveFileChooser.getSelectedFile();
            PrintStream printStreamWriter = new PrintStream(saveToFile);
            printStreamWriter.println("File: Shapes File"); //Indicator that marks the created file as a shapes file (used to determine if a file being opened is valid)
 

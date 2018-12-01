@@ -40,10 +40,10 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener {
     private boolean lightThemeActive = true; //Light theme on by default
     private boolean darkThemeActive = false;
     private boolean fileExists = false; //Used for saving
-    public static final Font DEFAULT_FONT = new Font("Sans-Serif", Font.PLAIN, 20);
-    public static FontWindow fontWindow;
+    private static final Font DEFAULT_FONT = new Font("Sans-Serif", Font.PLAIN, 20);
+    private static FontWindow fontWindow;
     public static TextEditor textEditor;
-    public static PaintWindow paintWindow;
+    private static PaintWindow paintWindow;
 
     /*For file management*/
     private String openedFileName = "";
@@ -548,6 +548,10 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener {
 
         return 0;
     }
+
+    public PaintWindow getPaintWindow(){return paintWindow;}
+    public FontWindow getFontWindow(){return fontWindow;}
+    //public static TextEditor getTextEditor(){return textEditor;}
     public static void main(String[] args){
         textEditor = new TextEditor();
     }

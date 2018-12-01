@@ -46,9 +46,9 @@ public class PaintWindow extends JFrame implements ActionListener {
     private final int COLOR_BUTTON_SIZE = 20;
     private final int TOOL_BUTTON_SIZE = 35;
 
-    public String selectedTool;
-    public Color selectedColor;
-    public boolean filling = false;
+    private String selectedTool;
+    private Color selectedColor;
+    private boolean filling = false;
 
     /*Canvas object where all the graphics will be handled*/
     private Canvas canvas;
@@ -323,4 +323,9 @@ public class PaintWindow extends JFrame implements ActionListener {
         else if (action.equals("Clear")) canvas.clear();
         else if (action.equals("Open")) canvas.open();
     }
+
+    /*Getters*/
+    public String getSelectedTool(){return selectedTool;}
+    public Color getSelectedColor(){return selectedColor;}
+    public boolean isFilling(){return filling;}
 }
