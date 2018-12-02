@@ -8,23 +8,34 @@ import java.util.*;
 import java.util.List;
 
 public class FontWindow extends JFrame implements ActionListener, ListSelectionListener {
+
+    /*Standard Collections*/
     private List<String> availableFontFamilyNames;
     private Font[] allAvailableFonts;
+    private  Set<String> availableFontStylesForSelectedFont;
+    private Map<String, JScrollPane> scrollPaneMap;
+
+    /*Constants*/
     private static final int FONT_WINDOW_WIDTH = 700;
     private static final int FONT_WINDOW_HEIGHT = 600;
     private static final int PANEL_WIDTH = 200;
     private static final int PANEL_HEIGHT = 200;
     private static final int BUTTON_WIDTH = 100;
     private static final int BUTTON_HEIGHT = 40;
+
+    /*Various components*/
     private JTextArea sampleTextArea;
     private JScrollPane sampleTextAreaScroll;
     private JPanel fontFamilyPanel, fontStylePanel, fontSizePanel, samplePanel;
-    public static Set<String> availableFontStylesForSelectedFont = new HashSet<>();
+
+    /*JLists and DefaultListModel objects*/
     private JList fontFamilyList, fontStyleList;
     private JList<Integer> fontSizeList;
     private DefaultListModel listModelFontFamily, listModelFontStyle, listModelFontSize;
-    String selectedFontFamily, selectedFontStyle;
-    int selectedFontSize;
+
+    /*Other variables*/
+    private String selectedFontFamily, selectedFontStyle;
+    private int selectedFontSize;
 
     public FontWindow() {
 
@@ -33,6 +44,9 @@ public class FontWindow extends JFrame implements ActionListener, ListSelectionL
         fontStylePanel = new JPanel();
         fontSizePanel = new JPanel();
         samplePanel = new JPanel();
+
+        scrollPaneMap = new HashMap<>();
+        availableFontStylesForSelectedFont = new HashSet<>();
 
         setUpFontWindowUI();
     }
@@ -94,7 +108,6 @@ public class FontWindow extends JFrame implements ActionListener, ListSelectionL
         add(fontStylePanel);
         add(fontSizePanel);
         add(samplePanel);
-
     }
 
     /**
@@ -129,33 +142,25 @@ public class FontWindow extends JFrame implements ActionListener, ListSelectionL
      * Setting up the JList objects - This includes filling up the list with values
      */
     public void setupJLists(){
-        //TODO: Create a new method that handles the JScrollPane stuff and parameterize for code efficiency
 
-        /* ---- Setting up the font family list ---- */
-        listModelFontFamily = new DefaultListModel<>();
+        /*  Setting up the font family list  */
+        listModelFontFamily = new DefaultListModel<>(); //DefaultListModel object to make adding elements easier
         for(String fontFamilyName : availableFontFamilyNames){
             listModelFontFamily.addElement(fontFamilyName);
         }
         fontFamilyList = new JList(listModelFontFamily);
         fontFamilyList.setCellRenderer(new FontJListCellRenderer()); //Uses custom cell renderer to customize each individual cell in this list
-        JScrollPane fontFamilyListScroll = new JScrollPane(fontFamilyList);
-        fontFamilyListScroll.setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
-        fontFamilyListScroll.setBorder(BorderFactory.createTitledBorder("Font Family"));
         String firstFontFamily = fontFamilyList.getModel().getElementAt(0).toString(); //Gets the first font family in the list
         setAvailableFontStylesForSelectedFont(firstFontFamily);
         fontFamilyList.setSelectedIndex(0);
 
         /*Setting up the font style list*/
-        listModelFontStyle = new DefaultListModel<>();
+        listModelFontStyle = new DefaultListModel<>(); //DefaultListModel object to make adding elements easier
         for(String fontStyle : availableFontStylesForSelectedFont){
             listModelFontStyle.addElement(fontStyle);
         }
         fontStyleList = new JList(listModelFontStyle);
         fontStyleList.setCellRenderer(new FontJListCellRenderer()); //Uses custom cell renderer to customize each individual cell in this list
-        JScrollPane fontStyleListScroll = new JScrollPane(fontStyleList);
-        fontStyleListScroll.setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
-        fontStyleListScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        fontStyleListScroll.setBorder(BorderFactory.createTitledBorder("Font Style"));
         fontStyleList.setSelectedIndex(0);
 
         /*Setting up the font size list*/
@@ -166,10 +171,12 @@ public class FontWindow extends JFrame implements ActionListener, ListSelectionL
             fontVal+=2;
         }
         fontSizeList = new JList<>(listModelFontSize);
-        JScrollPane fontSizeListScroll = new JScrollPane(fontSizeList);
-        fontSizeListScroll.setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
-        fontSizeListScroll.setBorder(BorderFactory.createTitledBorder("Font Size"));
         fontSizeList.setSelectedIndex(5);
+
+        /*Creating the JScrollPane objects to hold the JList objects*/
+        createScrollPane(fontFamilyList, "Font Family", PANEL_WIDTH, PANEL_HEIGHT, false);
+        createScrollPane(fontStyleList, "Font Style", PANEL_WIDTH, PANEL_HEIGHT, true);
+        createScrollPane(fontSizeList, "Font Size", PANEL_WIDTH, PANEL_HEIGHT, false);
 
         /*Setting the initial selected font combination*/
         selectedFontFamily = fontFamilyList.getSelectedValue().toString();
@@ -182,9 +189,20 @@ public class FontWindow extends JFrame implements ActionListener, ListSelectionL
         fontSizeList.addListSelectionListener(this);
 
         /*adding the scroll panes of each list to the corresponding panel*/
-        fontFamilyPanel.add(fontFamilyListScroll);
-        fontStylePanel.add(fontStyleListScroll);
-        fontSizePanel.add(fontSizeListScroll);
+        fontFamilyPanel.add(scrollPaneMap.get("Font Family"));
+        fontStylePanel.add(scrollPaneMap.get("Font Style"));
+        fontSizePanel.add(scrollPaneMap.get("Font Size"));
+    }
+
+    /**
+     * Creates a scroll pane for a JList object and adds it to the map
+     */
+    private void createScrollPane(JList list, String nameOfScrollPane, int scrollPaneX , int scrollPaneY, boolean alwaysScroll){
+        JScrollPane scrollPane= new JScrollPane(list);
+        scrollPane.setPreferredSize(new Dimension(scrollPaneX, scrollPaneY));
+        scrollPane.setBorder(BorderFactory.createTitledBorder(nameOfScrollPane));
+        if(alwaysScroll) scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPaneMap.put(nameOfScrollPane, scrollPane);
     }
 
     /**
@@ -196,11 +214,10 @@ public class FontWindow extends JFrame implements ActionListener, ListSelectionL
         String initFontFamily = fontFamilyList.getSelectedValue().toString();
         String initFontStyle = fontStyleList.getSelectedValue().toString();
         int initFontSize = fontSizeList.getSelectedValue();
-        System.out.println(initFontFamily + " " + initFontStyle + " " + initFontSize);
 
         /*Setting initial font that the sample should be displayed in*/
         sampleTextArea = new JTextArea();
-        sampleTextArea.setFont(new Font(initFontFamily, fontStyleType(initFontStyle), 12));
+        sampleTextArea.setFont(new Font(initFontFamily, fontStyleType(initFontStyle), initFontSize));
         sampleTextArea.setBorder(BorderFactory.createTitledBorder("Sample"));
         sampleTextArea.setText("AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz");
         sampleTextArea.setLineWrap(true);
@@ -240,23 +257,22 @@ public class FontWindow extends JFrame implements ActionListener, ListSelectionL
         if(!e.getValueIsAdjusting()){
             JList list = (JList)e.getSource();
 
-            //TODO: Clean this up by using list models in the conditions instead of the other collections
             /*If change was within the fontFamilyList JList object - other conditions are needed to handle any special circumstances to prevent errors*/
-            if((availableFontFamilyNames.contains(list.getSelectedValue()) && availableFontStylesForSelectedFont.contains(list.getSelectedValue()) && availableFontStylesForSelectedFont.size() == 1)
-            || availableFontFamilyNames.contains(list.getSelectedValue()) && availableFontStylesForSelectedFont.contains(list.getSelectedValue())){
+            if((listModelFontFamily.contains(list.getSelectedValue()) && listModelFontStyle.contains(list.getSelectedValue()) && listModelFontStyle.size() == 1)
+            || listModelFontFamily.contains(list.getSelectedValue()) && listModelFontStyle.contains(list.getSelectedValue())){
                 selectedFontFamily = list.getSelectedValue().toString();
                 selectedFontStyle = list.getSelectedValue().toString();
                 updateSample();
 
             /*If change was within the fontFamilyList JList object*/
-            }else if(availableFontFamilyNames.contains(list.getSelectedValue())){
+            }else if(listModelFontFamily.contains(list.getSelectedValue())){
                 selectedFontFamily = list.getSelectedValue().toString();
                 setAvailableFontStylesForSelectedFont(selectedFontFamily);
                 updateFontStylesList();
                 updateSample();
 
             /*If the change was within the fontStyleList JList object*/
-            }else if(availableFontStylesForSelectedFont.contains(list.getSelectedValue())){
+            }else if(listModelFontStyle.contains(list.getSelectedValue())){
                 selectedFontStyle = list.getSelectedValue().toString();
                 updateSample();
 
@@ -298,7 +314,7 @@ public class FontWindow extends JFrame implements ActionListener, ListSelectionL
         if(fontStyle.contains("Bold") && fontStyle.contains("Italic")) return Font.BOLD|Font.ITALIC;
         else if(fontStyle.contains("Italic")) return Font.ITALIC;
         else if(fontStyle.contains("Bold")) return Font.BOLD;
-        else {return Font.PLAIN;}
+        else return Font.PLAIN;
     }
 
     /**

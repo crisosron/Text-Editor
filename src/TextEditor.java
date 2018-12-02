@@ -183,7 +183,6 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener {
             else if(editMenuItemNames.contains(entryCheckBox.getKey())) menuMap.get("Edit").add(entryCheckBox.getValue());
             else if(formatMenuItemNames.contains(entryCheckBox.getKey())) menuMap.get("Format").add(entryCheckBox.getValue());
             else if(paintMenuItemNames.contains(entryCheckBox.getKey())) menuMap.get("Graphics").add(entryCheckBox.getValue());
-            System.out.println("Added " + entryCheckBox.getKey());
         }
 
         /*Setting this checkbox menu item to true since the light theme is on by default*/
@@ -551,7 +550,6 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener {
 
     public PaintWindow getPaintWindow(){return paintWindow;}
     public FontWindow getFontWindow(){return fontWindow;}
-    //public static TextEditor getTextEditor(){return textEditor;}
     public static void main(String[] args){
         textEditor = new TextEditor();
     }
