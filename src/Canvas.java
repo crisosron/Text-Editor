@@ -30,7 +30,7 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
         setupCanvas();
     }
 
-    public void setupCanvas(){
+    private void setupCanvas(){
         setBounds(x, y, width, height);
         setBorder(BorderFactory.createTitledBorder("Canvas"));
         setBackground(Color.white);
@@ -89,7 +89,7 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
     /**
      * Creates a rectangle shape and adds to list
      */
-    public void createRect(int startX, int startY, int endX, int endY, boolean hasFill, Color color){
+    private void createRect(int startX, int startY, int endX, int endY, boolean hasFill, Color color){
         int x = Math.min(startX, endX);
         int y = Math.min(startY, endY);
         int width = Math.abs(endX - startX);
@@ -104,7 +104,7 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
     /**
      * Creates a line shape and adds to list
      */
-    public void createLine(int startX, int startY, int endX, int endY, Color color){
+    private void createLine(int startX, int startY, int endX, int endY, Color color){
         Line2D.Float newLine = new Line2D.Float(startX, startY, endX, endY);
         Point firstPoint = new Point(startX, startY);
         Point secondPoint = new Point(endX, endY);
@@ -116,7 +116,7 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
     /**
      * Creates an oval shape and adds to list
      */
-    public void createOval(int startX, int startY, int endX, int endY, boolean hasFill, Color color){
+    private void createOval(int startX, int startY, int endX, int endY, boolean hasFill, Color color){
         int x = Math.min(startX, endX);
         int y = Math.min(startY, endY);
         int width = Math.abs(endX - startX);

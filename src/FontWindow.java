@@ -50,7 +50,7 @@ public class FontWindow extends JFrame implements ActionListener, ListSelectionL
 
         setUpFontWindowUI();
     }
-    public void setUpFontWindowUI(){
+    private void setUpFontWindowUI(){
 
         /*Setting up the frame*/
         setDefaultCloseOperation(DISPOSE_ON_CLOSE); //Gets rid of the this frame but the application stays open (therefore main frame stays)
@@ -77,7 +77,7 @@ public class FontWindow extends JFrame implements ActionListener, ListSelectionL
     /**
      * Setting up the JPanel objects - This includes positioning of the panel within the frame
      */
-    public void panelSetup(){
+    private void panelSetup(){
 
         /*Getting available fonts in machine and storing into array*/
         String[] tempAvailableFontFamilyNamesArray = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames(); //Names of fonts
@@ -113,7 +113,7 @@ public class FontWindow extends JFrame implements ActionListener, ListSelectionL
     /**
      * Setting up the buttons for this frame
      */
-    public void setupButtons(){
+    private void setupButtons(){
 
         /*Creating JButton objects*/
         JButton confirmButton = new JButton("Confirm");
@@ -141,7 +141,7 @@ public class FontWindow extends JFrame implements ActionListener, ListSelectionL
     /**
      * Setting up the JList objects - This includes filling up the list with values
      */
-    public void setupJLists(){
+    private void setupJLists(){
 
         /*  Setting up the font family list  */
         listModelFontFamily = new DefaultListModel<>(); //DefaultListModel object to make adding elements easier
@@ -209,7 +209,7 @@ public class FontWindow extends JFrame implements ActionListener, ListSelectionL
      * Method that sets up the sample text area - This includes the first font,
      * absolute positioning and the sample text contained within the text area
      */
-    public void setupSampleTextArea(){
+    private void setupSampleTextArea(){
 
         String initFontFamily = fontFamilyList.getSelectedValue().toString();
         String initFontStyle = fontStyleList.getSelectedValue().toString();
@@ -231,7 +231,7 @@ public class FontWindow extends JFrame implements ActionListener, ListSelectionL
     /**
      * Adding all available font styles for the selected font to the set
      */
-    public void setAvailableFontStylesForSelectedFont(String fontFamily){
+    private void setAvailableFontStylesForSelectedFont(String fontFamily){
         if(!availableFontStylesForSelectedFont.isEmpty()) availableFontStylesForSelectedFont.clear();
         for(Font font : allAvailableFonts){
             String fontStyle = font.getName(); //Name of the font is the style of the font
@@ -288,7 +288,7 @@ public class FontWindow extends JFrame implements ActionListener, ListSelectionL
      * Updates the list model that the fontStyleList JList object uses and in turn
      * updates the actual fontStyleList JList object
      */
-    public void updateFontStylesList(){
+    private void updateFontStylesList(){
         listModelFontStyle.clear();
         for(String fontStyle : availableFontStylesForSelectedFont){
             listModelFontStyle.addElement(fontStyle);
@@ -300,7 +300,7 @@ public class FontWindow extends JFrame implements ActionListener, ListSelectionL
     /**
      * Updates the sample text area font
      */
-    public void updateSample(){
+    private void updateSample(){
         String fontFamily = fontFamilyList.getSelectedValue().toString();
         String fontStyle = fontStyleList.getSelectedValue().toString();
         int fontSize = fontSizeList.getSelectedValue();
@@ -310,7 +310,7 @@ public class FontWindow extends JFrame implements ActionListener, ListSelectionL
     /**
      * Method that returns the type of font style in string form
      */
-    public int fontStyleType(String fontStyle){
+    private int fontStyleType(String fontStyle){
         if(fontStyle.contains("Bold") && fontStyle.contains("Italic")) return Font.BOLD|Font.ITALIC;
         else if(fontStyle.contains("Italic")) return Font.ITALIC;
         else if(fontStyle.contains("Bold")) return Font.BOLD;
@@ -320,7 +320,7 @@ public class FontWindow extends JFrame implements ActionListener, ListSelectionL
     /**
      * Sends the selected combination through and sets the new font
      */
-    public void confirm(){
+    private void confirm(){
         TextEditor.textEditor.setNewFont(selectedFontFamily, selectedFontStyle, selectedFontSize);
         dispose(); //Closes the font window
         JOptionPane.showMessageDialog(null, "Updated Font!");

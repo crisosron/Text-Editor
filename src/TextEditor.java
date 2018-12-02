@@ -9,6 +9,7 @@ import java.io.FileWriter;
 import java.util.*;
 import java.util.List;
 
+
 public class TextEditor extends JFrame implements ActionListener, KeyListener {
 
     /*UI Fields*/
@@ -20,8 +21,8 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener {
     /*Constants for sizes of components - All are somehow related back to FRAME_WIDTH and FRAME_HEIGHT*/
     public static final int FRAME_WIDTH = 1000;
     public static final int FRAME_HEIGHT = 800;
-    public static final int MAIN_TEXT_AREA_WIDTH = FRAME_WIDTH;
-    public static final int MAIN_TEXT_AREA_HEIGHT = FRAME_HEIGHT;
+    private static final int MAIN_TEXT_AREA_WIDTH = FRAME_WIDTH;
+    private static final int MAIN_TEXT_AREA_HEIGHT = FRAME_HEIGHT;
 
     /*Collections for UI*/
     private Set<String> menuNames, menuItemNames, checkBoxMenuItemNames, fileMenuItemNames, editMenuItemNames, formatMenuItemNames, paintMenuItemNames;
@@ -153,7 +154,7 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener {
     /**
      * Sets up the user interface
      */
-    public void setupGUI(){
+    private void setupGUI(){
 
         /* ---- Setting up the frame(this) ---- */
         setLayout(new BorderLayout());
@@ -209,7 +210,7 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener {
     /**
      * Handles all the keyboard shortcuts
      */
-    public void setupHotKeys(){
+    private void setupHotKeys(){
 
         /*Looping through all the menu items with key shortcuts and setting the shortcuts*/
         for(String menuItemWithKeyShortCut : allMenuItemsWithShortcuts){
@@ -260,7 +261,7 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener {
         else if(action.equals("New Paint Window")) {paintWindow = new PaintWindow();}
     }
 
-    public void openFile(){
+    private void openFile(){
         try{
 
             /*Prompting user to open a file using file choosers*/
@@ -290,7 +291,7 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener {
      * Called when the Save menu item in the File menu. This method differs from saveFileAs method since
      * it first checks if the user is trying to save to an existing file. If not, call the saveFileAs method
      */
-    public void saveFile(){
+    private void saveFile(){
         try{
 
             /*If saving to existing file*/
@@ -314,7 +315,7 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener {
      *  unlike the saveFile method which does not force the showSaveDialog if the file being saved is a file that already
      *  exists.
      */
-    public void saveFileAs(){
+    private void saveFileAs(){
         try {
             /*Operations to conduct when saving to a brand new file*/
             JFileChooser saveFileChooser = new JFileChooser();
@@ -342,7 +343,7 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener {
      *                              1 = User clicked on Exit JMenuItem in the File menu
      *                              2 = User clicked on New JMenuItem in the File menu without saving current changes
      */
-    public void saveCheck(int sourceID){
+    private void saveCheck(int sourceID){
         int optionInput = JOptionPane.showConfirmDialog(null, "Would you like to save changes made? ");
         if(optionInput == JOptionPane.YES_OPTION) {
             saveFile();
@@ -360,7 +361,7 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener {
     /**
      * Creates a new untitled document
      */
-    public void newDocument(){
+    private void newDocument(){
 
         /*Checking if the user wants to save an unsaved changes*/
         if(changesMade) {
@@ -378,7 +379,7 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener {
     /**
      * Forces a hard exit -Called when the Exit menu item in the File menu is clicked
      */
-    public void exit(){
+    private void exit(){
         if(changesMade)saveCheck(1);
         else System.exit(EXIT_ON_CLOSE);
     }
@@ -386,7 +387,7 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener {
     /**
      * Changes the editor to use a dark theme
      */
-    public void enableDarkTheme(){
+    private void enableDarkTheme(){
 
         /*Exits the method if the dark theme is already active*/
         if(darkThemeActive) return;
@@ -404,7 +405,7 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener {
     /**
      * Changes the editor to use a light theme
      */
-    public void enableLightTheme(){
+    private void enableLightTheme(){
 
         /*Exits the method if the light theme is already active*/
         if(lightThemeActive) return;
@@ -422,7 +423,7 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener {
     /**
      * Activates/Deactivates the word wrap functionality around the mainTextArea component
      */
-    public void setWordWrap(){
+    private void setWordWrap(){
         isWrapping = !isWrapping;
         mainTextArea.setLineWrap(isWrapping);
     }
@@ -430,7 +431,7 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener {
     /**
      * Method that copies text and removes it from the mainTextArea component
      */
-    public void cut(){
+    private void cut(){
 
         /*Text to cut is the selected text in the mainTextArea component*/
         String textToCut = mainTextArea.getSelectedText();
@@ -453,7 +454,7 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener {
      * Method that takes the text stored in the system clipboard and pastes it to
      * the mainTextArea component
      */
-    public void paste() {
+    private void paste() {
         try {
             String textToPaste = (String) Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor);
             mainTextArea.insert(textToPaste, mainTextArea.getCaretPosition()); //Inserts the text in the clipboard in the current position of the caret
@@ -463,7 +464,7 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener {
     /**
      * Copies selected text in mainTextArea into system clipboard without removing the text from the mainTextArea component
      */
-    public void copy(){
+    private void copy(){
         StringSelection textToCopy = new StringSelection(mainTextArea.getSelectedText());
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         clipboard.setContents(textToCopy, textToCopy);
@@ -487,7 +488,7 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener {
     /**
      * Method that returns the type of font style in string form
      */
-    public int fontStyleType(String fontStyle){
+    private int fontStyleType(String fontStyle){
         if(fontStyle.contains("Bold") && fontStyle.contains("Italic")) return Font.BOLD|Font.ITALIC;
         else if(fontStyle.contains("Italic")) return Font.ITALIC;
         else if(fontStyle.contains("Bold")) return Font.BOLD;
@@ -515,7 +516,7 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener {
      * Returns the KeyEvent constant that corresponds to the character passed
      * into the method
      */
-    public int getKeyEventForChar(char character){
+    private int getKeyEventForChar(char character){
         switch(character){
             case 'A': return KeyEvent.VK_A;
             case 'B': return KeyEvent.VK_B;

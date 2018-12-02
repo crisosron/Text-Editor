@@ -70,7 +70,7 @@ public class PaintWindow extends JFrame implements ActionListener {
         setupPaintWindowUI();
     }
 
-    public void setupPaintWindowUI(){
+    private void setupPaintWindowUI(){
 
         /*Setting up the paint window frame*/
         setTitle("Paint");
@@ -112,7 +112,7 @@ public class PaintWindow extends JFrame implements ActionListener {
     /**
      * Method that sets up the color buttons
      */
-    public void setupColorButtons(){
+    private void setupColorButtons(){
 
         /*Setting the layout of the color panel to null so that the
          * buttons being added can be positioned absolutely*/
@@ -168,7 +168,7 @@ public class PaintWindow extends JFrame implements ActionListener {
     /**
      * Sets up the tool buttons
      */
-    public void setupToolButtons(){
+    private void setupToolButtons(){
 
         /*Setting the Tool panel layout to null so that components within it can be
         * positioned absolutely*/
@@ -200,7 +200,7 @@ public class PaintWindow extends JFrame implements ActionListener {
     /**
      * Sets up the other actions buttons
      */
-    public void setupOtherActionsButtons(){
+    private void setupOtherActionsButtons(){
         int x = 25;
         int y = 15;
         int width = 150;
@@ -216,7 +216,7 @@ public class PaintWindow extends JFrame implements ActionListener {
      * Method used to determine what hue should be generated for the color buttons (used to determine hue for row)
      * Returns a List with rgb values in order
      */
-    public List<Integer> determineHue(String hueToGenerate){
+    private List<Integer> determineHue(String hueToGenerate){
         if(hueToGenerate.equals("Red")) return (new ArrayList<>(Arrays.asList(255, 0, 0)));
         else if(hueToGenerate.equals("Green")) return (new ArrayList<>(Arrays.asList(0, 255, 0)));
         else if (hueToGenerate.equals("Blue")) return (new ArrayList<>(Arrays.asList(0, 0, 255)));
@@ -233,7 +233,7 @@ public class PaintWindow extends JFrame implements ActionListener {
     /**
      * Method that creates panels and positions them onto the frame
      */
-    public void createPanel(String name, int x, int y, int width, int height){
+    private void createPanel(String name, int x, int y, int width, int height){
         JPanel newPanel = new JPanel();
         newPanel.setBounds(x, y, width, height);
         newPanel.setBorder(BorderFactory.createTitledBorder(name));
@@ -244,7 +244,7 @@ public class PaintWindow extends JFrame implements ActionListener {
     /**
      * Creates a button that represents a color - Used for color selection
      */
-    public JButton createColorButton(Color color, int x, int y, String colorCommand){
+    private JButton createColorButton(Color color, int x, int y, String colorCommand){
         JButton colorButton = new JButton();
         colorButton.setContentAreaFilled(false); //Removes default fill of button
         colorButton.setOpaque(true); //Allows for custom fill
@@ -261,7 +261,7 @@ public class PaintWindow extends JFrame implements ActionListener {
     /**
      * Creates a button that represents a tool that the user can use
      */
-    public void createToolButton(String iconFileName, int x, int y, String toolCommand){
+    private void createToolButton(String iconFileName, int x, int y, String toolCommand){
 
         /*Creating the icon for the image*/
         Icon buttonIcon = new ImageIcon("Images/"+iconFileName);
@@ -284,7 +284,7 @@ public class PaintWindow extends JFrame implements ActionListener {
     /**
      * Creates a button that is placed in the 'Other Actions' panel
      */
-    public void createOtherActionButton(String name, int x, int y, int width, int height){
+    private void createOtherActionButton(String name, int x, int y, int width, int height){
         JButton otherActionButton = new JButton(name);
         otherActionButton.setBounds(x, y, width, height);
         otherActionButton.addActionListener(this);
@@ -296,7 +296,7 @@ public class PaintWindow extends JFrame implements ActionListener {
     /**
      * Sets up the fill toggle button
      */
-    public void setupFillButton(){
+    private void setupFillButton(){
         panelMap.get("Fill").setLayout(null);
         fillToggleButton.setBounds(25, 15, 150, 30);
         fillToggleButton.setActionCommand("Set Fill");
