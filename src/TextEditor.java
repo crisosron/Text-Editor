@@ -53,6 +53,7 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
     private String openedFileNamePath = "";
     private static boolean hasOpenedFile = false;
     private static boolean changesMade = false;
+    private boolean cancelClose = false;
 
     /**
      * Constructor - Initialises UI components and collections
@@ -366,8 +367,12 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
             /*Operations to conduct when saving to a brand new file*/
             JFileChooser saveFileChooser = new JFileChooser();
             int status = saveFileChooser.showSaveDialog(null);
-            if (status != JFileChooser.APPROVE_OPTION) JOptionPane.showMessageDialog(null, "Save cancelled!");
+            if (status != JFileChooser.APPROVE_OPTION){
+                JOptionPane.showMessageDialog(null, "Save cancelled!");
+                cancelClose = true; //Makes sure the program does not exit if cancel or the exit button is clicked in the save dialog
+            }
             else {
+                cancelClose = false;
                 File fileToSave = saveFileChooser.getSelectedFile(); //Creates a new file with a title based on the user's input
                 FileWriter writer = new FileWriter(fileToSave); //FileWriter object to write to the newly created file
                 mainTextArea.write(writer); //Gets the text in the mainTextArea component and writes it to the newly created file
@@ -386,14 +391,14 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
      * changes made to the current document
      *
      * Parameter sourceID notation: 0 = User clicked on exit button on the window
-     *                              1 = User clicked on Exit JMenuItem in the File menu
-     *                              2 = User clicked on New JMenuItem in the File menu without saving current changes
+     *                                                        1 = User clicked on Exit JMenuItem in the File menu
+     *                                                        2 = User clicked on New JMenuItem in the File menu without saving current changes
      */
     private void saveCheck(int sourceID){
         int optionInput = JOptionPane.showConfirmDialog(null, "Would you like to save changes made? ");
         if(optionInput == JOptionPane.YES_OPTION) {
             saveFile();
-            if(sourceID == 0 || sourceID == 1) System.exit(0);
+            if(sourceID == 0 || sourceID == 1 && !cancelClose) System.exit(0);
         }
         else if(optionInput == JOptionPane.CANCEL_OPTION) return;
         else{
