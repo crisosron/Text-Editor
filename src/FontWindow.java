@@ -171,7 +171,7 @@ public class FontWindow extends JFrame implements ActionListener, ListSelectionL
             fontVal+=2;
         }
         fontSizeList = new JList<>(listModelFontSize);
-        fontSizeList.setSelectedIndex(5);
+        fontSizeList.setSelectedIndex(9);
 
         /*Creating the JScrollPane objects to hold the JList objects*/
         createScrollPane(fontFamilyList, "Font Family", PANEL_WIDTH, PANEL_HEIGHT, false);

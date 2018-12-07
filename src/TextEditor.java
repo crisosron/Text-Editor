@@ -12,7 +12,6 @@ import java.io.FileWriter;
 import java.util.*;
 import java.util.List;
 
-
 public class TextEditor extends JFrame implements ActionListener, KeyListener , UndoableEditListener{
 
     /*UI Fields*/
@@ -390,9 +389,10 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
      * Method called when the user attempts to create a new document or exit the program without saving
      * changes made to the current document
      *
-     * Parameter sourceID notation: 0 = User clicked on exit button on the window
-     *                                                        1 = User clicked on Exit JMenuItem in the File menu
-     *                                                        2 = User clicked on New JMenuItem in the File menu without saving current changes
+     * Parameter sourceID notation:
+     * 0 = User clicked on exit button on the window
+     * 1 = User clicked on Exit JMenuItem in the File menu
+     * 2 = User clicked on New JMenuItem in the File menu without saving current changes
      */
     private void saveCheck(int sourceID){
         int optionInput = JOptionPane.showConfirmDialog(null, "Would you like to save changes made? ");
