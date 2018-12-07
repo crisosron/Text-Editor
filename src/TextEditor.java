@@ -1,4 +1,7 @@
 import javax.swing.*;
+import javax.swing.event.UndoableEditEvent;
+import javax.swing.event.UndoableEditListener;
+import javax.swing.undo.UndoManager;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
@@ -10,7 +13,7 @@ import java.util.*;
 import java.util.List;
 
 
-public class TextEditor extends JFrame implements ActionListener, KeyListener {
+public class TextEditor extends JFrame implements ActionListener, KeyListener , UndoableEditListener{
 
     /*UI Fields*/
     private JTextArea mainTextArea;
@@ -45,6 +48,7 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener {
     private static FontWindow fontWindow;
     public static TextEditor textEditor;
     private static PaintWindow paintWindow;
+    private UndoManager undoManager;
 
     /*For file management*/
     private String openedFileName = "";
@@ -71,6 +75,8 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener {
         menuItemsMap = new HashMap<>();
         history = new Stack<>();
         mainTextAreaFont = DEFAULT_FONT;
+        undoManager = new UndoManager();
+        mainTextArea.getDocument().addUndoableEditListener(this); //Adds the undoable edit listener to the mainTextArea
 
         /* ---- Setting up the collections ---- */
         /*Set that stores the names of all the menus in the editor*/
@@ -78,7 +84,7 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener {
 
         /*Sets that stores the menu items within each respective menu*/
         fileMenuItemNames = new HashSet<>(Arrays.asList("New", "Open", "Save", "Save As...", "Exit"));
-        editMenuItemNames = new HashSet<>(Arrays.asList("Undo", "Cut", "Copy", "Paste"));
+        editMenuItemNames = new HashSet<>(Arrays.asList("Undo", "Cut", "Copy", "Paste", "Redo"));
         formatMenuItemNames = new HashSet<>(Arrays.asList("Font", "Word Wrap", "Light Theme", "Dark Theme"));
         paintMenuItemNames = new HashSet<>(Arrays.asList("New Paint Window", "Open Paint In Current Window"));
 
@@ -91,7 +97,7 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener {
         *   menuItemsWithShiftShortcuts is a collection of menu items whose shortcut is CTRL + SHIFT + [first character of the menu item name]
         */
         menuItemsWithBasicShortcuts = new HashSet<>(Arrays.asList("New", "Open", "Save", "Copy", "Font"));
-        menuItemsWithStandardShortcuts = new HashSet<>(Arrays.asList("Undo", "Cut", "Paste", "Exit"));
+        menuItemsWithStandardShortcuts = new HashSet<>(Arrays.asList("Undo", "Cut", "Paste", "Exit", "Redo"));
         menuItemsWithShiftShortCuts = new HashSet<>(Arrays.asList("Save As..."));
 
         /*Adding all the menu items with a keyboard shortcut to a single set*/
@@ -229,6 +235,7 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener {
                 else if(menuItemWithKeyShortCut.equals("Cut")) menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, ActionEvent.CTRL_MASK));
                 else if(menuItemWithKeyShortCut.equals("Paste")) menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, ActionEvent.CTRL_MASK));
                 else if(menuItemWithKeyShortCut.equals("Exit")) menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W, ActionEvent.CTRL_MASK));
+                else if(menuItemWithKeyShortCut.equals("Redo")) menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y, ActionEvent.CTRL_MASK));
             }
         }
     }
@@ -250,6 +257,8 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener {
         else if(action.equals("Cut")) cut();
         else if(action.equals("Paste")) paste();
         else if(action.equals("Copy")) copy();
+        else if (action.equals("Undo")) undo();
+        else if(action.equals("Redo")) redo();
 
         /*Format menu actions*/
         else if(action.equals("Word Wrap")) setWordWrap();
@@ -259,6 +268,13 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener {
 
         /*Paint menu actions*/
         else if(action.equals("New Paint Window")) {paintWindow = new PaintWindow();}
+    }
+
+    /**
+     * Comes from the UndoableEditListener interface - Adds undoable actions to the UndoManager object
+     */
+    public void undoableEditHappened(UndoableEditEvent undoableEditEvent){
+        undoManager.addEdit(undoableEditEvent.getEdit());
     }
 
     private void openFile(){
@@ -473,9 +489,15 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener {
     /**
      * Undo's most recent action
      */
-    public void undo(){
-        //TODO: Implement this using a string stack
+    private void undo(){
+        if(undoManager.canUndo()) undoManager.undo();
+    }
 
+    /**
+     * Redo's an undone action
+     */
+    private void redo(){
+        if(undoManager.canRedo()) undoManager.redo();
     }
 
     /**
