@@ -6,9 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="56e28fe7-e4ac-4f50-ac0d-417cbc74c409" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/TextEditor/Canvas.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/TextEditor/Canvas.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/TextEditor/FontWindow.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/TextEditor/FontWindow.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/TextEditor/PaintWindow.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/TextEditor/PaintWindow.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/TextEditor/TextEditor$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/TextEditor/TextEditor$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/TextEditor/TextEditor.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/TextEditor/TextEditor.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/TextEditor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/TextEditor.java" afterDir="false" />
@@ -25,16 +22,18 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/TextEditor.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="518">
-              <caret line="500" column="5" lean-forward="true" selection-start-line="500" selection-start-column="5" selection-end-line="500" selection-end-column="5" />
+            <state relative-caret-position="113">
+              <caret line="226" column="96" lean-forward="true" selection-start-line="226" selection-start-column="96" selection-end-line="226" selection-end-column="96" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#22903#22904#0" expanded="true" />
-                <element signature="e#22963#22964#0" expanded="true" />
-                <element signature="e#23072#23073#0" expanded="true" />
-                <element signature="e#23132#23133#0" expanded="true" />
-                <element signature="e#24826#24827#0" expanded="true" />
-                <element signature="e#24871#24872#0" expanded="true" />
+                <element signature="e#11277#12076#0" expanded="true" />
+                <element signature="e#12075#12076#0" expanded="true" />
+                <element signature="e#24046#24047#0" expanded="true" />
+                <element signature="e#24106#24107#0" expanded="true" />
+                <element signature="e#24179#24180#0" expanded="true" />
+                <element signature="e#24239#24240#0" expanded="true" />
+                <element signature="e#26973#26974#0" expanded="true" />
+                <element signature="e#27018#27019#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -43,7 +42,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/PaintWindow.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="6320">
+            <state relative-caret-position="5369">
               <caret line="323" column="54" selection-start-line="323" selection-start-column="54" selection-end-line="323" selection-end-column="54" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -55,7 +54,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Canvas.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3580">
+            <state relative-caret-position="-1391">
               <caret line="190" selection-start-line="190" selection-end-line="190" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -76,8 +75,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/FontWindow.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="600">
-              <caret line="37" column="33" selection-start-line="37" selection-start-column="33" selection-end-line="37" selection-end-column="33" />
+            <state relative-caret-position="2000">
+              <caret line="272" lean-forward="true" selection-start-line="272" selection-end-line="272" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -88,7 +87,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/FontJListCellRenderer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="500">
+            <state relative-caret-position="520">
               <caret line="26" column="20" selection-start-line="26" selection-start-column="20" selection-end-line="26" selection-end-column="20" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -164,8 +163,8 @@
     </treeState>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-10" />
-    <option name="y" value="-10" />
+    <option name="x" value="349" />
+    <option name="y" value="-28" />
     <option name="width" value="1700" />
     <option name="height" value="1070" />
   </component>
@@ -174,7 +173,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -196,11 +195,11 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1544148866138" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1544151096774" />
     <property name="last_opened_file_path" value="$USER_HOME$/Eclipse Workspace/NotesEditor" />
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.15" />
@@ -259,7 +258,7 @@
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.19296375" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.19509594" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -268,13 +267,13 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32930845" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49200428" weight="0.28985506" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.4914712" visible="true" weight="0.033444814" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.1470911" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32930845" />
-      <window_info anchor="bottom" id="Terminal" order="7" sideWeight="0.52771854" weight="0.0" />
-      <window_info active="true" anchor="bottom" id="Event Log" order="8" sideWeight="0.5079957" side_tool="true" visible="true" weight="0.0" />
+      <window_info anchor="bottom" id="Terminal" order="7" sideWeight="0.52665246" weight="0.033444814" />
+      <window_info anchor="bottom" id="Event Log" order="8" sideWeight="0.50852877" side_tool="true" visible="true" weight="0.033444814" />
       <window_info anchor="bottom" id="Version Control" order="9" show_stripe_button="false" />
       <window_info anchor="bottom" id="Messages" order="10" weight="0.32930845" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
@@ -316,25 +315,9 @@
     <entry file="file://$PROJECT_DIR$/dsdfsdf" />
     <entry file="file://$PROJECT_DIR$/painting.txt" />
     <entry file="file://$PROJECT_DIR$/adasdasd" />
-    <entry file="file://$PROJECT_DIR$/src/TextEditor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="518">
-          <caret line="500" column="5" lean-forward="true" selection-start-line="500" selection-start-column="5" selection-end-line="500" selection-end-column="5" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#22903#22904#0" expanded="true" />
-            <element signature="e#22963#22964#0" expanded="true" />
-            <element signature="e#23072#23073#0" expanded="true" />
-            <element signature="e#23132#23133#0" expanded="true" />
-            <element signature="e#24826#24827#0" expanded="true" />
-            <element signature="e#24871#24872#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/PaintWindow.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="6320">
+        <state relative-caret-position="5369">
           <caret line="323" column="54" selection-start-line="323" selection-start-column="54" selection-end-line="323" selection-end-column="54" />
           <folding>
             <element signature="imports" expanded="true" />
@@ -344,7 +327,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Canvas.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3580">
+        <state relative-caret-position="-1391">
           <caret line="190" selection-start-line="190" selection-end-line="190" />
           <folding>
             <element signature="imports" expanded="true" />
@@ -359,22 +342,40 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/FontWindow.java">
+    <entry file="file://$PROJECT_DIR$/src/FontJListCellRenderer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="600">
-          <caret line="37" column="33" selection-start-line="37" selection-start-column="33" selection-end-line="37" selection-end-column="33" />
+        <state relative-caret-position="520">
+          <caret line="26" column="20" selection-start-line="26" selection-start-column="20" selection-end-line="26" selection-end-column="20" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/FontJListCellRenderer.java">
+    <entry file="file://$PROJECT_DIR$/src/FontWindow.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="500">
-          <caret line="26" column="20" selection-start-line="26" selection-start-column="20" selection-end-line="26" selection-end-column="20" />
+        <state relative-caret-position="2000">
+          <caret line="272" lean-forward="true" selection-start-line="272" selection-end-line="272" />
           <folding>
             <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/TextEditor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="113">
+          <caret line="226" column="96" lean-forward="true" selection-start-line="226" selection-start-column="96" selection-end-line="226" selection-end-column="96" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#11277#12076#0" expanded="true" />
+            <element signature="e#12075#12076#0" expanded="true" />
+            <element signature="e#24046#24047#0" expanded="true" />
+            <element signature="e#24106#24107#0" expanded="true" />
+            <element signature="e#24179#24180#0" expanded="true" />
+            <element signature="e#24239#24240#0" expanded="true" />
+            <element signature="e#26973#26974#0" expanded="true" />
+            <element signature="e#27018#27019#0" expanded="true" />
           </folding>
         </state>
       </provider>

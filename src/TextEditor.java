@@ -20,6 +20,7 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
     private JMenuBar menuBar;
     private JScrollPane mainTextAreaScroll;
     private Font mainTextAreaFont;
+    private JPopupMenu rightClickMenu;
 
     /*Constants for sizes of components - All are somehow related back to FRAME_WIDTH and FRAME_HEIGHT*/
     public static final int FRAME_WIDTH = 1000;
@@ -28,16 +29,13 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
     private static final int MAIN_TEXT_AREA_HEIGHT = FRAME_HEIGHT;
 
     /*Collections for UI*/
-    private Set<String> menuNames, menuItemNames, checkBoxMenuItemNames, fileMenuItemNames, editMenuItemNames, formatMenuItemNames, paintMenuItemNames;
+    private Set<String> menuNames, menuItemNames, checkBoxMenuItemNames, fileMenuItemNames, editMenuItemNames, formatMenuItemNames, paintMenuItemNames, rightClickMenuItemNames;
     private Map<String, JMenu> menuMap; //Use this map to gain access to menus
     private Map<String, JMenuItem> menuItemsMap; //Use this map to gain access to menu items
     private Map<String, JCheckBoxMenuItem> checkBoxMenuItemsMap = new HashMap<>(); //Use this map to gain access to check box menu items
 
     /*Sets that are used for keyboard shortcuts*/
     private Set<String> menuItemsWithBasicShortcuts, menuItemsWithStandardShortcuts, allMenuItemsWithShortcuts, menuItemsWithShiftShortCuts;
-
-    /*Stack used to control the undo function*/
-    private Stack<String> history;
 
     /*Other fields*/
     private boolean isWrapping = false; //Wrapping of text area is set to false by default
@@ -68,12 +66,12 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
 
         /* ---- Initializing some fields ---- */
         mainTextArea = new JTextArea();
+        rightClickMenu = new JPopupMenu();
         mainTextAreaScroll = new JScrollPane(mainTextArea);
         menuBar = new JMenuBar();
         menuItemNames = new HashSet<>();
         menuMap = new HashMap<>();
         menuItemsMap = new HashMap<>();
-        history = new Stack<>();
         mainTextAreaFont = DEFAULT_FONT;
         undoManager = new UndoManager();
         mainTextArea.getDocument().addUndoableEditListener(this); //Adds the undoable edit listener to the mainTextArea
@@ -87,6 +85,7 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
         editMenuItemNames = new HashSet<>(Arrays.asList("Undo", "Cut", "Copy", "Paste", "Redo"));
         formatMenuItemNames = new HashSet<>(Arrays.asList("Font", "Word Wrap", "Light Theme", "Dark Theme"));
         paintMenuItemNames = new HashSet<>(Arrays.asList("New Paint Window", "Open Paint In Current Window"));
+        rightClickMenuItemNames  = new HashSet<>(Arrays.asList("Undo", "Cut", "Copy", "Paste", "Redo"));
 
         /*Seperate set for JCheckBoxMenuItem objects*/
         checkBoxMenuItemNames = new HashSet<>(Arrays.asList("Word Wrap", "Light Theme", "Dark Theme"));
@@ -204,6 +203,7 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
         mainTextAreaScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
         mainTextAreaScroll.setPreferredSize(new Dimension(MAIN_TEXT_AREA_WIDTH, MAIN_TEXT_AREA_HEIGHT));
 
+        setupBasicMouseListener();
         setupHotKeys();
 
         /*Adding components to the frame*/
@@ -211,6 +211,36 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
         add(mainTextAreaScroll);
 
         setVisible(true);
+    }
+
+    /**
+     * Adding a basic mouselistener to mainTextArea handle only mouseReleased events for right click
+     */
+    private void setupBasicMouseListener(){
+        mainTextArea.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                super.mouseReleased(e);
+
+                /*Checking iif right click*/
+                if(SwingUtilities.isRightMouseButton(e)){
+                    rightClickMenu = new JPopupMenu(); //JPopupMenu to show at the point clicked
+
+                    /*Creating JMenuItems and placing into rightClickMenu*/
+                    for(Map.Entry<String, JMenuItem> entry : menuItemsMap.entrySet()){
+                        if(rightClickMenuItemNames.contains(entry.getKey())){
+                            JMenuItem newMenuItem = new JMenuItem(entry.getKey());
+                            newMenuItem.setActionCommand(newMenuItem.getName());
+                            newMenuItem.addActionListener(TextEditor.this::actionPerformed);
+                            rightClickMenu.add(newMenuItem);
+                        }
+                    }
+
+                    /*Showing the menu at the place clicked*/
+                    rightClickMenu.show(e.getComponent(), e.getX(), e.getY());
+                }
+            }
+        });
     }
 
     /**
