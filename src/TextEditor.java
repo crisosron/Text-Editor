@@ -398,6 +398,7 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
             if (status != JFileChooser.APPROVE_OPTION){
                 JOptionPane.showMessageDialog(null, "Save cancelled!");
                 cancelClose = true; //Makes sure the program does not exit if cancel or the exit button is clicked in the save dialog
+                return;
             }
             else {
                 cancelClose = false;
