@@ -343,7 +343,10 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
             JFileChooser openFileChooser = new JFileChooser();
             openFileChooser.setCurrentDirectory(new File(System.getProperty("user.dir"))); //Gets current working directory
             int status = openFileChooser.showOpenDialog(null); //Prompting user to open a file
-            if(status != JFileChooser.APPROVE_OPTION)JOptionPane.showMessageDialog(null, "No file selected!");
+            if(status != JFileChooser.APPROVE_OPTION){
+                JOptionPane.showMessageDialog(null, "No file selected!");
+                return;
+            }
             else{
 
                 /*Getting the text in the opened file and transferring it onto the
@@ -357,6 +360,7 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
                 while(scan.hasNext()) textToDisplay += scan.nextLine() + "\n";
                 mainTextArea.setText(textToDisplay);
                 setTitle(openedFileName); //Setting the title of the frame to the name of the opened text file
+                changesMade = false;
             }
 
         }catch(Exception e){e.printStackTrace();}
