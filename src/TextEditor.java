@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.util.*;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class TextEditor extends JFrame implements ActionListener, KeyListener , UndoableEditListener{
 
@@ -28,7 +29,7 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
     private static final int MAIN_TEXT_AREA_HEIGHT = FRAME_HEIGHT;
 
     /*Collections for UI*/
-    private Set<String> menuNames, menuItemNames, checkBoxMenuItemNames, fileMenuItemNames, editMenuItemNames, formatMenuItemNames, paintMenuItemNames, rightClickMenuItemNames;
+    private Set<String> fileMenuItemNames, editMenuItemNames, formatMenuItemNames, paintMenuItemNames, rightClickMenuItemNames;
     private Map<String, JMenu> menuMap; //Use this map to gain access to menus
     private Map<String, JMenuItem> menuItemsMap; //Use this map to gain access to menu items
     private Map<String, JCheckBoxMenuItem> checkBoxMenuItemsMap = new HashMap<>(); //Use this map to gain access to check box menu items
@@ -40,7 +41,6 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
     private boolean isWrapping = false; //Wrapping of text area is set to false by default
     private boolean lightThemeActive = true; //Light theme on by default
     private boolean darkThemeActive = false;
-    private boolean fileExists = false; //Used for saving
     private static final Font DEFAULT_FONT = new Font("Sans-Serif", Font.PLAIN, 20);
     private static FontWindow fontWindow;
     public static TextEditor textEditor;
@@ -69,7 +69,6 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
         rightClickMenu = new JPopupMenu();
         mainTextAreaScroll = new JScrollPane(mainTextArea);
         menuBar = new JMenuBar();
-        menuItemNames = new HashSet<>();
         menuMap = new HashMap<>();
         menuItemsMap = new HashMap<>();
         mainTextAreaFont = DEFAULT_FONT;
@@ -78,17 +77,17 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
 
         /* ---- Setting up the collections ---- */
         /*Set that stores the names of all the menus in the editor*/
-        menuNames = new HashSet<>(Arrays.asList("File", "Edit", "Format", "Graphics"));
+        Set<String> menuNames = new HashSet<>(Arrays.asList("File", "Edit", "Format", "Graphics"));
 
         /*Sets that stores the menu items within each respective menu*/
         fileMenuItemNames = new HashSet<>(Arrays.asList("New", "Open", "Save", "Save As...", "Exit"));
-        editMenuItemNames = new HashSet<>(Arrays.asList("Undo", "Cut", "Copy", "Paste", "Redo"));
+        editMenuItemNames = new HashSet<>(Arrays.asList("Undo", "Redo", "Cut", "Copy", "Paste"));
         formatMenuItemNames = new HashSet<>(Arrays.asList("Font", "Word Wrap", "Light Theme", "Dark Theme"));
         paintMenuItemNames = new HashSet<>(Arrays.asList("New Paint Window", "Open Paint In Current Window"));
         rightClickMenuItemNames  = new HashSet<>(Arrays.asList("Undo", "Cut", "Copy", "Paste", "Redo"));
 
         /*Seperate set for JCheckBoxMenuItem objects*/
-        checkBoxMenuItemNames = new HashSet<>(Arrays.asList("Word Wrap", "Light Theme", "Dark Theme"));
+        Set<String> checkBoxMenuItemNames = new HashSet<>(Arrays.asList("Word Wrap", "Light Theme", "Dark Theme"));
 
         /*Explanation of the 3 Collections:
         *   menuItemsWithBasic is a collection of menu items whose shortcut is CTRL + [first character of the menu item name]
@@ -106,10 +105,8 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
         allMenuItemsWithShortcuts.addAll(menuItemsWithStandardShortcuts);
 
         /*Adding all menu item names into one set*/
-        menuItemNames.addAll(fileMenuItemNames);
-        menuItemNames.addAll(editMenuItemNames);
-        menuItemNames.addAll(formatMenuItemNames);
-        menuItemNames.addAll(paintMenuItemNames);
+        Set<String> menuItemNames = new HashSet<>();
+        Stream.of(fileMenuItemNames, editMenuItemNames, formatMenuItemNames, paintMenuItemNames).forEach(menuItemNames::addAll);
 
         /*Creating all menus and adding to map*/
         for(String menuName : menuNames){
@@ -137,6 +134,7 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
             entryCheckBoxMenuItem.getValue().setActionCommand(entryCheckBoxMenuItem.getKey());
             entryCheckBoxMenuItem.getValue().addActionListener(this);
         }
+
 
         /*Overrides the exit operation on the frame closing button - This ensures that the user is prompted to save
         * any changes made before exiting*/
@@ -166,7 +164,7 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
         setTitle("Text Editor");
         setSize(new Dimension(FRAME_WIDTH, FRAME_HEIGHT));
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-        setResizable(false); //Disables resizability
+        setResizable(true); //Enables Resizability
 
         /* ---- Setting up the menus ---- */
         /*Adding menus to menu bar*/
@@ -175,21 +173,8 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
             menuBar.add(menuMap.get(menuName));
         }
 
-        /*Adding menu items to their respective menu items*/
-        for(Map.Entry<String, JMenuItem> menuItemEntry : menuItemsMap.entrySet()){
-            if(fileMenuItemNames.contains(menuItemEntry.getKey()) && !checkBoxMenuItemsMap.containsKey(menuItemEntry.getKey())) menuMap.get("File").add(menuItemEntry.getValue()); //If element belongs to File menu, add it to file menu
-            else if(editMenuItemNames.contains(menuItemEntry.getKey()) && !checkBoxMenuItemsMap.containsKey(menuItemEntry.getKey())) menuMap.get("Edit").add(menuItemEntry.getValue()); //If element belongs to Edit menu, add it to edit menu
-            else if(formatMenuItemNames.contains(menuItemEntry.getKey()) && !checkBoxMenuItemsMap.containsKey(menuItemEntry.getKey())) menuMap.get("Format").add(menuItemEntry.getValue()); //If element belongs to Format menu, add it to format menu
-            else if(paintMenuItemNames.contains(menuItemEntry.getKey()) && !checkBoxMenuItemsMap.containsKey(menuItemEntry.getKey())) menuMap.get("Graphics").add(menuItemEntry.getValue()); //If element belongs to Graphics menu, add it to graphics menu
-        }
-
-        /*Adding check box menu items to their respective menus*/
-        for (Map.Entry<String, JCheckBoxMenuItem> entryCheckBox : checkBoxMenuItemsMap.entrySet()){
-            if(fileMenuItemNames.contains(entryCheckBox.getKey())) menuMap.get("File").add(entryCheckBox.getValue());
-            else if(editMenuItemNames.contains(entryCheckBox.getKey())) menuMap.get("Edit").add(entryCheckBox.getValue());
-            else if(formatMenuItemNames.contains(entryCheckBox.getKey())) menuMap.get("Format").add(entryCheckBox.getValue());
-            else if(paintMenuItemNames.contains(entryCheckBox.getKey())) menuMap.get("Graphics").add(entryCheckBox.getValue());
-        }
+        /*Setting up the menus*/
+        setupMenus();
 
         /*Setting this checkbox menu item to true since the light theme is on by default*/
         checkBoxMenuItemsMap.get("Light Theme").setSelected(true);
@@ -203,6 +188,7 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
         mainTextAreaScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
         mainTextAreaScroll.setPreferredSize(new Dimension(MAIN_TEXT_AREA_WIDTH, MAIN_TEXT_AREA_HEIGHT));
 
+        /*Other setup*/
         setupBasicMouseListener();
         setupHotKeys();
 
@@ -211,6 +197,44 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
         add(mainTextAreaScroll);
 
         setVisible(true);
+    }
+
+    /**
+     * Adding menu items to their respective menus
+     */
+    private void setupMenus(){
+
+        /*Adding menu items to their respective  menus using the menuItemsMap and menuMap*/
+        for(Map.Entry<String, JMenuItem> menuItemEntry : menuItemsMap.entrySet()){
+            String menuItemName = menuItemEntry.getKey();
+            JMenuItem menuItem = menuItemEntry.getValue();
+
+            if(fileMenuItemNames.contains(menuItemName) && !checkBoxMenuItemsMap.containsKey(menuItemName)) {
+                menuMap.get("File").add(menuItem);
+               if(menuItemName.equals("Save As...") || menuItemName.equals("Save")) menuMap.get("File").addSeparator(); //Adding separator after certain menu items
+            }
+
+            else if(editMenuItemNames.contains(menuItemName) && !checkBoxMenuItemsMap.containsKey(menuItemName)) {
+                menuMap.get("Edit").add(menuItem);
+                if(menuItemName.equals("Paste")) menuMap.get("Edit").addSeparator();
+            }
+
+            else if(formatMenuItemNames.contains(menuItemName) && !checkBoxMenuItemsMap.containsKey(menuItemName)) {
+                menuMap.get("Format").add(menuItem);
+                if(menuItemName.equals("Font") || menuItemName.equals("Light Theme")) menuMap.get("Format").addSeparator();
+            }
+
+            /*---------------------------------------------------------- ENABLES PAINT FUNCTIONALITY ----------------------------------------------------------*/
+            //else if(paintMenuItemNames.contains(menuItemEntry.getKey()) && !checkBoxMenuItemsMap.containsKey(menuItemEntry.getKey())) menuMap.get("Graphics").add(menuItemEntry.getValue());
+        }
+
+        /*Adding check box menu items to their respective menus*/
+        for (Map.Entry<String, JCheckBoxMenuItem> entryCheckBox : checkBoxMenuItemsMap.entrySet()){
+            if(fileMenuItemNames.contains(entryCheckBox.getKey())) menuMap.get("File").add(entryCheckBox.getValue());
+            else if(editMenuItemNames.contains(entryCheckBox.getKey())) menuMap.get("Edit").add(entryCheckBox.getValue());
+            else if(formatMenuItemNames.contains(entryCheckBox.getKey())) menuMap.get("Format").add(entryCheckBox.getValue());
+            else if(paintMenuItemNames.contains(entryCheckBox.getKey())) menuMap.get("Graphics").add(entryCheckBox.getValue());
+        }
     }
 
     /**
@@ -254,19 +278,21 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
             char firstChar = menuItemWithKeyShortCut.charAt(0);
 
             /*'CTRL + [First character of menu item name]'*/
-            if(menuItemsWithBasicShortcuts.contains(menuItemWithKeyShortCut)) menuItem.setAccelerator(KeyStroke.getKeyStroke(getKeyEventForChar(firstChar), ActionEvent.CTRL_MASK));
+            if (menuItemsWithBasicShortcuts.contains(menuItemWithKeyShortCut))
+                menuItem.setAccelerator(KeyStroke.getKeyStroke(getKeyEventForChar(firstChar), ActionEvent.CTRL_MASK));
 
-            /*'CTRL + SHIFT + [First character of menu item name]'*/
-            else if(menuItemsWithShiftShortCuts.contains(menuItemWithKeyShortCut)) menuItem.setAccelerator(KeyStroke.getKeyStroke(getKeyEventForChar(firstChar), ActionEvent.CTRL_MASK|ActionEvent.SHIFT_MASK));
+                /*'CTRL + SHIFT + [First character of menu item name]'*/
+            else if (menuItemsWithShiftShortCuts.contains(menuItemWithKeyShortCut))
+                menuItem.setAccelerator(KeyStroke.getKeyStroke(getKeyEventForChar(firstChar), ActionEvent.CTRL_MASK | ActionEvent.SHIFT_MASK));
 
-            /*Menu items that have short cuts that adhere to the established standard (instead of using the first character of the menu item name)*/
-            else if (menuItemsWithStandardShortcuts.contains(menuItemWithKeyShortCut)){
-                if(menuItemWithKeyShortCut.equals("Undo")) menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, ActionEvent.CTRL_MASK));
-                else if(menuItemWithKeyShortCut.equals("Cut")) menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, ActionEvent.CTRL_MASK));
-                else if(menuItemWithKeyShortCut.equals("Paste")) menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, ActionEvent.CTRL_MASK));
-                else if(menuItemWithKeyShortCut.equals("Exit")) menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W, ActionEvent.CTRL_MASK));
-                else if(menuItemWithKeyShortCut.equals("Redo")) menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y, ActionEvent.CTRL_MASK));
-            }
+                /*Menu items that have short cuts that adhere to the established standard (instead of using the first character of the menu item name)*/
+            else if (menuItemsWithStandardShortcuts.contains(menuItemWithKeyShortCut)) {
+                if (menuItemWithKeyShortCut.equals("Undo")) menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, ActionEvent.CTRL_MASK));
+                else if (menuItemWithKeyShortCut.equals("Cut")) menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, ActionEvent.CTRL_MASK));
+                else if (menuItemWithKeyShortCut.equals("Paste")) menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, ActionEvent.CTRL_MASK));
+                else if (menuItemWithKeyShortCut.equals("Exit")) menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W, ActionEvent.CTRL_MASK));
+                else if (menuItemWithKeyShortCut.equals("Redo")) menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y, ActionEvent.CTRL_MASK));
+                }
         }
     }
 
