@@ -209,16 +209,19 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
             String menuItemName = menuItemEntry.getKey();
             JMenuItem menuItem = menuItemEntry.getValue();
 
+            /*If menu item is within the file menu*/
             if(fileMenuItemNames.contains(menuItemName) && !checkBoxMenuItemsMap.containsKey(menuItemName)) {
                 menuMap.get("File").add(menuItem);
                if(menuItemName.equals("Save As...") || menuItemName.equals("Save")) menuMap.get("File").addSeparator(); //Adding separator after certain menu items
             }
 
+            /*If menu item is within the edit menu*/
             else if(editMenuItemNames.contains(menuItemName) && !checkBoxMenuItemsMap.containsKey(menuItemName)) {
                 menuMap.get("Edit").add(menuItem);
                 if(menuItemName.equals("Paste")) menuMap.get("Edit").addSeparator();
             }
 
+            /*If menu item is witihn the format menu*/
             else if(formatMenuItemNames.contains(menuItemName) && !checkBoxMenuItemsMap.containsKey(menuItemName)) {
                 menuMap.get("Format").add(menuItem);
                 if(menuItemName.equals("Font") || menuItemName.equals("Light Theme")) menuMap.get("Format").addSeparator();
