@@ -11,9 +11,7 @@ public class FontJListCellRenderer extends JLabel implements ListCellRenderer {
 
         /*Determining the font the text should be displayed in - The font and style should be the same font and style that the text represents*/
         if(!valueString.contains("Bold") && !valueString.contains("Italic"))setFont(new Font(valueString, Font.PLAIN, 12));
-        else{
-            setFont(new Font(valueString, this.fontStyleType(valueString), 14));
-        }
+        else setFont(new Font(valueString, fontStyleType(valueString), 12));
 
         /*Determining selection colors*/
         if(isSelected){

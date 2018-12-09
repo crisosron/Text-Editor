@@ -143,13 +143,16 @@ public class FontWindow extends JFrame implements ActionListener, ListSelectionL
      */
     private void setupJLists(){
 
+        /*Custom ListCellRenderer object*/
+        FontJListCellRenderer customListCellRenderer = new FontJListCellRenderer();
+
         /*  Setting up the font family list  */
         listModelFontFamily = new DefaultListModel<>(); //DefaultListModel object to make adding elements easier
         for(String fontFamilyName : availableFontFamilyNames){
             listModelFontFamily.addElement(fontFamilyName);
         }
         fontFamilyList = new JList(listModelFontFamily);
-        fontFamilyList.setCellRenderer(new FontJListCellRenderer()); //Uses custom cell renderer to customize each individual cell in this list
+        fontFamilyList.setCellRenderer(customListCellRenderer); //Uses custom cell renderer to customize each individual cell in this list
         String firstFontFamily = fontFamilyList.getModel().getElementAt(0).toString(); //Gets the first font family in the list
         setAvailableFontStylesForSelectedFont(firstFontFamily);
         fontFamilyList.setSelectedIndex(0);
@@ -160,7 +163,7 @@ public class FontWindow extends JFrame implements ActionListener, ListSelectionL
             listModelFontStyle.addElement(fontStyle);
         }
         fontStyleList = new JList(listModelFontStyle);
-        fontStyleList.setCellRenderer(new FontJListCellRenderer()); //Uses custom cell renderer to customize each individual cell in this list
+        fontStyleList.setCellRenderer(customListCellRenderer); //Uses custom cell renderer to customize each individual cell in this list
         fontStyleList.setSelectedIndex(0);
 
         /*Setting up the font size list*/
@@ -192,6 +195,7 @@ public class FontWindow extends JFrame implements ActionListener, ListSelectionL
         fontFamilyPanel.add(scrollPaneMap.get("Font Family"));
         fontStylePanel.add(scrollPaneMap.get("Font Style"));
         fontSizePanel.add(scrollPaneMap.get("Font Size"));
+        System.out.println("Finished setting up JLists");
     }
 
     /**
