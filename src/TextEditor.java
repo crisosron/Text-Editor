@@ -32,7 +32,7 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
     private Set<String> fileMenuItemNames, editMenuItemNames, formatMenuItemNames, paintMenuItemNames, rightClickMenuItemNames;
     private Map<String, JMenu> menuMap; //Use this map to gain access to menus
     private Map<String, JMenuItem> menuItemsMap; //Use this map to gain access to menu items
-    private Map<String, JCheckBoxMenuItem> checkBoxMenuItemsMap = new HashMap<>(); //Use this map to gain access to check box menu items
+    private Map<String, JCheckBoxMenuItem> checkBoxMenuItemsMap; //Use this map to gain access to check box menu items
 
     /*Sets that are used for keyboard shortcuts*/
     private Set<String> menuItemsWithBasicShortcuts, menuItemsWithStandardShortcuts, allMenuItemsWithShortcuts, menuItemsWithShiftShortCuts;
@@ -68,6 +68,7 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
         mainTextArea = new JTextArea();
         rightClickMenu = new JPopupMenu();
         mainTextAreaScroll = new JScrollPane(mainTextArea);
+        checkBoxMenuItemsMap = new HashMap<>();
         menuBar = new JMenuBar();
         menuMap = new HashMap<>();
         menuItemsMap = new HashMap<>();
@@ -86,7 +87,7 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
         paintMenuItemNames = new HashSet<>(Arrays.asList("New Paint Window", "Open Paint In Current Window"));
         rightClickMenuItemNames  = new HashSet<>(Arrays.asList("Undo", "Cut", "Copy", "Paste", "Redo"));
 
-        /*Seperate set for JCheckBoxMenuItem objects*/
+        /*Separate set for JCheckBoxMenuItem objects*/
         Set<String> checkBoxMenuItemNames = new HashSet<>(Arrays.asList("Word Wrap", "Light Theme", "Dark Theme"));
 
         /*Explanation of the 3 Collections:
@@ -115,7 +116,12 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
 
         /*Creating all JMenuItem objects and placing them into the map*/
         for(String menuItemName : menuItemNames){
-            menuItemsMap.put(menuItemName, new JMenuItem(menuItemName));
+            if(fileMenuItemNames.contains(menuItemName) || editMenuItemNames.contains(menuItemName)) {
+                JMenuItem newMenuItem = new JMenuItem(menuItemName);
+                if(fileMenuItemNames.contains(menuItemName))newMenuItem.setPreferredSize(new Dimension(200, 25));
+                else if(editMenuItemNames.contains(menuItemName)) newMenuItem.setPreferredSize(new Dimension(160, 25));
+                menuItemsMap.put(menuItemName, newMenuItem);
+            }else menuItemsMap.put(menuItemName, new JMenuItem(menuItemName));
         }
 
         /*Creating JCheckBoxMenuItem objects and placing them into the map*/
@@ -475,7 +481,10 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
     private void enableDarkTheme(){
 
         /*Exits the method if the dark theme is already active*/
-        if(darkThemeActive) return;
+        if(darkThemeActive) {
+            checkBoxMenuItemsMap.get("Dark Theme").setSelected(true); //Dark theme retains selection appearance
+            return;
+        }
 
         /*Operations to convert to dark theme*/
         darkThemeActive = true;
@@ -493,7 +502,10 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
     private void enableLightTheme(){
 
         /*Exits the method if the light theme is already active*/
-        if(lightThemeActive) return;
+        if(lightThemeActive) {
+            checkBoxMenuItemsMap.get("Light Theme").setSelected(true); //Light theme retains selection appearance
+            return;
+        }
 
         /*Operations to convert to light theme*/
         lightThemeActive = true;
