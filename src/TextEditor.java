@@ -1,3 +1,4 @@
+//TODO: Dispose text editor frame iff there is more than one instance of the TextEditor object
 import javax.swing.*;
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.event.UndoableEditListener;
@@ -81,7 +82,7 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
         Set<String> menuNames = new HashSet<>(Arrays.asList("File", "Edit", "Format", "Graphics"));
 
         /*Sets that stores the menu items within each respective menu*/
-        fileMenuItemNames = new HashSet<>(Arrays.asList("New", "Open", "Save", "Save As...", "Exit"));
+        fileMenuItemNames = new HashSet<>(Arrays.asList("New", "Open", "Save", "Save As...", "Exit", "New Window"));
         editMenuItemNames = new HashSet<>(Arrays.asList("Undo", "Redo", "Cut", "Copy", "Paste"));
         formatMenuItemNames = new HashSet<>(Arrays.asList("Font", "Word Wrap", "Light Theme", "Dark Theme"));
         paintMenuItemNames = new HashSet<>(Arrays.asList("New Paint Window", "Open Paint In Current Window"));
@@ -97,7 +98,7 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
         */
         menuItemsWithBasicShortcuts = new HashSet<>(Arrays.asList("New", "Open", "Save", "Copy", "Font"));
         menuItemsWithStandardShortcuts = new HashSet<>(Arrays.asList("Undo", "Cut", "Paste", "Exit", "Redo"));
-        menuItemsWithShiftShortCuts = new HashSet<>(Arrays.asList("Save As..."));
+        menuItemsWithShiftShortCuts = new HashSet<>(Arrays.asList("Save As...", "New Window"));
 
         /*Adding all the menu items with a keyboard shortcut to a single set*/
         allMenuItemsWithShortcuts = new HashSet<>();
@@ -317,6 +318,7 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
         else if(action.equals("Save"))saveFile();
         else if(action.equals("Save As..."))saveFileAs();
         else if(action.equals("Exit"))exit();
+        else if(action.equals("New Window")) {new TextEditor();}
 
         /*Edit menu actions*/
         else if(action.equals("Cut")) cut();

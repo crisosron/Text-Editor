@@ -20,10 +20,9 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/TextEditor.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="7183">
-              <caret line="484" column="111" selection-start-line="484" selection-start-column="111" selection-end-line="484" selection-end-column="111" />
+            <state relative-caret-position="160">
+              <caret line="8" column="45" lean-forward="true" selection-start-line="8" selection-start-column="45" selection-end-line="8" selection-end-column="45" />
               <folding>
-                <element signature="imports" expanded="true" />
                 <element signature="e#25769#25770#0" expanded="true" />
                 <element signature="e#25829#25830#0" expanded="true" />
                 <element signature="e#25902#25903#0" expanded="true" />
@@ -160,7 +159,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1544435676215" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1544436016728" />
     <property name="last_opened_file_path" value="$USER_HOME$/Eclipse Workspace/NotesEditor" />
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.15" />
@@ -307,10 +306,9 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/TextEditor.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="7183">
-          <caret line="484" column="111" selection-start-line="484" selection-start-column="111" selection-end-line="484" selection-end-column="111" />
+        <state relative-caret-position="160">
+          <caret line="8" column="45" lean-forward="true" selection-start-line="8" selection-start-column="45" selection-end-line="8" selection-end-column="45" />
           <folding>
-            <element signature="imports" expanded="true" />
             <element signature="e#25769#25770#0" expanded="true" />
             <element signature="e#25829#25830#0" expanded="true" />
             <element signature="e#25902#25903#0" expanded="true" />
