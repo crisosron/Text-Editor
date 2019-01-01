@@ -1,4 +1,5 @@
 //TODO: Dispose text editor frame iff there is more than one instance of the TextEditor object
+//TODO: Use a single opened file field for save logic
 import javax.swing.*;
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.event.UndoableEditListener;
@@ -54,6 +55,7 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
     private static boolean hasOpenedFile = false;
     private static boolean changesMade = false;
     private boolean cancelClose = false;
+    private File openedFile;
 
     /**
      * Constructor - Initialises UI components and collections
@@ -419,6 +421,7 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
                 mainTextArea.write(writer); //Gets the text in the mainTextArea component and writes it to the newly created file
                 setTitle(fileToSave.getName());
                 JOptionPane.showMessageDialog(null, "File saved as: " + fileToSave.getName());
+                openedFileNamePath = fileToSave.getAbsolutePath();
             }
             hasOpenedFile = true;
             changesMade = false;
