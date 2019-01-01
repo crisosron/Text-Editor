@@ -5,14 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="56e28fe7-e4ac-4f50-ac0d-417cbc74c409" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/TextEditor/Canvas.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/TextEditor/Canvas.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/TextEditor/FontJListCellRenderer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/TextEditor/FontJListCellRenderer.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/TextEditor/FontWindow.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/TextEditor/FontWindow.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/TextEditor/PaintWindow.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/TextEditor/PaintWindow.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/TextEditor/TextEditor$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/TextEditor/TextEditor$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/TextEditor/TextEditor$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/TextEditor/TextEditor$2.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/TextEditor/TextEditor.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/TextEditor/TextEditor.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/TextEditor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/TextEditor.java" afterDir="false" />
     </list>
@@ -28,8 +21,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/TextEditor.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="20">
-              <caret line="1" column="53" selection-start-line="1" selection-start-column="53" selection-end-line="1" selection-end-column="53" />
+            <state relative-caret-position="313">
+              <caret line="396" column="13" lean-forward="true" selection-start-line="396" selection-start-column="13" selection-end-line="396" selection-end-column="13" />
               <folding>
                 <element signature="e#0#29521#0" expanded="true" />
                 <element signature="imports" expanded="true" />
@@ -236,7 +229,7 @@
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32930845" />
-      <window_info anchor="bottom" id="Terminal" order="7" sideWeight="0.52665246" weight="0.26279393" />
+      <window_info anchor="bottom" id="Terminal" order="7" sideWeight="0.52665246" weight="0.04172462" />
       <window_info anchor="bottom" id="Event Log" order="8" sideWeight="0.50852877" side_tool="true" weight="0.033444814" />
       <window_info anchor="bottom" id="Version Control" order="9" show_stripe_button="false" />
       <window_info anchor="bottom" id="Messages" order="10" weight="0.32814237" />
@@ -297,8 +290,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/TextEditor.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="20">
-          <caret line="1" column="53" selection-start-line="1" selection-start-column="53" selection-end-line="1" selection-end-column="53" />
+        <state relative-caret-position="313">
+          <caret line="396" column="13" lean-forward="true" selection-start-line="396" selection-start-column="13" selection-end-line="396" selection-end-column="13" />
           <folding>
             <element signature="e#0#29521#0" expanded="true" />
             <element signature="imports" expanded="true" />

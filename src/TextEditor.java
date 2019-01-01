@@ -383,8 +383,11 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
     private void saveFile(){
         try{
 
+            /*If the user attempts to save a newly opened file with no changes - return*/
+            if(!changesMade && hasOpenedFile)return;
+
             /*If saving to existing file*/
-            if(hasOpenedFile){
+            if(changesMade){
                 File openedFile = new File(openedFileNamePath);
                 FileWriter writeToOpenedFile = new FileWriter(openedFile);
                 mainTextArea.write(writeToOpenedFile);
