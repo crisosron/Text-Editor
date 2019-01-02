@@ -387,7 +387,7 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
             if(!changesMade && hasOpenedFile)return;
 
             /*If saving to existing file*/
-            if(changesMade){
+            if(hasOpenedFile){
                 File openedFile = new File(openedFileNamePath);
                 FileWriter writeToOpenedFile = new FileWriter(openedFile);
                 mainTextArea.write(writeToOpenedFile);
