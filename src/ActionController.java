@@ -16,8 +16,8 @@ public class ActionController {
     /*For file management*/
     private String openedFileName = "";
     private String openedFileNamePath = "";
-    private static boolean hasOpenedFile = false;
-    private static boolean changesMade = false;
+    private boolean hasOpenedFile = false;
+    private boolean changesMade = false;
     private boolean cancelClose = false;
 
     /*Format menu booleans*/
