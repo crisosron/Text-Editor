@@ -1,9 +1,14 @@
+//TODO: Add set font as default functionality
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.*;
 import java.util.List;
 
@@ -118,24 +123,32 @@ public class FontWindow extends JFrame implements ActionListener, ListSelectionL
         /*Creating JButton objects*/
         JButton confirmButton = new JButton("Confirm");
         JButton cancelButton = new JButton("Cancel");
+        JButton setFontAsDefaultButton = new JButton("Set Default");
 
         /*x and y coordinates of the top left of the bounding rectangle for the buttons*/
         int x = 430;
         int y = 480;
+        int fontDefaultButtonX = 20;
+        int fontDefaultButtonY = 480;
 
         /*Absolutely positioning the buttons*/
         confirmButton.setBounds(x, y, BUTTON_WIDTH, BUTTON_HEIGHT);
         cancelButton.setBounds(x + BUTTON_WIDTH+15, y, BUTTON_WIDTH, BUTTON_HEIGHT);
+        setFontAsDefaultButton.setBounds(fontDefaultButtonX, fontDefaultButtonY, BUTTON_WIDTH, BUTTON_HEIGHT);
 
         /*Adding the buttons to the this frame*/
         add(confirmButton);
         add(cancelButton);
+        add(setFontAsDefaultButton);
 
         /*Adding action listener and setting action commands for each button*/
         confirmButton.setActionCommand("Confirm");
         cancelButton.setActionCommand("Cancel");
+        setFontAsDefaultButton.setActionCommand("Set Default Font");
         confirmButton.addActionListener(this);
         cancelButton.addActionListener(this);
+        setFontAsDefaultButton.addActionListener(this);
+
     }
 
     /**
@@ -195,7 +208,6 @@ public class FontWindow extends JFrame implements ActionListener, ListSelectionL
         fontFamilyPanel.add(scrollPaneMap.get("Font Family"));
         fontStylePanel.add(scrollPaneMap.get("Font Style"));
         fontSizePanel.add(scrollPaneMap.get("Font Size"));
-        System.out.println("Finished setting up JLists");
     }
 
     /**
@@ -252,6 +264,7 @@ public class FontWindow extends JFrame implements ActionListener, ListSelectionL
         String action = e.getActionCommand();
         if(action.equals("Confirm")) confirm();
         else if(action.equals("Cancel"))dispose();
+        else if(action.equals("Set Default Font")) writeDefaultFontToConfig();
     }
 
     /**
@@ -312,13 +325,50 @@ public class FontWindow extends JFrame implements ActionListener, ListSelectionL
     }
 
     /**
-     * Method that returns the type of font style in string form
+     * Method that returns the type of font style in int form
      */
     private int fontStyleType(String fontStyle){
         if(fontStyle.contains("Bold") && fontStyle.contains("Italic")) return Font.BOLD|Font.ITALIC;
         else if(fontStyle.contains("Italic")) return Font.ITALIC;
         else if(fontStyle.contains("Bold")) return Font.BOLD;
         else return Font.PLAIN;
+    }
+
+    /**
+     * Edits the config file to load the default font the next time the program is launched
+     */
+    private void writeDefaultFontToConfig(){
+        try{
+
+            /*Font details*/
+            String newDefFontFamily = fontFamilyList.getSelectedValue().toString();
+            int newDefFontStyle = fontStyleType(fontStyleList.getSelectedValue().toString());
+            int newDefFontSize = fontSizeList.getSelectedValue();
+
+            /*Confirming if the default font should be reset to a new font*/
+            int optionInput = JOptionPane.showConfirmDialog(null, "Set the following selection as default font? " +
+                    "\nFont Family: " + newDefFontFamily +
+                    "\nFont Style: " + fontStyleList.getSelectedValue().toString() +
+                    "\nFont Size: " + newDefFontSize);
+
+            /*Exiting method if cancel or no is clicked in the confirm dialog*/
+            if(optionInput != JOptionPane.YES_OPTION) return;
+
+            /*Properties and outputStream objects to set some values in config.properties file*/
+            Properties properties = new Properties();
+            OutputStream outputStream = new FileOutputStream(getClass().getResource("resources/config.properties").getFile());
+
+            /*Setting new values*/
+            properties.setProperty("font-family", newDefFontFamily);
+            properties.setProperty("font-style", Integer.toString(newDefFontStyle));
+            properties.setProperty("font-size", Integer.toString(newDefFontSize));
+
+            /*Storing changes and closing outputStream*/
+            properties.store(outputStream, null);
+            outputStream.close();
+            JOptionPane.showMessageDialog(null, "Default font set!");
+
+        }catch(IOException e){e.printStackTrace();}
     }
 
     /**

@@ -6,6 +6,9 @@ import javax.swing.event.UndoableEditListener;
 import javax.swing.undo.UndoManager;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.*;
 import java.util.List;
 import java.util.stream.Stream;
@@ -35,7 +38,8 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
     private Set<String> menuItemsWithBasicShortcuts, menuItemsWithStandardShortcuts, allMenuItemsWithShortcuts, menuItemsWithShiftShortCuts;
 
     /*Other fields*/
-    private static final Font DEFAULT_FONT = new Font("Sans-Serif", Font.PLAIN, 20);
+    //private static final Font DEFAULT_FONT = new Font("Sans-Serif", Font.PLAIN, 20);
+    private static Font defaultFont;
     private static FontWindow fontWindow;
     public static TextEditor textEditor;
     private static PaintWindow paintWindow;
@@ -60,10 +64,13 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
         menuBar = new JMenuBar();
         menuMap = new HashMap<>();
         menuItemsMap = new HashMap<>();
-        mainTextAreaFont = DEFAULT_FONT;
+        //mainTextAreaFont = DEFAULT_FONT;
         undoManager = new UndoManager();
         mainTextArea.getDocument().addUndoableEditListener(this); //Adds the undoable edit listener to the mainTextArea
         actionController = new ActionController(this);
+
+        /*Loading set defaults*/
+        loadDefaults(); //In this method, the setDefaultFont method is called
 
         /* ---- Setting up the collections ---- */
         /*Set that stores the names of all the menus in the editor*/
@@ -289,8 +296,37 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
                 else if (menuItemWithKeyShortCut.equals("Paste")) menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, ActionEvent.CTRL_MASK));
                 else if (menuItemWithKeyShortCut.equals("Exit")) menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W, ActionEvent.CTRL_MASK));
                 else if (menuItemWithKeyShortCut.equals("Redo")) menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y, ActionEvent.CTRL_MASK));
-                }
+            }
         }
+    }
+
+    /**
+     * Loading the defaults of the program using config.properties file
+     */
+    private void loadDefaults() {
+
+        try {
+
+            /*Setting up InputStream and Properties objects*/
+            Properties properties = new Properties();
+            InputStream inputStream = getClass().getClassLoader().getResourceAsStream("resources/config.properties"); //ClassLoader is for getting stuff in the resources folder
+
+            /*Loading config.properties using InputStream*/
+            if (inputStream != null) properties.load(inputStream);
+            else throw new FileNotFoundException("File config.properties cannot be found");
+
+            /*Getting the default font settings*/
+            String defFontFamily = properties.getProperty("font-family");
+            String defFontStyle = properties.getProperty("font-style");
+            String defFontSize = properties.getProperty("font-size");
+
+            /*Loading the default font (for startup) and closing inputStream*/
+            setDefaultFont(defFontFamily, Integer.parseInt(defFontStyle), Integer.parseInt(defFontSize));
+            inputStream.close();
+
+        }catch(IOException e){e.printStackTrace();}
+
+
     }
 
     /**
@@ -400,6 +436,11 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
         }
 
         return 0;
+    }
+
+    public void setDefaultFont(String fontStyle, int fontFamily, int fontSize){
+        defaultFont = new Font(fontStyle, fontFamily, fontSize);
+        mainTextAreaFont = defaultFont;
     }
 
     /*Getters*/
