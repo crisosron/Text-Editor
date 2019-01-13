@@ -56,6 +56,7 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         }catch(Exception e){e.printStackTrace();}
 
+
         /* ---- Initializing some fields ---- */
         mainTextArea = new JTextArea();
         rightClickMenu = new JPopupMenu();
@@ -195,6 +196,7 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
 
         /*Adding components to the frame*/
         add(menuBar, BorderLayout.NORTH);
+        setJMenuBar(menuBar);
         add(mainTextAreaScroll);
 
         setVisible(true);
@@ -449,8 +451,20 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
     public JTextArea getMainTextArea(){return mainTextArea;}
     public Map<String, JCheckBoxMenuItem> getCheckBoxMenuItemsMap(){return checkBoxMenuItemsMap;}
     public UndoManager getUndoManager(){return undoManager;}
+    public JMenuBar getMenuBarTextEditor(){return menuBar;}
 
     public static void main(String[] args){
+        boolean isMacOSX = false;
+
+        /*Allows the program to use MacOSX menu bar*/
+        if(System.getProperty("os.name").contains("Mac")) {
+            System.setProperty("apple.laf.useScreenMenuBar", "true");
+            isMacOSX = true;
+        }
+
         textEditor = new TextEditor();
+
+        /*Fullscreen for MacOSX*/
+        if(isMacOSX) textEditor.getRootPane().putClientProperty("apple.awt.fullscreenable", Boolean.valueOf(true));
     }
 }
