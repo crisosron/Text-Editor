@@ -406,6 +406,7 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
     /**
      * Returns the KeyEvent constant that corresponds to the character passed
      * into the method
+     * @param character is the character that needs to be processed into a KeyEvent constant
      */
     private int getKeyEventForChar(char character){
         switch(character){
@@ -440,6 +441,12 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
         return 0;
     }
 
+    /**
+     * Sets up the default font
+     * @param fontStyle is the default font style
+     * @param fontFamily is the default font family eg Italic, Plain
+     * @param fontSize is the default font size
+     */
     private void setDefaultFont(String fontStyle, int fontFamily, int fontSize){
         defaultFont = new Font(fontStyle, fontFamily, fontSize);
         mainTextAreaFont = defaultFont;
