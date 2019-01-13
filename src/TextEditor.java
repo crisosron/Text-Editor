@@ -75,7 +75,7 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
 
         /* ---- Setting up the collections ---- */
         /*Set that stores the names of all the menus in the editor*/
-        Set<String> menuNames = new HashSet<>(Arrays.asList("File", "Edit", "Format", "Graphics"));
+        Set<String> menuNames = new HashSet<>(Arrays.asList("File", "Edit", "Format"));
 
         /*Sets that stores the menu items within each respective menu*/
         fileMenuItemNames = new HashSet<>(Arrays.asList("New", "Open", "Save", "Save As...", "Exit", "New Window"));
@@ -170,7 +170,7 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
 
         /* ---- Setting up the menus ---- */
         /*Adding menus to menu bar*/
-        List<String> tempMenuList = new ArrayList<>(Arrays.asList("File", "Edit", "Format", "Graphics")); //Menus will be added to menu bar in this order
+        List<String> tempMenuList = new ArrayList<>(Arrays.asList("File", "Edit", "Format")); //Menus will be added to menu bar in this order
         for(String menuName : tempMenuList){
             menuBar.add(menuMap.get(menuName));
         }
@@ -379,7 +379,7 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
     /**
      * Method that returns the type of font style in string form
      */
-    private int fontStyleType(String fontStyle){
+    public static int fontStyleType(String fontStyle){
         if(fontStyle.contains("Bold") && fontStyle.contains("Italic")) return Font.BOLD|Font.ITALIC;
         else if(fontStyle.contains("Italic")) return Font.ITALIC;
         else if(fontStyle.contains("Bold")) return Font.BOLD;
@@ -440,7 +440,7 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
         return 0;
     }
 
-    public void setDefaultFont(String fontStyle, int fontFamily, int fontSize){
+    private void setDefaultFont(String fontStyle, int fontFamily, int fontSize){
         defaultFont = new Font(fontStyle, fontFamily, fontSize);
         mainTextAreaFont = defaultFont;
     }
@@ -451,7 +451,6 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
     public JTextArea getMainTextArea(){return mainTextArea;}
     public Map<String, JCheckBoxMenuItem> getCheckBoxMenuItemsMap(){return checkBoxMenuItemsMap;}
     public UndoManager getUndoManager(){return undoManager;}
-    public JMenuBar getMenuBarTextEditor(){return menuBar;}
 
     public static void main(String[] args){
         boolean isMacOSX = false;

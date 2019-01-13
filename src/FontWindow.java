@@ -233,7 +233,7 @@ public class FontWindow extends JFrame implements ActionListener, ListSelectionL
 
         /*Setting initial font that the sample should be displayed in*/
         sampleTextArea = new JTextArea();
-        sampleTextArea.setFont(new Font(initFontFamily, fontStyleType(initFontStyle), initFontSize));
+        sampleTextArea.setFont(new Font(initFontFamily, TextEditor.fontStyleType(initFontStyle), initFontSize));
         sampleTextArea.setBorder(BorderFactory.createTitledBorder("Sample"));
         sampleTextArea.setText("AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz");
         sampleTextArea.setLineWrap(true);
@@ -321,18 +321,20 @@ public class FontWindow extends JFrame implements ActionListener, ListSelectionL
         String fontFamily = fontFamilyList.getSelectedValue().toString();
         String fontStyle = fontStyleList.getSelectedValue().toString();
         int fontSize = fontSizeList.getSelectedValue();
-        sampleTextArea.setFont(new Font(fontFamily, fontStyleType(fontStyle), fontSize));
+        sampleTextArea.setFont(new Font(fontFamily, TextEditor.fontStyleType(fontStyle), fontSize));
     }
 
     /**
      * Method that returns the type of font style in int form
      */
+    /*
     private int fontStyleType(String fontStyle){
         if(fontStyle.contains("Bold") && fontStyle.contains("Italic")) return Font.BOLD|Font.ITALIC;
         else if(fontStyle.contains("Italic")) return Font.ITALIC;
         else if(fontStyle.contains("Bold")) return Font.BOLD;
         else return Font.PLAIN;
     }
+    */
 
     /**
      * Edits the config file to load the default font the next time the program is launched
@@ -342,7 +344,7 @@ public class FontWindow extends JFrame implements ActionListener, ListSelectionL
 
             /*Font details*/
             String newDefFontFamily = fontFamilyList.getSelectedValue().toString();
-            int newDefFontStyle = fontStyleType(fontStyleList.getSelectedValue().toString());
+            int newDefFontStyle = TextEditor.fontStyleType(fontStyleList.getSelectedValue().toString());
             int newDefFontSize = fontSizeList.getSelectedValue();
 
             /*Confirming if the default font should be reset to a new font*/
@@ -356,7 +358,7 @@ public class FontWindow extends JFrame implements ActionListener, ListSelectionL
 
             /*Properties and outputStream objects to set some values in config.properties file*/
             Properties properties = new Properties();
-            OutputStream outputStream = new FileOutputStream(getClass().getResource("resources/config.properties").getFile());
+            OutputStream outputStream = new FileOutputStream(getClass().getResource("/resources/config.properties").getFile());
 
             /*Setting new values*/
             properties.setProperty("font-family", newDefFontFamily);
