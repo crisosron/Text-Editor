@@ -207,6 +207,8 @@ public class FontWindow extends JFrame implements ActionListener, ListSelectionL
         fontSizePanel.add(scrollPaneMap.get("Font Size"));
     }
 
+
+
     /**
      * Creates a scroll pane for a JList object and adds it to the map
      */
@@ -322,18 +324,6 @@ public class FontWindow extends JFrame implements ActionListener, ListSelectionL
     }
 
     /**
-     * Method that returns the type of font style in int form
-     */
-    /*
-    private int fontStyleType(String fontStyle){
-        if(fontStyle.contains("Bold") && fontStyle.contains("Italic")) return Font.BOLD|Font.ITALIC;
-        else if(fontStyle.contains("Italic")) return Font.ITALIC;
-        else if(fontStyle.contains("Bold")) return Font.BOLD;
-        else return Font.PLAIN;
-    }
-    */
-
-    /**
      * Edits the config file to load the default font the next time the program is launched
      */
     private void writeDefaultFontToConfig(){
@@ -355,7 +345,8 @@ public class FontWindow extends JFrame implements ActionListener, ListSelectionL
 
             /*Properties and outputStream objects to set some values in config.properties file*/
             Properties properties = new Properties();
-            OutputStream outputStream = new FileOutputStream(getClass().getResource("/resources/config.properties").getFile());
+            OutputStream outputStream = new FileOutputStream("config.properties");
+            //OutputStream outputStream = new FileOutputStream(getClass().getResource("/config.properties").getFile());
 
             /*Setting new values*/
             properties.setProperty("font-family", newDefFontFamily);

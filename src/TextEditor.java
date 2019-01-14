@@ -1,11 +1,13 @@
 //TODO: Dispose text editor frame iff there is more than one instance of the TextEditor object
 //TODO: Use a single opened file field for save logic
+//TODO: Support usage of command key for MacOS for menu item shortcuts
 import javax.swing.*;
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.event.UndoableEditListener;
 import javax.swing.undo.UndoManager;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -69,6 +71,7 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
         undoManager = new UndoManager();
         mainTextArea.getDocument().addUndoableEditListener(this); //Adds the undoable edit listener to the mainTextArea
         actionController = new ActionController(this);
+        setUndecorated(false);
 
         /*Loading set defaults*/
         loadDefaults(); //In this method, the setDefaultFont method is called
@@ -224,7 +227,7 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
                 if(menuItemName.equals("Paste")) menuMap.get("Edit").addSeparator();
             }
 
-            /*If menu item is witihn the format menu*/
+            /*If menu item is within the format menu*/
             else if(formatMenuItemNames.contains(menuItemName) && !checkBoxMenuItemsMap.containsKey(menuItemName)) {
                 menuMap.get("Format").add(menuItem);
                 if(menuItemName.equals("Font") || menuItemName.equals("Light Theme")) menuMap.get("Format").addSeparator();
@@ -252,7 +255,7 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
             public void mouseReleased(MouseEvent e) {
                 super.mouseReleased(e);
 
-                /*Checking iif right click*/
+                /*Checking if right click*/
                 if(SwingUtilities.isRightMouseButton(e)){
                     rightClickMenu = new JPopupMenu(); //JPopupMenu to show at the point clicked
 
@@ -311,7 +314,8 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
 
             /*Setting up InputStream and Properties objects*/
             Properties properties = new Properties();
-            InputStream inputStream = getClass().getClassLoader().getResourceAsStream("resources/config.properties"); //ClassLoader is for getting stuff in the resources folder
+            InputStream inputStream = new FileInputStream("config.properties");
+            //InputStream inputStream = getClass().getClassLoader().getResourceAsStream("config.properties"); //ClassLoader is for getting stuff in the resources folder
 
             /*Loading config.properties using InputStream*/
             if (inputStream != null) properties.load(inputStream);
