@@ -1,6 +1,5 @@
 //TODO: Dispose text editor frame iff there is more than one instance of the TextEditor object
 //TODO: Use a single opened file field for save logic
-//TODO: Support usage of command key for MacOS for menu item shortcuts
 import javax.swing.*;
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.event.UndoableEditListener;
@@ -40,13 +39,14 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
     private Set<String> menuItemsWithBasicShortcuts, menuItemsWithStandardShortcuts, allMenuItemsWithShortcuts, menuItemsWithShiftShortCuts;
 
     /*Other fields*/
-    //private static final Font DEFAULT_FONT = new Font("Sans-Serif", Font.PLAIN, 20);
     private static Font defaultFont;
     private static FontWindow fontWindow;
     public static TextEditor textEditor;
     private static PaintWindow paintWindow;
     private UndoManager undoManager;
     private ActionController actionController;
+
+    private boolean isMacOSX;
 
     /**
      * Constructor - Initialises UI components and collections
@@ -71,7 +71,9 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
         undoManager = new UndoManager();
         mainTextArea.getDocument().addUndoableEditListener(this); //Adds the undoable edit listener to the mainTextArea
         actionController = new ActionController(this);
-        setUndecorated(false);
+
+        /*Allows support for MacOSX features, eg system menu bar, command key etc*/
+        if(System.getProperty("os.name").contains("Mac")) isMacOSX = true;
 
         /*Loading set defaults*/
         loadDefaults(); //In this method, the setDefaultFont method is called
@@ -281,6 +283,9 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
      */
     private void setupHotKeys(){
 
+        /*Will either be control key if Windows or Linux, or command key for MacOSX*/
+        int shortcutKeyMask = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
+
         /*Looping through all the menu items with key shortcuts and setting the shortcuts*/
         for(String menuItemWithKeyShortCut : allMenuItemsWithShortcuts){
             JMenuItem menuItem = menuItemsMap.get(menuItemWithKeyShortCut);
@@ -288,19 +293,19 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
 
             /*'CTRL + [First character of menu item name]'*/
             if (menuItemsWithBasicShortcuts.contains(menuItemWithKeyShortCut))
-                menuItem.setAccelerator(KeyStroke.getKeyStroke(getKeyEventForChar(firstChar), ActionEvent.CTRL_MASK));
+                menuItem.setAccelerator(KeyStroke.getKeyStroke(getKeyEventForChar(firstChar), shortcutKeyMask));
 
                 /*'CTRL + SHIFT + [First character of menu item name]'*/
             else if (menuItemsWithShiftShortCuts.contains(menuItemWithKeyShortCut))
-                menuItem.setAccelerator(KeyStroke.getKeyStroke(getKeyEventForChar(firstChar), ActionEvent.CTRL_MASK | ActionEvent.SHIFT_MASK));
+                menuItem.setAccelerator(KeyStroke.getKeyStroke(getKeyEventForChar(firstChar), shortcutKeyMask | ActionEvent.SHIFT_MASK));
 
                 /*Menu items that have short cuts that adhere to the established standard (instead of using the first character of the menu item name)*/
             else if (menuItemsWithStandardShortcuts.contains(menuItemWithKeyShortCut)) {
-                if (menuItemWithKeyShortCut.equals("Undo")) menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, ActionEvent.CTRL_MASK));
-                else if (menuItemWithKeyShortCut.equals("Cut")) menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, ActionEvent.CTRL_MASK));
-                else if (menuItemWithKeyShortCut.equals("Paste")) menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, ActionEvent.CTRL_MASK));
-                else if (menuItemWithKeyShortCut.equals("Exit")) menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W, ActionEvent.CTRL_MASK));
-                else if (menuItemWithKeyShortCut.equals("Redo")) menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y, ActionEvent.CTRL_MASK));
+                if (menuItemWithKeyShortCut.equals("Undo")) menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, shortcutKeyMask));
+                else if (menuItemWithKeyShortCut.equals("Cut")) menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, shortcutKeyMask));
+                else if (menuItemWithKeyShortCut.equals("Paste")) menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, shortcutKeyMask));
+                else if (menuItemWithKeyShortCut.equals("Exit")) menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W, shortcutKeyMask));
+                else if (menuItemWithKeyShortCut.equals("Redo")) menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y, shortcutKeyMask));
             }
         }
     }
@@ -464,17 +469,11 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
     public UndoManager getUndoManager(){return undoManager;}
 
     public static void main(String[] args){
-        boolean isMacOSX = false;
 
-        /*Allows the program to use MacOSX menu bar*/
-        if(System.getProperty("os.name").contains("Mac")) {
-            System.setProperty("apple.laf.useScreenMenuBar", "true");
-            isMacOSX = true;
-        }
+        /*Allows the program to use MacOSX menu bar - Note this has to be at the top of the main method
+         * to work */
+        if(System.getProperty("os.name").contains("Mac")) System.setProperty("apple.laf.useScreenMenuBar", "true");
 
         textEditor = new TextEditor();
-
-        /*Fullscreen for MacOSX*/
-        if(isMacOSX) textEditor.getRootPane().putClientProperty("apple.awt.fullscreenable", Boolean.valueOf(true));
     }
 }
