@@ -46,18 +46,20 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
     private UndoManager undoManager;
     private ActionController actionController;
 
-    private boolean isMacOSX;
+    /*Acts as an instance id, used to check what instance the user tries to close*/
+    private int instanceNum;
 
     /**
      * Constructor - Initialises UI components and collections
      */
-    public TextEditor(){
+    public TextEditor(int instanceNum){
 
         /*Making the UI use the OS aesthetics*/
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         }catch(Exception e){e.printStackTrace();}
 
+        this.instanceNum = instanceNum;
 
         /* ---- Initializing some fields ---- */
         mainTextArea = new JTextArea();
@@ -67,13 +69,9 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
         menuBar = new JMenuBar();
         menuMap = new HashMap<>();
         menuItemsMap = new HashMap<>();
-        //mainTextAreaFont = DEFAULT_FONT;
         undoManager = new UndoManager();
         mainTextArea.getDocument().addUndoableEditListener(this); //Adds the undoable edit listener to the mainTextArea
         actionController = new ActionController(this);
-
-        /*Allows support for MacOSX features, eg system menu bar, command key etc*/
-        if(System.getProperty("os.name").contains("Mac")) isMacOSX = true;
 
         /*Loading set defaults*/
         loadDefaults(); //In this method, the setDefaultFont method is called
@@ -152,7 +150,12 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
                 if(actionController.isChangesMade()){
                     actionController.saveCheck(0);
                 }else{
-                    System.exit(0);
+
+                    /*Checks if the program should close or not depending on the
+                    * instance the user is trying to close. If the first instance is being closed,
+                    * the whole program ends*/
+                    if(instanceNum != 0) dispose();
+                    else System.exit(0);
                 }
             }
         });
@@ -320,7 +323,6 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
             /*Setting up InputStream and Properties objects*/
             Properties properties = new Properties();
             InputStream inputStream = new FileInputStream("config.properties");
-            //InputStream inputStream = getClass().getClassLoader().getResourceAsStream("config.properties"); //ClassLoader is for getting stuff in the resources folder
 
             /*Loading config.properties using InputStream*/
             if (inputStream != null) properties.load(inputStream);
@@ -352,7 +354,10 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
         else if(action.equals("Save"))actionController.saveFile();
         else if(action.equals("Save As..."))actionController.saveFileAs();
         else if(action.equals("Exit"))actionController.exit();
-        else if(action.equals("New Window")) {new TextEditor();}
+        else if(action.equals("New Window")) {
+            instanceNum++;
+            new TextEditor(instanceNum);
+        }
 
         /*Edit menu actions*/
         else if(action.equals("Cut")) actionController.cut();
@@ -474,6 +479,6 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
          * to work */
         if(System.getProperty("os.name").contains("Mac")) System.setProperty("apple.laf.useScreenMenuBar", "true");
 
-        textEditor = new TextEditor();
+        textEditor = new TextEditor(0);
     }
 }
