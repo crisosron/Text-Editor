@@ -1,4 +1,3 @@
-//TODO: Dispose text editor frame iff there is more than one instance of the TextEditor object
 //TODO: Use a single opened file field for save logic
 import javax.swing.*;
 import javax.swing.event.UndoableEditEvent;
@@ -480,5 +479,6 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
         if(System.getProperty("os.name").contains("Mac")) System.setProperty("apple.laf.useScreenMenuBar", "true");
 
         textEditor = new TextEditor(0);
+        textEditor.getRootPane().putClientProperty("apple.awt.fullscreenable", Boolean.valueOf(true));
     }
 }
