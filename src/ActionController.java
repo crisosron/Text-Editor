@@ -164,6 +164,10 @@ public class ActionController {
         else System.exit(EXIT_ON_CLOSE);
     }
 
+    /**
+     * Changes the theme to the specified string parameter
+     * @param changeThemeTo Specifies what theme the editor should change to
+     */
     public void changeTheme(String changeThemeTo){
 
         JTextArea mainTextArea = textEditor.getMainTextArea();
@@ -277,6 +281,20 @@ public class ActionController {
      */
     public void redo(){
         if(textEditor.getUndoManager().canRedo()) textEditor.getUndoManager().redo();
+    }
+
+    /**
+     * Creates a new line and creates 4 spaces and a hyphen - Acts as a bullet point generator
+     */
+    public void insertPoint(){
+        textEditor.getMainTextArea().append("\n" + "    " + "-");
+    }
+
+    /**
+     * Serves the purpose of being a sub point for a created point
+     */
+    public void insertSubPoint(){
+        textEditor.getMainTextArea().append("\n" + "    " + "    " + "-");
     }
 
     /*Getters*/

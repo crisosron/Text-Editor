@@ -346,7 +346,6 @@ public class FontWindow extends JFrame implements ActionListener, ListSelectionL
             /*Properties and outputStream objects to set some values in config.properties file*/
             Properties properties = new Properties();
             OutputStream outputStream = new FileOutputStream("config.properties");
-            //OutputStream outputStream = new FileOutputStream(getClass().getResource("/config.properties").getFile());
 
             /*Setting new values*/
             properties.setProperty("font-family", newDefFontFamily);

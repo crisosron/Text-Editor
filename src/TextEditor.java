@@ -81,7 +81,7 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
 
         /*Sets that stores the menu items within each respective menu*/
         fileMenuItemNames = new ArrayList<>(Arrays.asList("New", "Open", "Save", "Save As...", "Exit", "New Window"));
-        editMenuItemNames = new ArrayList<>(Arrays.asList("Cut", "Copy", "Paste", "Undo", "Redo"));
+        editMenuItemNames = new ArrayList<>(Arrays.asList("Cut", "Copy", "Paste", "Undo", "Redo", "Insert Point", "Insert Sub Point"));
         formatMenuItemNames = new ArrayList<>(Arrays.asList("Font", "Word Wrap", "Light Theme", "Dark Theme"));
         paintMenuItemNames = new ArrayList<>(Arrays.asList("New Paint Window", "Open Paint In Current Window"));
         rightClickMenuItemNames  = new ArrayList<>(Arrays.asList("Undo", "Cut", "Copy", "Paste", "Redo"));
@@ -95,9 +95,9 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
         *   menuItemsWithStandardShortcuts is a collection of menu items whose shortcut adheres to the standard eg paste is CTRL+V etc
         *   menuItemsWithShiftShortcuts is a collection of menu items whose shortcut is CTRL + SHIFT + [first character of the menu item name]
         */
-        menuItemsWithBasicShortcuts = new HashSet<>(Arrays.asList("New", "Open", "Save", "Copy", "Font"));
+        menuItemsWithBasicShortcuts = new HashSet<>(Arrays.asList("New", "Open", "Save", "Copy", "Font", "Insert Point"));
         menuItemsWithStandardShortcuts = new HashSet<>(Arrays.asList("Undo", "Cut", "Paste", "Exit", "Redo"));
-        menuItemsWithShiftShortCuts = new HashSet<>(Arrays.asList("Save As...", "New Window"));
+        menuItemsWithShiftShortCuts = new HashSet<>(Arrays.asList("Save As...", "New Window", "Insert Sub Point"));
 
         /*Adding all the menu items with a keyboard shortcut to a single set*/
         allMenuItemsWithShortcuts = new HashSet<>();
@@ -233,7 +233,7 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
             /*If menu item is within the edit menu*/
             else if(editMenuItemNames.contains(menuItemName) && !checkBoxMenuItemNames.contains(menuItemName)) {
                 menuMap.get("Edit").add(menuItem);
-                if(menuItemName.equals("Paste")) menuMap.get("Edit").addSeparator();
+                if(menuItemName.equals("Paste") || menuItemName.equals("Redo")) menuMap.get("Edit").addSeparator();
             }
 
             /*If menu item is within the format menu*/
@@ -378,6 +378,8 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
         else if(action.equals("Copy")) actionController.copy();
         else if (action.equals("Undo")) actionController.undo();
         else if(action.equals("Redo")) actionController.redo();
+        else if(action.equals("Insert Point")) actionController.insertPoint();
+        else if(action.equals("Insert Sub Point")) actionController.insertSubPoint();
 
         /*Format menu actions*/
         else if(action.equals("Word Wrap")) actionController.setWordWrap();
