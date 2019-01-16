@@ -1,4 +1,3 @@
-//TODO: Merge light theme and dark theme methods into one methods
 import javax.swing.*;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
@@ -165,44 +164,12 @@ public class ActionController {
         else System.exit(EXIT_ON_CLOSE);
     }
 
-    /**
-     * Changes the editor to use a dark theme
-     */
-    public void enableDarkTheme(){
-        JTextArea mainTextArea = textEditor.getMainTextArea();
-        List<JCheckBoxMenuItem> checkBoxMenuItemList = textEditor.getCheckBoxMenuItemsList();
-
-        JCheckBoxMenuItem darkThemeMenuItem = new JCheckBoxMenuItem();
-        JCheckBoxMenuItem lightThemeMenuItem = new JCheckBoxMenuItem();
-        for(JCheckBoxMenuItem checkBoxMenuItem : checkBoxMenuItemList){
-            if(checkBoxMenuItem.getName().equals("Dark Theme")) darkThemeMenuItem = checkBoxMenuItem;
-            else if(checkBoxMenuItem.getName().equals("Light Theme")) lightThemeMenuItem = checkBoxMenuItem;
-        }
-
-        /*Exits the method if the dark theme is already active*/
-        if(darkThemeActive) {
-            darkThemeMenuItem.setSelected(true); //Dark theme retains selection appearance
-            return;
-        }
-
-        /*Operations to convert to dark theme*/
-        darkThemeActive = true;
-        lightThemeActive = false;
-        darkThemeMenuItem.setSelected(true); //Enables the tick for the dark theme menu item
-        lightThemeMenuItem.setSelected(false); //Disables the tick for the light theme menu item
-        mainTextArea.setCaretColor(Color.white);
-        mainTextArea.setForeground(Color.white);
-        mainTextArea.setBackground(new Color(42, 42, 42));
-    }
-
-    /**
-     * Changes the editor to use a light theme
-     */
-    public void enableLightTheme(){
+    public void changeTheme(String changeThemeTo){
 
         JTextArea mainTextArea = textEditor.getMainTextArea();
         List<JCheckBoxMenuItem> checkBoxMenuItemList = textEditor.getCheckBoxMenuItemsList();
 
+        /*Getting the menu items for theme selection*/
         JCheckBoxMenuItem lightThemeMenuItem = new JCheckBoxMenuItem();
         JCheckBoxMenuItem darkThemeMenuItem = new JCheckBoxMenuItem();
         for(JCheckBoxMenuItem checkBoxMenuItem : checkBoxMenuItemList){
@@ -210,20 +177,41 @@ public class ActionController {
             else if(checkBoxMenuItem.getName().equals("Light Theme")) lightThemeMenuItem = checkBoxMenuItem;
         }
 
-        /*Exits the method if the light theme is already active*/
-        if(lightThemeActive) {
+        if(changeThemeTo.equals("Dark Theme")){
+
+            /*If the theme is already active, re-toggle selected on the menu item and returns*/
+            if(darkThemeActive) {
+                darkThemeMenuItem.setSelected(true);
+                return;
+            }
+
+            /*Setting booleans and selection logic*/
+            darkThemeActive = true;
+            lightThemeActive = false;
+            lightThemeMenuItem.setSelected(false);
+            darkThemeMenuItem.setSelected(true);
+
+            /*Setting mainTextArea colors*/
+            mainTextArea.setCaretColor(Color.white);
+            mainTextArea.setForeground(Color.white);
+            mainTextArea.setBackground(new Color(42, 42, 42));
+
+        }else if(changeThemeTo.equals("Light Theme")){
+
+            if(lightThemeActive){
+                lightThemeMenuItem.setSelected(true);
+                return;
+            }
+
+            lightThemeActive = true;
+            darkThemeActive = false;
             lightThemeMenuItem.setSelected(true);
-            return;
-        }
+            darkThemeMenuItem.setSelected(false);
 
-        /*Operations to convert to light theme*/
-        lightThemeActive = true;
-        darkThemeActive = false;
-        darkThemeMenuItem.setSelected(false); //Disables the tick for the dark theme menu item
-        lightThemeMenuItem.setSelected(true); //Enables the tick for the light theme menu item
-        mainTextArea.setCaretColor(Color.black);
-        mainTextArea.setForeground(Color.black);
-        mainTextArea.setBackground(Color.white);
+            mainTextArea.setCaretColor(Color.black);
+            mainTextArea.setForeground(Color.black);
+            mainTextArea.setBackground(Color.white);
+        }
     }
 
     /**

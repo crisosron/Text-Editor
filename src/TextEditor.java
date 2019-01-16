@@ -249,12 +249,6 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
         /*Adding check box menu items to their respective menus*/
         for (JCheckBoxMenuItem checkBoxMenuItem : checkBoxMenuItemsList){
             String checkBoxMenuItemName = checkBoxMenuItem.getName();
-            /*
-            if(fileMenuItemNames.contains(entryCheckBox.getKey())) menuMap.get("File").add(entryCheckBox.getValue());
-            else if(editMenuItemNames.contains(entryCheckBox.getKey())) menuMap.get("Edit").add(entryCheckBox.getValue());
-            else if(formatMenuItemNames.contains(entryCheckBox.getKey())) menuMap.get("Format").add(entryCheckBox.getValue());
-            else if(paintMenuItemNames.contains(entryCheckBox.getKey())) menuMap.get("Graphics").add(entryCheckBox.getValue());
-            */
             if(fileMenuItemNames.contains(checkBoxMenuItemName)) menuMap.get("File").add(checkBoxMenuItem);
             else if(editMenuItemNames.contains(checkBoxMenuItemName)) menuMap.get("Edit").add(checkBoxMenuItem);
             else if(formatMenuItemNames.contains(checkBoxMenuItemName)) menuMap.get("Format").add(checkBoxMenuItem);
@@ -359,8 +353,6 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
             inputStream.close();
 
         }catch(IOException e){e.printStackTrace();}
-
-
     }
 
     /**
@@ -389,8 +381,8 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
 
         /*Format menu actions*/
         else if(action.equals("Word Wrap")) actionController.setWordWrap();
-        else if(action.equals("Dark Theme")) actionController.enableDarkTheme();
-        else if(action.equals("Light Theme")) actionController.enableLightTheme();
+        else if(action.equals("Dark Theme")) actionController.changeTheme(action);
+        else if(action.equals("Light Theme")) actionController.changeTheme(action);
         else if(action.equals("Font")) {fontWindow = new FontWindow();}
 
         /*Paint menu actions*/
