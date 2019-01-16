@@ -1,3 +1,4 @@
+//TODO: Merge light theme and dark theme methods into one methods
 import javax.swing.*;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
@@ -5,6 +6,7 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.io.File;
 import java.io.FileWriter;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -168,19 +170,26 @@ public class ActionController {
      */
     public void enableDarkTheme(){
         JTextArea mainTextArea = textEditor.getMainTextArea();
-        Map<String, JCheckBoxMenuItem> checkBoxMenuItemsMap = textEditor.getCheckBoxMenuItemsMap();
+        List<JCheckBoxMenuItem> checkBoxMenuItemList = textEditor.getCheckBoxMenuItemsList();
+
+        JCheckBoxMenuItem darkThemeMenuItem = new JCheckBoxMenuItem();
+        JCheckBoxMenuItem lightThemeMenuItem = new JCheckBoxMenuItem();
+        for(JCheckBoxMenuItem checkBoxMenuItem : checkBoxMenuItemList){
+            if(checkBoxMenuItem.getName().equals("Dark Theme")) darkThemeMenuItem = checkBoxMenuItem;
+            else if(checkBoxMenuItem.getName().equals("Light Theme")) lightThemeMenuItem = checkBoxMenuItem;
+        }
 
         /*Exits the method if the dark theme is already active*/
         if(darkThemeActive) {
-            checkBoxMenuItemsMap.get("Dark Theme").setSelected(true); //Dark theme retains selection appearance
+            darkThemeMenuItem.setSelected(true); //Dark theme retains selection appearance
             return;
         }
 
         /*Operations to convert to dark theme*/
         darkThemeActive = true;
         lightThemeActive = false;
-        checkBoxMenuItemsMap.get("Dark Theme").setSelected(true); //Enables the tick for the dark theme menu item
-        checkBoxMenuItemsMap.get("Light Theme").setSelected(false); //Disables the tick for the light theme menu item
+        darkThemeMenuItem.setSelected(true); //Enables the tick for the dark theme menu item
+        lightThemeMenuItem.setSelected(false); //Disables the tick for the light theme menu item
         mainTextArea.setCaretColor(Color.white);
         mainTextArea.setForeground(Color.white);
         mainTextArea.setBackground(new Color(42, 42, 42));
@@ -192,19 +201,26 @@ public class ActionController {
     public void enableLightTheme(){
 
         JTextArea mainTextArea = textEditor.getMainTextArea();
-        Map<String, JCheckBoxMenuItem> checkBoxMenuItemsMap = textEditor.getCheckBoxMenuItemsMap();
+        List<JCheckBoxMenuItem> checkBoxMenuItemList = textEditor.getCheckBoxMenuItemsList();
+
+        JCheckBoxMenuItem lightThemeMenuItem = new JCheckBoxMenuItem();
+        JCheckBoxMenuItem darkThemeMenuItem = new JCheckBoxMenuItem();
+        for(JCheckBoxMenuItem checkBoxMenuItem : checkBoxMenuItemList){
+            if(checkBoxMenuItem.getName().equals("Dark Theme")) darkThemeMenuItem = checkBoxMenuItem;
+            else if(checkBoxMenuItem.getName().equals("Light Theme")) lightThemeMenuItem = checkBoxMenuItem;
+        }
 
         /*Exits the method if the light theme is already active*/
         if(lightThemeActive) {
-            checkBoxMenuItemsMap.get("Light Theme").setSelected(true); //Light theme retains selection appearance
+            lightThemeMenuItem.setSelected(true);
             return;
         }
 
         /*Operations to convert to light theme*/
         lightThemeActive = true;
         darkThemeActive = false;
-        checkBoxMenuItemsMap.get("Dark Theme").setSelected(false); //Disables the tick for the dark theme menu item
-        checkBoxMenuItemsMap.get("Light Theme").setSelected(true); //Enables the tick for the light theme menu item
+        darkThemeMenuItem.setSelected(false); //Disables the tick for the dark theme menu item
+        lightThemeMenuItem.setSelected(true); //Enables the tick for the light theme menu item
         mainTextArea.setCaretColor(Color.black);
         mainTextArea.setForeground(Color.black);
         mainTextArea.setBackground(Color.white);
@@ -279,6 +295,7 @@ public class ActionController {
     public boolean isChangesMade(){return changesMade;}
     public boolean isHasOpenedFile(){return hasOpenedFile;}
 
+    /*Setters*/
     public void setChangesMadeTrue(){changesMade = true;}
     public void setChangesMadeFalse(){changesMade = false;}
 }
