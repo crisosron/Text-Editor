@@ -150,7 +150,7 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
             @Override
             public void windowClosing(WindowEvent e) {
                 super.windowClosing(e);
-                if(actionController.isChangesMade()){
+                if(actionController.hasChangesMade()){
                     actionController.saveCheck(0);
                 }else{
 
@@ -421,14 +421,14 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
     public void keyPressed(KeyEvent ke){
 
         /*Checks if the key pressed is alphabetic*/
-        if(Character.isAlphabetic(ke.getKeyChar()))actionController.setChangesMadeTrue();
+        if(Character.isAlphabetic(ke.getKeyChar()) && !actionController.hasChangesMade())actionController.setChangesMadeTrue();
     }
 
     /**
      * For KeyListener - Sets changesMade to false if the mainTextArea component is empty and the user has not opened a file
      */
     public void keyReleased(KeyEvent ke){
-        if(mainTextArea.getText().equals("") && !actionController.isHasOpenedFile()) actionController.setChangesMadeFalse();
+        if(mainTextArea.getText().equals("") && !actionController.openedFileExists()) actionController.setChangesMadeFalse();
     }
     public void keyTyped(KeyEvent ke){ }
 

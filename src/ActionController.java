@@ -6,7 +6,6 @@ import java.awt.datatransfer.StringSelection;
 import java.io.File;
 import java.io.FileWriter;
 import java.util.List;
-import java.util.Map;
 import java.util.Scanner;
 
 import static javax.swing.JFrame.EXIT_ON_CLOSE;
@@ -15,11 +14,9 @@ public class ActionController {
     private TextEditor textEditor;
 
     /*For file management*/
-    private String openedFileName = "";
-    private String openedFileNamePath = "";
-    private boolean hasOpenedFile = false;
     private boolean changesMade = false;
     private boolean cancelClose = false;
+    private File openedFile;
 
     /*Format menu booleans*/
     private boolean isWrapping = false; //Wrapping of text area is set to false by default
@@ -32,7 +29,7 @@ public class ActionController {
 
             /*Prompting user to open a file using file choosers*/
             JFileChooser openFileChooser = new JFileChooser();
-            openFileChooser.setCurrentDirectory(new File(System.getProperty("user.dir"))); //Gets current working directory
+            openFileChooser.setCurrentDirectory(new File(System.getProperty("user.home"))); //Gets current working directory
             int status = openFileChooser.showOpenDialog(null); //Prompting user to open a file
             if(status != JFileChooser.APPROVE_OPTION){
                 JOptionPane.showMessageDialog(null, "No file selected!");
@@ -42,15 +39,13 @@ public class ActionController {
 
                 /*Getting the text in the opened file and transferring it onto the
                  * mainTextArea component*/
-                File openedFile = openFileChooser.getSelectedFile();
-                openedFileName = openFileChooser.getSelectedFile().getName();
-                openedFileNamePath = openedFile.getAbsolutePath(); //Used for saving to an existing file
-                hasOpenedFile = true;
+                openedFile = openFileChooser.getSelectedFile();
+                String openedFileName = openFileChooser.getSelectedFile().getName();
                 Scanner scan = new Scanner(openedFile);
                 String textToDisplay = "";
                 while(scan.hasNext()) textToDisplay += scan.nextLine() + "\n";
                 textEditor.getMainTextArea().setText(textToDisplay);
-                textEditor.setTitle(openedFileName); //Setting the title of the frame to the name of the opened text file
+                textEditor.setTitle(openedFileName);
                 changesMade = false;
             }
 
@@ -65,11 +60,10 @@ public class ActionController {
         try{
 
             /*If the user attempts to save a newly opened file with no changes - return*/
-            if(!changesMade && hasOpenedFile)return;
+            if(!changesMade)return;
 
             /*If saving to existing file*/
-            if(hasOpenedFile){
-                File openedFile = new File(openedFileNamePath);
+            if(openedFile != null){
                 FileWriter writeToOpenedFile = new FileWriter(openedFile);
                 textEditor.getMainTextArea().write(writeToOpenedFile);
                 JOptionPane.showMessageDialog(null, "File Saved!");
@@ -105,9 +99,8 @@ public class ActionController {
                 textEditor.getMainTextArea().write(writer); //Gets the text in the mainTextArea component and writes it to the newly created file
                 textEditor.setTitle(fileToSave.getName());
                 JOptionPane.showMessageDialog(null, "File saved as: " + fileToSave.getName());
-                openedFileNamePath = fileToSave.getAbsolutePath();
+                openedFile = fileToSave;
             }
-            hasOpenedFile = true;
             changesMade = false;
 
         }catch(Exception e){e.printStackTrace();}
@@ -127,7 +120,8 @@ public class ActionController {
         int optionInput = JOptionPane.showConfirmDialog(null, "Would you like to save changes made? ");
         if(optionInput == JOptionPane.YES_OPTION) {
             saveFile();
-            if(sourceID == 0 || sourceID == 1 && !cancelClose) System.exit(0);
+            if(cancelClose) return;
+            if(sourceID == 0 || sourceID == 1) System.exit(0);
         }
         else if(optionInput == JOptionPane.CANCEL_OPTION) return;
         else{
@@ -149,10 +143,8 @@ public class ActionController {
         }
 
         /*Resetting some things*/
-        hasOpenedFile = false;
+        openedFile = null;
         textEditor.getMainTextArea().setText("");
-        openedFileNamePath = "";
-        openedFileName = "";
         changesMade = false;
     }
 
@@ -298,8 +290,8 @@ public class ActionController {
     }
 
     /*Getters*/
-    public boolean isChangesMade(){return changesMade;}
-    public boolean isHasOpenedFile(){return hasOpenedFile;}
+    public boolean hasChangesMade(){return changesMade;}
+    public boolean openedFileExists(){return openedFile == null;}
 
     /*Setters*/
     public void setChangesMadeTrue(){changesMade = true;}
