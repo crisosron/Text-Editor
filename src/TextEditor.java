@@ -37,7 +37,6 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
     private Set<String> menuItemsWithBasicShortcuts, menuItemsWithCustomShortCuts, allMenuItemsWithShortcuts, menuItemsWithShiftShortCuts;
 
     /*Other fields*/
-    //private static Font defaultFont;
     private static FontWindow fontWindow;
     public static TextEditor textEditor;
     private static PaintWindow paintWindow;
@@ -305,7 +304,6 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
                 }
             }
 
-            //JMenuItem menuItem = menuItemsMap.get(menuItemWithKeyShortCut);
             char firstChar = menuItemWithKeyShortCut.charAt(0);
 
             /*'CTRL + [First character of menu item name]'*/
@@ -344,12 +342,11 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
             else throw new FileNotFoundException("File config.properties cannot be found");
 
             /*Getting the default font settings*/
-            String defFontFamily = properties.getProperty("font-family");
             String defFontStyle = properties.getProperty("font-style");
             String defFontSize = properties.getProperty("font-size");
 
             /*Loading the default font (for startup) and closing inputStream*/
-            setDefaultFont(defFontFamily, Integer.parseInt(defFontStyle), Integer.parseInt(defFontSize));
+            setDefaultFont(defFontStyle, fontStyleType(defFontStyle), Integer.parseInt(defFontSize));
             inputStream.close();
 
         }catch(IOException e){e.printStackTrace();}

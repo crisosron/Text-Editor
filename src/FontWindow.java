@@ -329,7 +329,7 @@ public class FontWindow extends JFrame implements ActionListener, ListSelectionL
 
             /*Font details*/
             String newDefFontFamily = fontFamilyList.getSelectedValue().toString();
-            int newDefFontStyle = TextEditor.fontStyleType(fontStyleList.getSelectedValue().toString());
+            String newDefFontStyle = fontStyleList.getSelectedValue().toString();
             int newDefFontSize = fontSizeList.getSelectedValue();
 
             /*Confirming if the default font should be reset to a new font*/
@@ -347,7 +347,7 @@ public class FontWindow extends JFrame implements ActionListener, ListSelectionL
 
             /*Setting new values*/
             properties.setProperty("font-family", newDefFontFamily);
-            properties.setProperty("font-style", Integer.toString(newDefFontStyle));
+            properties.setProperty("font-style", newDefFontStyle);
             properties.setProperty("font-size", Integer.toString(newDefFontSize));
 
             /*Storing changes and closing outputStream*/
