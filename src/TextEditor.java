@@ -1,4 +1,3 @@
-//TODO: Use a single opened file field for save logic
 import javax.swing.*;
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.event.UndoableEditListener;
@@ -38,7 +37,7 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
     private Set<String> menuItemsWithBasicShortcuts, menuItemsWithStandardShortcuts, allMenuItemsWithShortcuts, menuItemsWithShiftShortCuts;
 
     /*Other fields*/
-    private static Font defaultFont;
+    //private static Font defaultFont;
     private static FontWindow fontWindow;
     public static TextEditor textEditor;
     private static PaintWindow paintWindow;
@@ -477,8 +476,7 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
      * @param fontSize is the default font size
      */
     private void setDefaultFont(String fontStyle, int fontFamily, int fontSize){
-        defaultFont = new Font(fontStyle, fontFamily, fontSize);
-        mainTextAreaFont = defaultFont;
+        mainTextAreaFont = new Font(fontStyle, fontFamily, fontSize);
     }
 
     /*Getters*/

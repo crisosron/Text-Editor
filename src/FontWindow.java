@@ -207,8 +207,6 @@ public class FontWindow extends JFrame implements ActionListener, ListSelectionL
         fontSizePanel.add(scrollPaneMap.get("Font Size"));
     }
 
-
-
     /**
      * Creates a scroll pane for a JList object and adds it to the map
      */

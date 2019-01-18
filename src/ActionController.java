@@ -146,6 +146,7 @@ public class ActionController {
         openedFile = null;
         textEditor.getMainTextArea().setText("");
         changesMade = false;
+        textEditor.setTitle("TextEditor");
     }
 
     /**
