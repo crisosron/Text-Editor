@@ -402,8 +402,8 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
     /**
      * Sets the font based on what font the user selects
      */
-    public void setNewFont(String fontFamily, String fontStyle, int fontSize){
-        mainTextArea.setFont(new Font(fontFamily, fontStyleType(fontStyle), fontSize));
+    public void setNewFont(String fontStyle, int fontSize){
+        mainTextArea.setFont(new Font(fontStyle, fontStyleType(fontStyle), fontSize));
     }
 
     /**

@@ -1,4 +1,4 @@
-//TODO: Add set font as default functionality
+//TODO: selectedFontFamily is no longer used in setting the font, do something about this
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -248,6 +248,7 @@ public class FontWindow extends JFrame implements ActionListener, ListSelectionL
         if(!availableFontStylesForSelectedFont.isEmpty()) availableFontStylesForSelectedFont.clear();
         for(Font font : allAvailableFonts){
             String fontStyle = font.getName(); //Name of the font is the style of the font
+            //if(!fontStyle.equals(font.getFamily()) && (!fontStyle.contains("Bold") || !fontStyle.contains("Italic"))) continue;
             if(font.getFamily().equals(fontFamily)) {
                 availableFontStylesForSelectedFont.add(fontStyle);
             }
@@ -315,10 +316,9 @@ public class FontWindow extends JFrame implements ActionListener, ListSelectionL
      * Updates the sample text area font
      */
     private void updateSample(){
-        String fontFamily = fontFamilyList.getSelectedValue().toString();
-        String fontStyle = fontStyleList.getSelectedValue().toString();
+        Object fontStyle = fontStyleList.getSelectedValue();
         int fontSize = fontSizeList.getSelectedValue();
-        sampleTextArea.setFont(new Font(fontFamily, TextEditor.fontStyleType(fontStyle), fontSize));
+        sampleTextArea.setFont(new Font(fontStyle.toString(), TextEditor.fontStyleType(fontStyle.toString()), fontSize));
     }
 
     /**
@@ -362,7 +362,9 @@ public class FontWindow extends JFrame implements ActionListener, ListSelectionL
      * Sends the selected combination through and sets the new font
      */
     private void confirm(){
-        TextEditor.textEditor.setNewFont(selectedFontFamily, selectedFontStyle, selectedFontSize);
+        /*Reminder that the actual font is equal to the name of the font style, font family is just used
+         * group the different font styles in the same family*/
+        TextEditor.textEditor.setNewFont(selectedFontStyle, selectedFontSize);
         dispose(); //Closes the font window
         JOptionPane.showMessageDialog(null, "Updated Font!");
     }
