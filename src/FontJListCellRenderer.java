@@ -1,3 +1,4 @@
+//TODO: If the font style does not contain, italic, bold or not directly equal to the font family, name, it should be discarded
 import javax.swing.*;
 import java.awt.*;
 

@@ -34,7 +34,7 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
     private List<JCheckBoxMenuItem> checkBoxMenuItemsList; //Use this map to gain access to check box menu items
 
     /*Sets that are used for keyboard shortcuts*/
-    private Set<String> menuItemsWithBasicShortcuts, menuItemsWithStandardShortcuts, allMenuItemsWithShortcuts, menuItemsWithShiftShortCuts;
+    private Set<String> menuItemsWithBasicShortcuts, menuItemsWithCustomShortCuts, allMenuItemsWithShortcuts, menuItemsWithShiftShortCuts;
 
     /*Other fields*/
     //private static Font defaultFont;
@@ -80,7 +80,7 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
 
         /*Sets that stores the menu items within each respective menu*/
         fileMenuItemNames = new ArrayList<>(Arrays.asList("New", "Open", "Save", "Save As...", "Exit", "New Window"));
-        editMenuItemNames = new ArrayList<>(Arrays.asList("Cut", "Copy", "Paste", "Undo", "Redo", "Insert Point", "Insert Sub Point"));
+        editMenuItemNames = new ArrayList<>(Arrays.asList("Cut", "Copy", "Paste", "Undo", "Redo", "Insert Point", "Insert Sub Point", "Insert Date"));
         formatMenuItemNames = new ArrayList<>(Arrays.asList("Font", "Word Wrap", "Light Theme", "Dark Theme"));
         paintMenuItemNames = new ArrayList<>(Arrays.asList("New Paint Window", "Open Paint In Current Window"));
         rightClickMenuItemNames  = new ArrayList<>(Arrays.asList("Undo", "Cut", "Copy", "Paste", "Redo"));
@@ -91,18 +91,18 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
 
         /*Explanation of the 3 Collections:
         *   menuItemsWithBasic is a collection of menu items whose shortcut is CTRL + [first character of the menu item name]
-        *   menuItemsWithStandardShortcuts is a collection of menu items whose shortcut adheres to the standard eg paste is CTRL+V etc
+        *   menuItemsWithCustomShortCuts is a collection of menu items whose shortcut does not use the first character of the menu item name
         *   menuItemsWithShiftShortcuts is a collection of menu items whose shortcut is CTRL + SHIFT + [first character of the menu item name]
         */
         menuItemsWithBasicShortcuts = new HashSet<>(Arrays.asList("New", "Open", "Save", "Copy", "Font", "Insert Point"));
-        menuItemsWithStandardShortcuts = new HashSet<>(Arrays.asList("Undo", "Cut", "Paste", "Exit", "Redo"));
+        menuItemsWithCustomShortCuts = new HashSet<>(Arrays.asList("Undo", "Cut", "Paste", "Exit", "Redo", "Insert Date"));
         menuItemsWithShiftShortCuts = new HashSet<>(Arrays.asList("Save As...", "New Window", "Insert Sub Point"));
 
         /*Adding all the menu items with a keyboard shortcut to a single set*/
         allMenuItemsWithShortcuts = new HashSet<>();
         allMenuItemsWithShortcuts.addAll(menuItemsWithBasicShortcuts);
         allMenuItemsWithShortcuts.addAll(menuItemsWithShiftShortCuts);
-        allMenuItemsWithShortcuts.addAll(menuItemsWithStandardShortcuts);
+        allMenuItemsWithShortcuts.addAll(menuItemsWithCustomShortCuts);
 
         /*Adding all menu item names into one set*/
         List<String> menuItemNames = new ArrayList<>();
@@ -317,12 +317,13 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
                 currentMenuItem.setAccelerator(KeyStroke.getKeyStroke(getKeyEventForChar(firstChar), shortcutKeyMask | ActionEvent.SHIFT_MASK));
 
                 /*Menu items that have short cuts that adhere to the established standard (instead of using the first character of the menu item name)*/
-            else if (menuItemsWithStandardShortcuts.contains(menuItemWithKeyShortCut)) {
+            else if (menuItemsWithCustomShortCuts.contains(menuItemWithKeyShortCut)) {
                 if (menuItemWithKeyShortCut.equals("Undo")) currentMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, shortcutKeyMask));
                 else if (menuItemWithKeyShortCut.equals("Cut")) currentMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, shortcutKeyMask));
                 else if (menuItemWithKeyShortCut.equals("Paste")) currentMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, shortcutKeyMask));
                 else if (menuItemWithKeyShortCut.equals("Exit")) currentMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W, shortcutKeyMask));
                 else if (menuItemWithKeyShortCut.equals("Redo")) currentMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y, shortcutKeyMask));
+                else if (menuItemWithKeyShortCut.equals("Insert Date")) currentMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D, shortcutKeyMask));
             }
         }
     }
@@ -379,6 +380,7 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
         else if(action.equals("Redo")) actionController.redo();
         else if(action.equals("Insert Point")) actionController.insertPoint();
         else if(action.equals("Insert Sub Point")) actionController.insertSubPoint();
+        else if(action.equals("Insert Date")) actionController.insertDate();
 
         /*Format menu actions*/
         else if(action.equals("Word Wrap")) actionController.setWordWrap();

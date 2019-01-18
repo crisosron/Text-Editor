@@ -5,6 +5,13 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.io.File;
 import java.io.FileWriter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
@@ -290,9 +297,40 @@ public class ActionController {
         textEditor.getMainTextArea().append("\n" + "    " + "    " + "-");
     }
 
+    /**
+     * Inserts the current date and day of the week into the text area
+     */
+    public void insertDate(){
+
+        /*Getting the current date in the format dd/mm/yyyyy*/
+        Date date = new Date();
+        String dateFormatString= "dd/MM/yyyy"; //Capital MM important to differentiate from mm (milliseconds)
+        DateFormat dateFormat = new SimpleDateFormat(dateFormatString);
+        String formattedDate = dateFormat.format(date);
+
+        /*Using calendar to get day of the week*/
+        Calendar calendar = Calendar.getInstance();
+        int day = calendar.get(Calendar.DAY_OF_WEEK);
+
+        String dayOfTheWeek = "";
+
+        /*Switch statement to determine what day of the week it is*/
+        switch(day){
+            case Calendar.SUNDAY: dayOfTheWeek = "Sunday"; break;
+            case Calendar.MONDAY: dayOfTheWeek = "Monday"; break;
+            case Calendar.TUESDAY: dayOfTheWeek = "Tuesday"; break;
+            case Calendar.WEDNESDAY: dayOfTheWeek = "Wednesday"; break;
+            case Calendar.THURSDAY: dayOfTheWeek = "Thursday"; break;
+            case Calendar.FRIDAY: dayOfTheWeek = "Friday"; break;
+            case Calendar.SATURDAY: dayOfTheWeek = "Saturday"; break;
+        }
+
+        textEditor.getMainTextArea().append(dayOfTheWeek + " - " + formattedDate);
+    }
+
     /*Getters*/
     public boolean hasChangesMade(){return changesMade;}
-    public boolean openedFileExists(){return openedFile == null;}
+    public boolean openedFileExists(){return openedFile != null;}
 
     /*Setters*/
     public void setChangesMadeTrue(){changesMade = true;}
