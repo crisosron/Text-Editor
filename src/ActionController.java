@@ -25,6 +25,7 @@ public class ActionController {
     /*For file management*/
     private boolean changesMade = false;
     private boolean cancelClose = false;
+    private boolean cancelOpenFile;
     private File openedFile;
 
     /*Format menu booleans*/
@@ -35,6 +36,17 @@ public class ActionController {
     public ActionController(TextEditor textEditor){this.textEditor = textEditor;}
     public void openFile(){
         try{
+
+            /*Performs save check*/
+            if(changesMade) saveCheck(3);
+
+            /*If the saveAs method is called during saveCheck method, and the user cancels the save as dialog, assume
+            * that the user wants to cancel the entire operation of opening a new file altogether - This prevents the user
+            * from being spammed a whole bunch of dialog boxes*/
+            if(cancelOpenFile) {
+                cancelOpenFile = false;
+                return;
+            }
 
             /*Prompting user to open a file using file choosers*/
             JFileChooser openFileChooser = new JFileChooser();
@@ -113,7 +125,6 @@ public class ActionController {
             changesMade = false;
 
         }catch(Exception e){e.printStackTrace();}
-
     }
 
     /**
@@ -124,12 +135,20 @@ public class ActionController {
      * 0 = User clicked on exit button on the window
      * 1 = User clicked on Exit JMenuItem in the File menu
      * 2 = User clicked on New JMenuItem in the File menu without saving current changes
+     * 3 = User clicked on open file when changes were made to the current file
      */
     public void saveCheck(int sourceID){
         int optionInput = JOptionPane.showConfirmDialog(null, "Would you like to save changes made? ");
         if(optionInput == JOptionPane.YES_OPTION) {
             saveFile();
-            if(cancelClose) return;
+
+            /*If the saveFileAs method is called within saveFile and the user clicks cancel or closes
+            * the save as dialog, cancelClose is set to true*/
+            if(cancelClose) {
+                if(sourceID == 3) cancelOpenFile = true;
+                return;
+            }
+
             if(sourceID == 0 || sourceID == 1) System.exit(0);
         }
         else if(optionInput == JOptionPane.CANCEL_OPTION) return;
