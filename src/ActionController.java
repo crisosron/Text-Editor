@@ -1,3 +1,5 @@
+//TODO: Make it so that the insert point and sub point uses the current caret position as the start point
+//TODO: Save check upon file opening if changes were made
 import javax.swing.*;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
@@ -284,17 +286,17 @@ public class ActionController {
     }
 
     /**
-     * Creates a new line and creates 4 spaces and a hyphen - Acts as a bullet point generator
+     * Creates a new line and creates 4 spaces and a hyphen - Acts as a bullet point generator - Generated at caret position
      */
     public void insertPoint(){
-        textEditor.getMainTextArea().append("\n" + "    " + "-");
+        textEditor.getMainTextArea().insert("\n" + "    " + "-", textEditor.getMainTextArea().getCaretPosition());
     }
 
     /**
-     * Serves the purpose of being a sub point for a created point
+     * Serves the purpose of being a sub point for a created point at the caret position
      */
     public void insertSubPoint(){
-        textEditor.getMainTextArea().append("\n" + "    " + "    " + "-");
+        textEditor.getMainTextArea().insert("\n" + "    " + "    " + "-", textEditor.getMainTextArea().getCaretPosition());
     }
 
     /**
@@ -325,7 +327,8 @@ public class ActionController {
             case Calendar.SATURDAY: dayOfTheWeek = "Saturday"; break;
         }
 
-        textEditor.getMainTextArea().append(dayOfTheWeek + " - " + formattedDate);
+        /*Outputs text at the caret position*/
+        textEditor.getMainTextArea().insert(dayOfTheWeek + " - " + formattedDate, textEditor.getMainTextArea().getCaretPosition());
     }
 
     /*Getters*/
