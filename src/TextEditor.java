@@ -484,6 +484,7 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
     public JTextArea getMainTextArea(){return mainTextArea;}
     public List<JCheckBoxMenuItem> getCheckBoxMenuItemsList(){return checkBoxMenuItemsList;}
     public UndoManager getUndoManager(){return undoManager;}
+    public int getInstanceNum() {return instanceNum; }
 
     public static void main(String[] args){
 

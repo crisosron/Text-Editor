@@ -1,5 +1,3 @@
-//TODO: Make it so that the insert point and sub point uses the current caret position as the start point
-//TODO: Save check upon file opening if changes were made
 import javax.swing.*;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
@@ -9,9 +7,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -26,6 +21,7 @@ public class ActionController {
     private boolean changesMade = false;
     private boolean cancelClose = false;
     private boolean cancelOpenFile;
+    private boolean cancelNewFile;
     private File openedFile;
 
     /*Format menu booleans*/
@@ -145,17 +141,22 @@ public class ActionController {
             /*If the saveFileAs method is called within saveFile and the user clicks cancel or closes
             * the save as dialog, cancelClose is set to true*/
             if(cancelClose) {
+                if(sourceID == 2) cancelNewFile = true;
                 if(sourceID == 3) cancelOpenFile = true;
                 return;
             }
 
-            if(sourceID == 0 || sourceID == 1) System.exit(0);
+            if(sourceID == 0 || sourceID == 1) {
+                if(textEditor.getInstanceNum() != 0) textEditor.dispose();
+                System.exit(0);
+            }
         }
         else if(optionInput == JOptionPane.CANCEL_OPTION) return;
         else{
             /*If the user clicks exit on the window*/
             if(sourceID ==  0 || sourceID == 1) {
-                System.exit(0);
+                if(textEditor.getInstanceNum() != 0) textEditor.dispose();
+                else System.exit(0);
             }
         }
     }
@@ -168,6 +169,11 @@ public class ActionController {
         /*Checking if the user wants to save an unsaved changes*/
         if(changesMade) {
             saveCheck(2);
+        }
+
+        if(cancelNewFile){
+            cancelNewFile = false;
+            return;
         }
 
         /*Resetting some things*/
