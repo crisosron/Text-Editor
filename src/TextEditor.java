@@ -417,9 +417,16 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
      * For KeyListener - Sets changesMade to true
      */
     public void keyPressed(KeyEvent ke){
+        if(Character.isAlphabetic(ke.getKeyChar())){
+            if(!actionController.hasChangesMade()){
+                int keyShortCutMask = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
 
-        /*Checks if the key pressed is alphabetic*/
-        if(Character.isAlphabetic(ke.getKeyChar()) && !actionController.hasChangesMade())actionController.setChangesMadeTrue();
+                /*Checks if the key shortcut mask is being combined with any other key, and if not, register a change*/
+                if((ke.getModifiers() & keyShortCutMask) != keyShortCutMask){
+                    actionController.setChangesMadeTrue();
+                }
+            }
+        }
     }
 
     /**
