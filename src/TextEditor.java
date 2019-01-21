@@ -195,6 +195,7 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
         /* ---- Setting up the main text area scroll pane (and in turn the main text area itself) ---- */
         mainTextArea.setFocusable(true); //For key events
         mainTextArea.addKeyListener(this); //For key events
+        mainTextArea.setWrapStyleWord(true);
         mainTextArea.setFont(mainTextAreaFont);
         mainTextArea.setMargin(new Insets(5, 5, 5, 5));
         mainTextAreaScroll.setBackground(Color.white);
@@ -435,6 +436,7 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
     public void keyReleased(KeyEvent ke){
         if(mainTextArea.getText().equals("") && !actionController.openedFileExists()) actionController.setChangesMadeFalse();
     }
+
     public void keyTyped(KeyEvent ke){ }
 
     /**
@@ -484,6 +486,7 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
     private void setDefaultFont(String fontStyle, int fontFamily, int fontSize){
         mainTextAreaFont = new Font(fontStyle, fontFamily, fontSize);
     }
+
 
     /*Getters*/
     public PaintWindow getPaintWindow(){return paintWindow;}
