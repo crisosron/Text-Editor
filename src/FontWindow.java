@@ -1,4 +1,3 @@
-//TODO: selectedFontFamily is no longer used in setting the font, do something about this
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -167,8 +166,8 @@ public class FontWindow extends JFrame implements ActionListener, ListSelectionL
         fontFamilyList = new JList(listModelFontFamily);
         fontFamilyList.setCellRenderer(customListCellRenderer); //Uses custom cell renderer to customize each individual cell in this list
         String firstFontFamily = fontFamilyList.getModel().getElementAt(0).toString(); //Gets the first font family in the list
-        setAvailableFontStylesForSelectedFont(firstFontFamily); //TODO: Put this in highlightSelectedFontProperties
-        fontFamilyList.setSelectedIndex(0);
+        //setAvailableFontStylesForSelectedFont(firstFontFamily); //TODO: Put this in highlightSelectedFontProperties
+        //fontFamilyList.setSelectedIndex(0);
 
         /*Setting up the font style list*/
         listModelFontStyle = new DefaultListModel<>(); //DefaultListModel object to make adding elements easier
@@ -177,7 +176,7 @@ public class FontWindow extends JFrame implements ActionListener, ListSelectionL
         }
         fontStyleList = new JList(listModelFontStyle);
         fontStyleList.setCellRenderer(customListCellRenderer); //Uses custom cell renderer to customize each individual cell in this list
-        fontStyleList.setSelectedIndex(0);
+        //fontStyleList.setSelectedIndex(0);
 
         /*Setting up the font size list*/
         listModelFontSize = new DefaultListModel<>(); //Used in conjunction with JList since JList class does not have a class that can take integer arrays
@@ -187,8 +186,9 @@ public class FontWindow extends JFrame implements ActionListener, ListSelectionL
             fontVal+=2;
         }
         fontSizeList = new JList<>(listModelFontSize);
-        fontSizeList.setSelectedIndex(9);
+        //fontSizeList.setSelectedIndex(9);
         //TODO: Develop highlightSelectedFontProperties();
+        highlightSelectedFontProperties();
 
         /*Creating the JScrollPane objects to hold the JList objects*/
         createScrollPane(fontFamilyList, "Font Family", PANEL_WIDTH, PANEL_HEIGHT, false);
@@ -221,16 +221,39 @@ public class FontWindow extends JFrame implements ActionListener, ListSelectionL
         if(alwaysScroll) scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         scrollPaneMap.put(nameOfScrollPane, scrollPane);
     }
-    /* TODO: Develop this
+
+    /**
+     * Method that processes the properties of the selected font for highlighting
+     */
     private void highlightSelectedFontProperties(){
+
+        /*The font and its properties*/
         Font currentFont = textEditor.getMainTextAreaFont();
-        String fontFamily = currentFont.getFamily();
-        String fontStyle = currentFont.getName();
-        int fontSize = currentFont.getSize();
+        String currentFontFamily = currentFont.getFamily();
+        String currentFontStyle = currentFont.getName();
+        String currentFontSize = Integer.toString(currentFont.getSize());
 
-
+        /*Calling the method that processes JLists to highlight the font property*/
+        setSelectedIndices(fontFamilyList, currentFontFamily);
+        setAvailableFontStylesForSelectedFont(currentFontFamily);
+        updateFontStylesList();
+        setSelectedIndices(fontStyleList, currentFontStyle);
+        setSelectedIndices(fontSizeList, currentFontSize);
     }
-    */
+
+
+    /**
+     * Highlights the item in the list that matches the string itemToMatch
+     * @param list - List that is iterated through to search for the item
+     * @param itemToMatch - Item to search for in the list parameter
+     */
+    private void setSelectedIndices(JList list, String itemToMatch){
+        for(int i = 0; i<list.getModel().getSize(); i++){
+            String itemInIteration = list.getModel().getElementAt(i).toString();
+            if(itemInIteration.equals(itemToMatch)) list.setSelectedIndex(i);
+        }
+    }
+
 
     /**
      * Method that sets up the sample text area - This includes the first font,
@@ -377,7 +400,6 @@ public class FontWindow extends JFrame implements ActionListener, ListSelectionL
     private void confirm(){
         /*Reminder that the actual font is equal to the name of the font style, font family is just used
          * group the different font styles in the same family*/
-        //TextEditor.textEditor.setNewFont(selectedFontStyle, selectedFontSize);
         textEditor.setNewFont(selectedFontStyle, selectedFontSize);
         dispose(); //Closes the font window
         JOptionPane.showMessageDialog(null, "Updated Font!");

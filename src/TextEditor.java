@@ -1,5 +1,4 @@
 //TODO: Make it so that the current font is already highlighted as soon as the font window is created
-//TODO: Make TextEditor instances not static? IE make textEditor field not static?
 import javax.swing.*;
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.event.UndoableEditListener;
@@ -493,6 +492,7 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
     public List<JCheckBoxMenuItem> getCheckBoxMenuItemsList(){return checkBoxMenuItemsList;}
     public UndoManager getUndoManager(){return undoManager;}
     public int getInstanceNum() {return instanceNum; }
+    public Font getMainTextAreaFont(){return mainTextAreaFont;}
 
     public static void main(String[] args){
 
