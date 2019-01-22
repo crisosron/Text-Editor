@@ -1,3 +1,5 @@
+//TODO: Make it so that the current font is already highlighted as soon as the font window is created
+//TODO: Make TextEditor instances not static? IE make textEditor field not static?
 import javax.swing.*;
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.event.UndoableEditListener;
@@ -37,9 +39,6 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
     private Set<String> menuItemsWithBasicShortcuts, menuItemsWithCustomShortCuts, allMenuItemsWithShortcuts, menuItemsWithShiftShortCuts;
 
     /*Other fields*/
-    private static FontWindow fontWindow;
-    public static TextEditor textEditor;
-    private static PaintWindow paintWindow;
     private UndoManager undoManager;
     private ActionController actionController;
 
@@ -384,10 +383,10 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
         else if(action.equals("Word Wrap")) actionController.setWordWrap();
         else if(action.equals("Dark Theme")) actionController.changeTheme(action);
         else if(action.equals("Light Theme")) actionController.changeTheme(action);
-        else if(action.equals("Font")) {fontWindow = new FontWindow();}
+        else if(action.equals("Font")) {FontWindow fontWindow = new FontWindow(this);}
 
         /*Paint menu actions*/
-        else if(action.equals("New Paint Window")) {paintWindow = new PaintWindow();}
+        else if(action.equals("New Paint Window")) {PaintWindow paintWindow = new PaintWindow();}
     }
 
     /**
@@ -401,7 +400,8 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
      * Sets the font based on what font the user selects
      */
     public void setNewFont(String fontStyle, int fontSize){
-        mainTextArea.setFont(new Font(fontStyle, fontStyleType(fontStyle), fontSize));
+        mainTextAreaFont = new Font(fontStyle, fontStyleType(fontStyle), fontSize);
+        mainTextArea.setFont(mainTextAreaFont);
     }
 
     /**
@@ -418,7 +418,7 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
      * For KeyListener - Sets changesMade to true
      */
     public void keyPressed(KeyEvent ke){
-        if(Character.isAlphabetic(ke.getKeyChar())){
+        if(Character.isAlphabetic(ke.getKeyChar()) || ke.getKeyCode() == KeyEvent.VK_SPACE || ke.getKeyCode() == KeyEvent.VK_BACK_SPACE){
             if(!actionController.hasChangesMade()){
                 int keyShortCutMask = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
 
@@ -489,8 +489,6 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
 
 
     /*Getters*/
-    public PaintWindow getPaintWindow(){return paintWindow;}
-    public FontWindow getFontWindow(){return fontWindow;}
     public JTextArea getMainTextArea(){return mainTextArea;}
     public List<JCheckBoxMenuItem> getCheckBoxMenuItemsList(){return checkBoxMenuItemsList;}
     public UndoManager getUndoManager(){return undoManager;}
@@ -502,7 +500,7 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
          * to work */
         if(System.getProperty("os.name").contains("Mac")) System.setProperty("apple.laf.useScreenMenuBar", "true");
 
-        textEditor = new TextEditor(0);
+        TextEditor textEditor = new TextEditor(0);
         textEditor.getRootPane().putClientProperty("apple.awt.fullscreenable", Boolean.valueOf(true));
     }
 }

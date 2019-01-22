@@ -81,7 +81,7 @@ public class PaintWindow extends JFrame implements ActionListener {
         setResizable(false);
 
         /*Creating the canvas and adding to the frame*/
-        canvas = new Canvas(SIDE_PANEL_WIDTH, 0, CANVAS_PANEL_WIDTH, CANVAS_PANEL_HEIGHT);
+        canvas = new Canvas(SIDE_PANEL_WIDTH, 0, CANVAS_PANEL_WIDTH, CANVAS_PANEL_HEIGHT, this);
         add(canvas);
 
         /*Creating new panels - Note that the order matters in terms of their creation since absolute positioning is being used*/

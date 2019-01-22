@@ -16,8 +16,9 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
     float eraserWidth, eraserHeight;
     private List<ShapeItem> shapeItems, whiteEraserCircleShapeItems, lineShapes; //shapeItems is the master list, lineShapes is used as a checker if a shape is a line
     private Point shapeStart, shapeEnd;
+    private PaintWindow paintWindow;
 
-    public Canvas(int x, int y, int width, int height){
+    public Canvas(int x, int y, int width, int height, PaintWindow paintWindow){
         this.x = x;
         this.y = y;
         this.width = width;
@@ -27,6 +28,7 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
         lineShapes = new ArrayList<>();
         eraserWidth = 50;
         eraserHeight = 50;
+        this.paintWindow = paintWindow;
         setupCanvas();
     }
 
@@ -60,7 +62,7 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
 
         /*Shape being drawn when the mouse is being dragged*/
         if(shapeEnd != null && shapeStart != null){
-            String selectedTool = TextEditor.textEditor.getPaintWindow().getSelectedTool();
+            String selectedTool = paintWindow.getSelectedTool();
             if(selectedTool.equals("line")){
                 Line2D.Float guideLine = new Line2D.Float(shapeStart.x, shapeStart.y, shapeEnd.x, shapeEnd.y);
                 graphics2D.draw(guideLine);
@@ -159,9 +161,9 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
     public void mouseReleased(MouseEvent mouseEvent){
 
         /*Variables*/
-        Color selectedColor = TextEditor.textEditor.getPaintWindow().getSelectedColor();
-        boolean filling = TextEditor.textEditor.getPaintWindow().isFilling();
-        String selectedTool = TextEditor.textEditor.getPaintWindow().getSelectedTool();
+        Color selectedColor = paintWindow.getSelectedColor();
+        boolean filling = paintWindow.isFilling();
+        String selectedTool = paintWindow.getSelectedTool();
 
         /*Conditional statements to determine what shape to create*/
         if(selectedTool.equals("line")) createLine(shapeStart.x, shapeStart.y, shapeEnd.x, shapeEnd.y, selectedColor);

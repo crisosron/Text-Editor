@@ -39,7 +39,10 @@ public class FontWindow extends JFrame implements ActionListener, ListSelectionL
     private String selectedFontFamily, selectedFontStyle;
     private int selectedFontSize;
 
-    public FontWindow() {
+    private TextEditor textEditor;
+
+    public FontWindow(TextEditor textEditor) {
+        this.textEditor = textEditor;
 
         /*Initialising panels*/
         fontFamilyPanel = new JPanel();
@@ -164,7 +167,7 @@ public class FontWindow extends JFrame implements ActionListener, ListSelectionL
         fontFamilyList = new JList(listModelFontFamily);
         fontFamilyList.setCellRenderer(customListCellRenderer); //Uses custom cell renderer to customize each individual cell in this list
         String firstFontFamily = fontFamilyList.getModel().getElementAt(0).toString(); //Gets the first font family in the list
-        setAvailableFontStylesForSelectedFont(firstFontFamily);
+        setAvailableFontStylesForSelectedFont(firstFontFamily); //TODO: Put this in highlightSelectedFontProperties
         fontFamilyList.setSelectedIndex(0);
 
         /*Setting up the font style list*/
@@ -185,6 +188,7 @@ public class FontWindow extends JFrame implements ActionListener, ListSelectionL
         }
         fontSizeList = new JList<>(listModelFontSize);
         fontSizeList.setSelectedIndex(9);
+        //TODO: Develop highlightSelectedFontProperties();
 
         /*Creating the JScrollPane objects to hold the JList objects*/
         createScrollPane(fontFamilyList, "Font Family", PANEL_WIDTH, PANEL_HEIGHT, false);
@@ -217,6 +221,16 @@ public class FontWindow extends JFrame implements ActionListener, ListSelectionL
         if(alwaysScroll) scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         scrollPaneMap.put(nameOfScrollPane, scrollPane);
     }
+    /* TODO: Develop this
+    private void highlightSelectedFontProperties(){
+        Font currentFont = textEditor.getMainTextAreaFont();
+        String fontFamily = currentFont.getFamily();
+        String fontStyle = currentFont.getName();
+        int fontSize = currentFont.getSize();
+
+
+    }
+    */
 
     /**
      * Method that sets up the sample text area - This includes the first font,
@@ -248,7 +262,6 @@ public class FontWindow extends JFrame implements ActionListener, ListSelectionL
         if(!availableFontStylesForSelectedFont.isEmpty()) availableFontStylesForSelectedFont.clear();
         for(Font font : allAvailableFonts){
             String fontStyle = font.getName(); //Name of the font is the style of the font
-            //if(!fontStyle.equals(font.getFamily()) && (!fontStyle.contains("Bold") || !fontStyle.contains("Italic"))) continue;
             if(font.getFamily().equals(fontFamily)) {
                 availableFontStylesForSelectedFont.add(fontStyle);
             }
@@ -364,7 +377,8 @@ public class FontWindow extends JFrame implements ActionListener, ListSelectionL
     private void confirm(){
         /*Reminder that the actual font is equal to the name of the font style, font family is just used
          * group the different font styles in the same family*/
-        TextEditor.textEditor.setNewFont(selectedFontStyle, selectedFontSize);
+        //TextEditor.textEditor.setNewFont(selectedFontStyle, selectedFontSize);
+        textEditor.setNewFont(selectedFontStyle, selectedFontSize);
         dispose(); //Closes the font window
         JOptionPane.showMessageDialog(null, "Updated Font!");
     }
