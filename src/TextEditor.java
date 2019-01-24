@@ -417,15 +417,15 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
      * For KeyListener - Sets changesMade to true
      */
     public void keyPressed(KeyEvent ke){
-        if(Character.isAlphabetic(ke.getKeyChar()) || ke.getKeyCode() == KeyEvent.VK_SPACE || ke.getKeyCode() == KeyEvent.VK_BACK_SPACE){
-            if(!actionController.hasChangesMade()){
-                int keyShortCutMask = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
+        int keyShortCutMask = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
 
-                /*Checks if the key shortcut mask is being combined with any other key, and if not, register a change*/
-                if((ke.getModifiers() & keyShortCutMask) != keyShortCutMask){
-                    actionController.setChangesMadeTrue();
-                }
-            }
+        /*Checking if the ctrl key is being pressed with another key, unless that other key is v (ie checking
+        if the user is trying to perform a keyboard shortcut, if that keyboard shortcut is anything other than
+        pasting, do not register a change)*/
+        if(((ke.getModifiers() & keyShortCutMask) == keyShortCutMask) && ke.getKeyCode() != KeyEvent.VK_V) return;
+
+        if(Character.isAlphabetic(ke.getKeyChar()) || ke.getKeyCode() == KeyEvent.VK_SPACE || ke.getKeyCode() == KeyEvent.VK_BACK_SPACE || ke.getKeyCode() == KeyEvent.VK_ENTER){
+            if(!actionController.hasChangesMade()) actionController.setChangesMadeTrue();
         }
     }
 
@@ -485,7 +485,6 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
     private void setDefaultFont(String fontStyle, int fontFamily, int fontSize){
         mainTextAreaFont = new Font(fontStyle, fontFamily, fontSize);
     }
-
 
     /*Getters*/
     public JTextArea getMainTextArea(){return mainTextArea;}
