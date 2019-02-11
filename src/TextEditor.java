@@ -1,4 +1,3 @@
-//TODO: Make it so that the current font is already highlighted as soon as the font window is created
 import javax.swing.*;
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.event.UndoableEditListener;
@@ -44,10 +43,12 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
     /*Acts as an instance id, used to check what instance the user tries to close*/
     private int instanceNum;
 
+    private ArrayList<TextEditor> instanceList;
+
     /**
      * Constructor - Initialises UI components and collections
      */
-    public TextEditor(int instanceNum){
+    public TextEditor(int instanceNum, ArrayList<TextEditor> instanceList){
 
         /*Making the UI use the OS aesthetics*/
         try {
@@ -55,6 +56,7 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
         }catch(Exception e){e.printStackTrace();}
 
         this.instanceNum = instanceNum;
+        this.instanceList = instanceList;
 
         /* ---- Initializing some fields ---- */
         mainTextArea = new JTextArea();
@@ -150,17 +152,22 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
                     actionController.saveCheck(0);
                 }else{
 
-                    /*Checks if the program should close or not depending on the
-                    * instance the user is trying to close. If the first instance is being closed,
-                    * the whole program ends*/
-                    if(instanceNum != 0) dispose();
-                    else System.exit(0);
+                    /*Checks the number of instances and sees if the instance should just dispose or close the
+                    * program entirely*/
+                    if(instanceList.size() - 1 <= 0) System.exit(0);
+                    else {
+                        removeInstanceFromList(instanceNum);
+                        dispose();
+                    }
                 }
             }
         });
 
         /*Setting up the GUI*/
         setupGUI();
+
+        /*Enables native fullscreen for macOS*/
+        macOSFullscreen();
     }
 
     /**
@@ -365,7 +372,9 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
         else if(action.equals("Exit"))actionController.exit();
         else if(action.equals("New Window")) {
             instanceNum++;
-            new TextEditor(instanceNum);
+            ArrayList<TextEditor> newInstanceList = instanceList;
+            TextEditor newTextEditorInstance = new TextEditor(instanceNum, newInstanceList);
+            newTextEditorInstance.getInstanceList().add(newTextEditorInstance);
         }
 
         /*Edit menu actions*/
@@ -477,6 +486,13 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
     }
 
     /**
+     * Enables native fullscreen for macOS
+     */
+    private void macOSFullscreen(){
+        this.getRootPane().putClientProperty("apple.awt.fullscreenable", true);
+    }
+
+    /**
      * Sets up the default font
      * @param fontStyle is the default font style
      * @param fontFamily is the default font family eg Italic, Plain
@@ -486,12 +502,23 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
         mainTextAreaFont = new Font(fontStyle, fontFamily, fontSize);
     }
 
+    private void removeInstanceFromList(int instanceIDToRemove){
+        ArrayList<TextEditor> tempList = instanceList;
+        for(int i=0; i<tempList.size(); i++){
+            if(tempList.get(i).getInstanceNum() == instanceIDToRemove) {
+                instanceList.remove(i);
+                break;
+            }
+        }
+    }
+
     /*Getters*/
     public JTextArea getMainTextArea(){return mainTextArea;}
     public List<JCheckBoxMenuItem> getCheckBoxMenuItemsList(){return checkBoxMenuItemsList;}
     public UndoManager getUndoManager(){return undoManager;}
     public int getInstanceNum() {return instanceNum; }
     public Font getMainTextAreaFont(){return mainTextAreaFont;}
+    private ArrayList<TextEditor> getInstanceList(){return instanceList;}
 
     public static void main(String[] args){
 
@@ -499,7 +526,7 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
          * to work */
         if(System.getProperty("os.name").contains("Mac")) System.setProperty("apple.laf.useScreenMenuBar", "true");
 
-        TextEditor textEditor = new TextEditor(0);
-        textEditor.getRootPane().putClientProperty("apple.awt.fullscreenable", Boolean.valueOf(true));
+        TextEditor textEditor = new TextEditor(0, new ArrayList<>());
+        textEditor.getInstanceList().add(textEditor);
     }
 }
