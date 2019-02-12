@@ -1,3 +1,5 @@
+package paint;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -34,7 +36,7 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
 
     private void setupCanvas(){
         setBounds(x, y, width, height);
-        setBorder(BorderFactory.createTitledBorder("Canvas"));
+        setBorder(BorderFactory.createTitledBorder("paint.Canvas"));
         setBackground(Color.white);
         addMouseMotionListener(this);
         addMouseListener(this);
@@ -80,7 +82,7 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
                 //TODO: Develop this
                 /*
                 Ellipse2D.Float guideEraser = new Ellipse2D.Float(shapeStart.x - eraserWidth/2, shapeStart.y - eraserHeight/2, eraserWidth, eraserHeight);
-                ShapeItem guideEraserShapeItem = new ShapeItem(guideEraser, Color.black);
+                paint.ShapeItem guideEraserShapeItem = new paint.ShapeItem(guideEraser, Color.black);
                 shapeItems.add(guideEraserShapeItem);
                 whiteEraserCircleShapeItems.add(guideEraserShapeItem);
                 */
@@ -138,7 +140,7 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
         float x = shapeStart.x - eraserWidth/2;
         float y = shapeStart.y - eraserHeight/2;
         Ellipse2D.Float whiteEraseShape = new Ellipse2D.Float(x, y, eraserWidth, eraserHeight);
-        ShapeItem shapeItem = new ShapeItem(whiteEraseShape, Color.white, true);
+        paint.ShapeItem shapeItem = new paint.ShapeItem(whiteEraseShape, Color.white, true);
         shapeItems.add(shapeItem);
         whiteEraserCircleShapeItems.add(shapeItem);
     }

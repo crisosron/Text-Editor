@@ -1,3 +1,5 @@
+package texteditor;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
@@ -180,7 +182,7 @@ public class ActionController {
         openedFile = null;
         textEditor.getMainTextArea().setText("");
         changesMade = false;
-        textEditor.setTitle("TextEditor");
+        textEditor.setTitle("texteditor.TextEditor");
     }
 
     /**
@@ -188,7 +190,14 @@ public class ActionController {
      */
     public void exit(){
         if(changesMade)saveCheck(1);
-        else System.exit(EXIT_ON_CLOSE);
+
+        /*Closes the instance only if there is more than one instance of texteditor.TextEditor running
+        * Ends the program completely otherwise*/
+        if(textEditor.getInstanceList().size() - 1 <= 0) System.exit(0);
+        else{
+            textEditor.removeInstanceFromList(textEditor.getInstanceNum());
+            textEditor.dispose();
+        }
     }
 
     /**

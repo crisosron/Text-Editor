@@ -1,3 +1,5 @@
+package texteditor;
+
 import javax.swing.*;
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.event.UndoableEditListener;
@@ -391,10 +393,14 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
         else if(action.equals("Word Wrap")) actionController.setWordWrap();
         else if(action.equals("Dark Theme")) actionController.changeTheme(action);
         else if(action.equals("Light Theme")) actionController.changeTheme(action);
-        else if(action.equals("Font")) {FontWindow fontWindow = new FontWindow(this);}
+        else if(action.equals("Font")) {
+            FontWindow fontWindow = new FontWindow(this);}
 
-        /*Paint menu actions*/
-        else if(action.equals("New Paint Window")) {PaintWindow paintWindow = new PaintWindow();}
+        /*Paint menu actions
+        else if(action.equals("New Paint Window")) {
+            paint.PaintWindow paintWindow = new paint.PaintWindow();
+        }
+        */
     }
 
     /**
@@ -502,7 +508,7 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
         mainTextAreaFont = new Font(fontStyle, fontFamily, fontSize);
     }
 
-    private void removeInstanceFromList(int instanceIDToRemove){
+    public void removeInstanceFromList(int instanceIDToRemove){
         ArrayList<TextEditor> tempList = instanceList;
         for(int i=0; i<tempList.size(); i++){
             if(tempList.get(i).getInstanceNum() == instanceIDToRemove) {
@@ -518,7 +524,7 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
     public UndoManager getUndoManager(){return undoManager;}
     public int getInstanceNum() {return instanceNum; }
     public Font getMainTextAreaFont(){return mainTextAreaFont;}
-    private ArrayList<TextEditor> getInstanceList(){return instanceList;}
+    public ArrayList<TextEditor> getInstanceList(){return instanceList;}
 
     public static void main(String[] args){
 

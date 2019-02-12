@@ -1,8 +1,10 @@
+package paint;
+
+import texteditor.TextEditor;
+
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.geom.Rectangle2D;
 import java.io.File;
 import java.util.*;
 import java.util.List;
@@ -50,7 +52,7 @@ public class PaintWindow extends JFrame implements ActionListener {
     private Color selectedColor;
     private boolean filling = false;
 
-    /*Canvas object where all the graphics will be handled*/
+    /*paint.Canvas object where all the graphics will be handled*/
     private Canvas canvas;
 
     public PaintWindow(){
