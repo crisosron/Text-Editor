@@ -34,7 +34,7 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
     private static final int MAIN_TEXT_AREA_HEIGHT = FRAME_HEIGHT;
 
     /*Collections for UI*/
-    private List<String> fileMenuItemNames, editMenuItemNames, formatMenuItemNames, paintMenuItemNames, rightClickMenuItemNames, checkBoxMenuItemNames;
+    private List<String> fileMenuItemNames, editMenuItemNames, formatMenuItemNames, paintMenuItemNames, rightClickMenuItemNames, checkBoxMenuItemNames, menuItemsWithSeparators;
     private Map<String, JMenu> menuMap; //Use this map to gain access to menus
     private List<JMenuItem> menuItemsList; //Use this map to gain access to menu items
     private List<JCheckBoxMenuItem> checkBoxMenuItemsList; //Use this map to gain access to check box menu items
@@ -87,7 +87,8 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
         fileMenuItemNames = new ArrayList<>(Arrays.asList("New", "Open", "Save", "Save As...", "Exit", "New Window"));
         editMenuItemNames = new ArrayList<>(Arrays.asList("Cut", "Copy", "Paste", "Undo", "Redo", "Insert Point", "Insert Sub Point", "Insert Date"));
         formatMenuItemNames = new ArrayList<>(Arrays.asList("Font", "Word Wrap", "Light Theme", "Dark Theme"));
-        paintMenuItemNames = new ArrayList<>(Arrays.asList("New Paint Window", "Open Paint In Current Window"));
+        menuItemsWithSeparators = Arrays.asList("Save", "Save As...", "Paste", "Redo", "Font", "Insert Sub Point");
+        //paintMenuItemNames = new ArrayList<>(Arrays.asList("New Paint Window", "Open Paint In Current Window"));
         rightClickMenuItemNames  = new ArrayList<>(Arrays.asList("Undo", "Cut", "Copy", "Paste", "Redo"));
         checkBoxMenuItemNames = new ArrayList<>(Arrays.asList("Word Wrap", "Light Theme", "Dark Theme"));
 
@@ -177,7 +178,7 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
     private void createMenuItems(List<String> menuItemNames, String associatedMenuName){
         JMenu associatedMenu = menuMap.get(associatedMenuName);
         menuItemNames.stream().forEach(menuItemName -> {
-            MenuItem menuItem;
+            JMenuItem menuItem;
 
             //Determines short cut info of the menu item
             if(menuItemsWithBasicShortcuts.contains(menuItemName)) menuItem = new MenuItem(menuItemName, true, false);//Menu item with short cut but no shift or no custom
@@ -191,6 +192,9 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
 
             //Setting up the action listener
             menuItem.addActionListener(this); //TODO: Explore alternatives to this - eg by making every sub type of MenuItem implementing its own action controller for methods that are associated with the menu?
+
+            //Adding separator to menu on exact menu items
+            if(menuItemsWithSeparators.contains(menuItemName)) associatedMenu.addSeparator();
         });
 
     }
