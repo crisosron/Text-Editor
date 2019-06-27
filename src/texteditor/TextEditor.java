@@ -158,22 +158,14 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
     private int findCustomShortcut(String menuItemName){
         try {
             switch (menuItemName) {
-                case "Undo":
-                    return KeyEvent.VK_Z;
-                case "Cut":
-                    return KeyEvent.VK_X;
-                case "Paste":
-                    return KeyEvent.VK_V;
-                case "Exit":
-                    return KeyEvent.VK_W;
-                case "Redo":
-                    return KeyEvent.VK_Y;
-                case "Insert Date":
-                    return KeyEvent.VK_D;
-                default:
-                    throw new NoCustomShortcutException(menuItemName);
+                case "Undo": return KeyEvent.VK_Z;
+                case "Cut": return KeyEvent.VK_X;
+                case "Paste": return KeyEvent.VK_V;
+                case "Exit": return KeyEvent.VK_W;
+                case "Redo": return KeyEvent.VK_Y;
+                case "Insert Date": return KeyEvent.VK_D;
+                default: throw new NoCustomShortcutException(menuItemName);
             }
-
         }catch(NoCustomShortcutException e){throw new Error();}
     }
 
@@ -242,7 +234,6 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
 
         /*Other setup*/
         setupBasicMouseListener();
-        setupHotKeys();
 
         /*Adding components to the frame*/
         add(menuBar, BorderLayout.NORTH);
@@ -257,32 +248,6 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
      * Adding menu items to their respective menus
      */
     private void setupMenus(){
-
-        /*Adding menu items to their respective  menus using the menuItemsMap and menuMap*/
-        for(JMenuItem menuItem : menuItemsList){
-            String menuItemName = menuItem.getName();
-
-            /*If menu item is within the file menu*/
-            if(fileMenuItemNames.contains(menuItemName) && !checkBoxMenuItemNames.contains(menuItemName)) {
-                menuMap.get("File").add(menuItem);
-               if(menuItemName.equals("Save As...") || menuItemName.equals("Save")) menuMap.get("File").addSeparator(); //Adding separator after certain menu items
-            }
-
-            /*If menu item is within the edit menu*/
-            else if(editMenuItemNames.contains(menuItemName) && !checkBoxMenuItemNames.contains(menuItemName)) {
-                menuMap.get("Edit").add(menuItem);
-                if(menuItemName.equals("Paste") || menuItemName.equals("Redo")) menuMap.get("Edit").addSeparator();
-            }
-
-            /*If menu item is within the format menu*/
-            else if(formatMenuItemNames.contains(menuItemName) && !checkBoxMenuItemNames.contains(menuItemName)) {
-                menuMap.get("Format").add(menuItem);
-                if(menuItemName.equals("Font") || menuItemName.equals("Light Theme")) menuMap.get("Format").addSeparator();
-            }
-
-            /*---------------------------------------------------------- ENABLES PAINT FUNCTIONALITY ----------------------------------------------------------*/
-            //else if(paintMenuItemNames.contains(menuItemEntry.getKey()) && !checkBoxMenuItemsList.containsKey(menuItemEntry.getKey())) menuMap.get("Graphics").add(menuItemEntry.getValue());
-        }
 
         /*Adding check box menu items to their respective menus*/
         for (JCheckBoxMenuItem checkBoxMenuItem : checkBoxMenuItemsList){
@@ -322,48 +287,6 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
                 }
             }
         });
-    }
-
-    /**
-     * Handles all the keyboard shortcuts
-     */
-    private void setupHotKeys(){
-
-        /*Will either be control key if Windows or Linux, or command key for MacOSX*/
-        int shortcutKeyMask = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
-
-        /*Looping through all the menu items with key shortcuts and setting the shortcuts*/
-        for(String menuItemWithKeyShortCut : allMenuItemsWithShortcuts){
-            JMenuItem currentMenuItem = new JMenuItem();
-
-            /*Finding the correct JMenuItem object for the outer for loop iteration*/
-            for(JMenuItem menuItem : menuItemsList){
-                if(menuItem.getName().equals(menuItemWithKeyShortCut)) {
-                    currentMenuItem = menuItem;
-                    break;
-                }
-            }
-
-            char firstChar = menuItemWithKeyShortCut.charAt(0);
-
-            /*'CTRL + [First character of menu item name]'*/
-            if (menuItemsWithBasicShortcuts.contains(menuItemWithKeyShortCut))
-                currentMenuItem.setAccelerator(KeyStroke.getKeyStroke(getKeyEventForChar(firstChar), shortcutKeyMask));
-
-                /*'CTRL + SHIFT + [First character of menu item name]'*/
-            else if (menuItemsWithShiftShortCuts.contains(menuItemWithKeyShortCut))
-                currentMenuItem.setAccelerator(KeyStroke.getKeyStroke(getKeyEventForChar(firstChar), shortcutKeyMask | ActionEvent.SHIFT_MASK));
-
-                /*Menu items that have short cuts that adhere to the established standard (instead of using the first character of the menu item name)*/
-            else if (menuItemsWithCustomShortCuts.contains(menuItemWithKeyShortCut)) {
-                if (menuItemWithKeyShortCut.equals("Undo")) currentMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, shortcutKeyMask));
-                else if (menuItemWithKeyShortCut.equals("Cut")) currentMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, shortcutKeyMask));
-                else if (menuItemWithKeyShortCut.equals("Paste")) currentMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, shortcutKeyMask));
-                else if (menuItemWithKeyShortCut.equals("Exit")) currentMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W, shortcutKeyMask));
-                else if (menuItemWithKeyShortCut.equals("Redo")) currentMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y, shortcutKeyMask));
-                else if (menuItemWithKeyShortCut.equals("Insert Date")) currentMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D, shortcutKeyMask));
-            }
-        }
     }
 
     /**
@@ -484,44 +407,6 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
     }
 
     public void keyTyped(KeyEvent ke){ }
-
-    /**
-     * Returns the KeyEvent constant that corresponds to the character passed
-     * into the method
-     * @param character is the character that needs to be processed into a KeyEvent constant
-     */
-    private int getKeyEventForChar(char character){
-        switch(character){
-            case 'A': return KeyEvent.VK_A;
-            case 'B': return KeyEvent.VK_B;
-            case 'C': return KeyEvent.VK_C;
-            case 'D': return KeyEvent.VK_D;
-            case 'E': return KeyEvent.VK_E;
-            case 'F': return KeyEvent.VK_F;
-            case 'G': return KeyEvent.VK_G;
-            case 'H': return KeyEvent.VK_H;
-            case 'I': return KeyEvent.VK_I;
-            case 'J': return KeyEvent.VK_J;
-            case 'K': return KeyEvent.VK_K;
-            case 'L': return KeyEvent.VK_L;
-            case 'M': return KeyEvent.VK_M;
-            case 'N': return KeyEvent.VK_N;
-            case 'O': return KeyEvent.VK_O;
-            case 'P': return KeyEvent.VK_P;
-            case 'Q': return KeyEvent.VK_Q;
-            case 'R': return KeyEvent.VK_R;
-            case 'S': return KeyEvent.VK_S;
-            case 'T': return KeyEvent.VK_T;
-            case 'U': return KeyEvent.VK_U;
-            case 'V': return KeyEvent.VK_V;
-            case 'W': return KeyEvent.VK_W;
-            case 'X': return KeyEvent.VK_X;
-            case 'Y': return KeyEvent.VK_Y;
-            case 'Z': return KeyEvent.VK_Z;
-        }
-
-        return 0;
-    }
 
     /**
      * Enables native fullscreen for macOS
