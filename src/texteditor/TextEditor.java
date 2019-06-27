@@ -1,5 +1,9 @@
 package texteditor;
 
+import texteditor.menu.items.FileMenuItem;
+import texteditor.menu.items.MenuItem;
+import texteditor.menu.items.NoCustomShortcutException;
+
 import javax.swing.*;
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.event.UndoableEditListener;
@@ -99,43 +103,17 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
         menuItemsWithCustomShortCuts = new HashSet<>(Arrays.asList("Undo", "Cut", "Paste", "Exit", "Redo", "Insert Date"));
         menuItemsWithShiftShortCuts = new HashSet<>(Arrays.asList("Save As...", "New Window", "Insert Sub Point"));
 
-        /*Adding all the menu items with a keyboard shortcut to a single set*/
-        allMenuItemsWithShortcuts = new HashSet<>();
-        allMenuItemsWithShortcuts.addAll(menuItemsWithBasicShortcuts);
-        allMenuItemsWithShortcuts.addAll(menuItemsWithShiftShortCuts);
-        allMenuItemsWithShortcuts.addAll(menuItemsWithCustomShortCuts);
-
-        /*Adding all menu item names into one set*/
-        List<String> menuItemNames = new ArrayList<>();
-        Stream.of(fileMenuItemNames, editMenuItemNames, formatMenuItemNames, paintMenuItemNames).forEach(menuItemNames::addAll);
-
-        /*Creating all menus and adding to map*/
-        for(String menuName : menuNames){
-            menuMap.put(menuName, new JMenu(menuName));
-        }
-
-        /*Creating all JMenuItem objects and placing them into the map*/
-        for(String menuItemName : menuItemNames){
-            JMenuItem newMenuItem = new JMenuItem(menuItemName);
-            newMenuItem.setName(menuItemName);
-            if(fileMenuItemNames.contains(menuItemName) || editMenuItemNames.contains(menuItemName)) {
-                if(fileMenuItemNames.contains(menuItemName))newMenuItem.setPreferredSize(new Dimension(200, 25));
-                else if(editMenuItemNames.contains(menuItemName)) newMenuItem.setPreferredSize(new Dimension(160, 25));
-                menuItemsList.add(newMenuItem);
-            }else menuItemsList.add(newMenuItem);
-        }
+        //Creating menu items and adding them to the corresponding menu
+        for(String menuName : menuNames) menuMap.put(menuName, new JMenu(menuName));
+        createMenuItems(fileMenuItemNames, "File");
+        createMenuItems(editMenuItemNames, "Edit");
+        createMenuItems(formatMenuItemNames, "Format");
 
         /*Creating JCheckBoxMenuItem objects and placing them into the map*/
         for(String checkBoxMenuItemName : checkBoxMenuItemNames){
             JCheckBoxMenuItem newJCheckBoxMenuItem = new JCheckBoxMenuItem(checkBoxMenuItemName);
             newJCheckBoxMenuItem.setName(checkBoxMenuItemName);
             checkBoxMenuItemsList.add(newJCheckBoxMenuItem);
-        }
-
-        /*Setting action commands for all the menu items*/
-        for(JMenuItem menuItem : menuItemsList){
-            menuItem.setActionCommand(menuItem.getName());
-            menuItem.addActionListener(this);
         }
 
         /*Setting action commands for all the check box menu items*/
@@ -165,11 +143,64 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
             }
         });
 
-        /*Setting up the GUI*/
+        //Setting up the gui
         setupGUI();
 
-        /*Enables native fullscreen for macOS*/
+        //Enabling macOS full screen ability
         macOSFullscreen();
+    }
+
+    /**
+     * Determines the custom shortcut for a menu item with the supplied name
+     * @param menuItemName Name of the menu item associated with the shortcut
+     * @return An integer representing the shortcut key
+     */
+    private int findCustomShortcut(String menuItemName){
+        try {
+            switch (menuItemName) {
+                case "Undo":
+                    return KeyEvent.VK_Z;
+                case "Cut":
+                    return KeyEvent.VK_X;
+                case "Paste":
+                    return KeyEvent.VK_V;
+                case "Exit":
+                    return KeyEvent.VK_W;
+                case "Redo":
+                    return KeyEvent.VK_Y;
+                case "Insert Date":
+                    return KeyEvent.VK_D;
+                default:
+                    throw new NoCustomShortcutException(menuItemName);
+            }
+
+        }catch(NoCustomShortcutException e){throw new Error();}
+    }
+
+    /**
+     * Creates the menu items and establishes their link to their menus
+     * @param menuItemNames List of menu item names
+     * @param associatedMenuName Name of the menu that the menu items are associated with
+     */
+    private void createMenuItems(List<String> menuItemNames, String associatedMenuName){
+        JMenu associatedMenu = menuMap.get(associatedMenuName);
+        menuItemNames.stream().forEach(menuItemName -> {
+            MenuItem menuItem;
+
+            //Determines short cut info of the menu item
+            if(menuItemsWithBasicShortcuts.contains(menuItemName)) menuItem = new MenuItem(menuItemName, true, false);//Menu item with short cut but no shift or no custom
+            else if(menuItemsWithShiftShortCuts.contains(menuItemName)) menuItem = new MenuItem(menuItemName, true, true);
+            else if(menuItemsWithCustomShortCuts.contains(menuItemName)) menuItem = new MenuItem(menuItemName, true, true, findCustomShortcut(menuItemName));
+            else menuItem = new MenuItem(menuItemName); //Menu item with no shortcut
+
+            //Adding the menu item to its menu
+            associatedMenu.add(menuItem);
+            menuItemsList.add(menuItem);
+
+            //Setting up the action listener
+            menuItem.addActionListener(this); //TODO: Explore alternatives to this - eg by making every sub type of MenuItem implementing its own action controller for methods that are associated with the menu?
+        });
+
     }
 
     /**
@@ -221,6 +252,7 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
         setVisible(true);
     }
 
+    //TODO: MAY NO LONGER NEED THIS METHOD
     /**
      * Adding menu items to their respective menus
      */
