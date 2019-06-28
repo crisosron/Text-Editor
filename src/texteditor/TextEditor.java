@@ -1,6 +1,5 @@
 package texteditor;
 
-import texteditor.menu.items.FileMenuItem;
 import texteditor.menu.items.MenuItem;
 import texteditor.menu.items.NoCustomShortcutException;
 
@@ -8,6 +7,7 @@ import javax.swing.*;
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.event.UndoableEditListener;
 import javax.swing.undo.UndoManager;
+//import java.awt.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.FileInputStream;
@@ -16,67 +16,65 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 import java.util.List;
-import java.util.stream.Stream;
 
 public class TextEditor extends JFrame implements ActionListener, KeyListener , UndoableEditListener{
 
-    /*UI Fields*/
+    //UI Fields
     private JTextArea mainTextArea;
     private JMenuBar menuBar;
     private JScrollPane mainTextAreaScroll;
     private Font mainTextAreaFont;
     private JPopupMenu rightClickMenu;
 
-    /*Constants for sizes of components - All are somehow related back to FRAME_WIDTH and FRAME_HEIGHT*/
+    //Constants for sizes and components
     public static final int FRAME_WIDTH = 1000;
     public static final int FRAME_HEIGHT = 800;
     private static final int MAIN_TEXT_AREA_WIDTH = FRAME_WIDTH;
     private static final int MAIN_TEXT_AREA_HEIGHT = FRAME_HEIGHT;
 
-    /*Collections for UI*/
+    //Collections for the UI
     private List<String> fileMenuItemNames, editMenuItemNames, formatMenuItemNames, paintMenuItemNames, rightClickMenuItemNames, checkBoxMenuItemNames, menuItemsWithSeparators;
     private Map<String, JMenu> menuMap; //Use this map to gain access to menus
-    private List<JMenuItem> menuItemsList; //Use this map to gain access to menu items
-    private List<JCheckBoxMenuItem> checkBoxMenuItemsList; //Use this map to gain access to check box menu items
+    private Map<String, MenuItem> menuItemsMap; //Use this map to gain access to menu items
 
-    /*Sets that are used for keyboard shortcuts*/
+    //Sets for menu items with shortcuts - Used for categorizing the menu items
     private Set<String> menuItemsWithBasicShortcuts, menuItemsWithCustomShortCuts, allMenuItemsWithShortcuts, menuItemsWithShiftShortCuts;
 
-    /*Other fields*/
+    //Other fields
     private UndoManager undoManager;
     private ActionController actionController;
-
-    /*Acts as an instance id, used to check what instance the user tries to close*/
-    private int instanceNum;
-
+    private int instanceNum; //Acts as an instance ID - used for checking which window user is trying to close
     private ArrayList<TextEditor> instanceList;
 
     /**
-     * Constructor - Initialises UI components and collections
+     * Creates a TextEditor instance
+     * @param instanceNum ID of this TextEditor instance
+     * @param instanceList A list of currently existing instances
      */
     public TextEditor(int instanceNum, ArrayList<TextEditor> instanceList){
 
-        /*Making the UI use the OS aesthetics*/
+        //Making the UI use the OS aesthetics
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        }catch(Exception e){e.printStackTrace();}
+        }catch (IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
 
         this.instanceNum = instanceNum;
         this.instanceList = instanceList;
 
-        /* ---- Initializing some fields ---- */
+        //Initializing some fields
         mainTextArea = new JTextArea();
         rightClickMenu = new JPopupMenu();
         mainTextAreaScroll = new JScrollPane(mainTextArea);
-        checkBoxMenuItemsList = new ArrayList<>();
         menuBar = new JMenuBar();
         menuMap = new HashMap<>();
-        menuItemsList = new ArrayList<>();
+        menuItemsMap = new HashMap<>();
         undoManager = new UndoManager();
         mainTextArea.getDocument().addUndoableEditListener(this); //Adds the undoable edit listener to the mainTextArea
         actionController = new ActionController(this);
 
-        /*Loading set defaults*/
+        //Loading set defaults
         loadDefaults(); //In this method, the setDefaultFont method is called
 
         /* ---- Setting up the collections ---- */
@@ -84,16 +82,12 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
         Set<String> menuNames = new HashSet<>(Arrays.asList("File", "Edit", "Format"));
 
         /*Sets that stores the menu items within each respective menu*/
-        fileMenuItemNames = new ArrayList<>(Arrays.asList("New", "Open", "Save", "Save As...", "Exit", "New Window"));
-        editMenuItemNames = new ArrayList<>(Arrays.asList("Cut", "Copy", "Paste", "Undo", "Redo", "Insert Point", "Insert Sub Point", "Insert Date"));
-        formatMenuItemNames = new ArrayList<>(Arrays.asList("Font", "Word Wrap", "Light Theme", "Dark Theme"));
+        fileMenuItemNames = Arrays.asList("New", "Open", "Save", "Save As...", "Exit", "New Window");
+        editMenuItemNames = Arrays.asList("Cut", "Copy", "Paste", "Undo", "Redo", "Insert Point", "Insert Sub Point", "Insert Date");
+        formatMenuItemNames = Arrays.asList("Font", "Word Wrap", "Light Theme", "Dark Theme");
         menuItemsWithSeparators = Arrays.asList("Save", "Save As...", "Paste", "Redo", "Font", "Insert Sub Point");
-        //paintMenuItemNames = new ArrayList<>(Arrays.asList("New Paint Window", "Open Paint In Current Window"));
-        rightClickMenuItemNames  = new ArrayList<>(Arrays.asList("Undo", "Cut", "Copy", "Paste", "Redo"));
-        checkBoxMenuItemNames = new ArrayList<>(Arrays.asList("Word Wrap", "Light Theme", "Dark Theme"));
-
-        /*Separate set for JCheckBoxMenuItem objects*/
-        List<String> checkBoxMenuItemNames = new ArrayList<>(Arrays.asList("Word Wrap", "Light Theme", "Dark Theme"));
+        rightClickMenuItemNames  = Arrays.asList("Undo", "Cut", "Copy", "Paste", "Redo");
+        checkBoxMenuItemNames = Arrays.asList("Word Wrap", "Light Theme", "Dark Theme");
 
         /*Explanation of the 3 Collections:
         *   menuItemsWithBasic is a collection of menu items whose shortcut is CTRL + [first character of the menu item name]
@@ -109,19 +103,6 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
         createMenuItems(fileMenuItemNames, "File");
         createMenuItems(editMenuItemNames, "Edit");
         createMenuItems(formatMenuItemNames, "Format");
-
-        /*Creating JCheckBoxMenuItem objects and placing them into the map*/
-        for(String checkBoxMenuItemName : checkBoxMenuItemNames){
-            JCheckBoxMenuItem newJCheckBoxMenuItem = new JCheckBoxMenuItem(checkBoxMenuItemName);
-            newJCheckBoxMenuItem.setName(checkBoxMenuItemName);
-            checkBoxMenuItemsList.add(newJCheckBoxMenuItem);
-        }
-
-        /*Setting action commands for all the check box menu items*/
-        for(JCheckBoxMenuItem checkBoxMenuItem : checkBoxMenuItemsList){
-            checkBoxMenuItem.setActionCommand(checkBoxMenuItem.getName());
-            checkBoxMenuItem.addActionListener(this);
-        }
 
         /*Overrides the exit operation on the frame closing button - This ensures that the user is prompted to save
         * any changes made before exiting*/
@@ -178,23 +159,24 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
     private void createMenuItems(List<String> menuItemNames, String associatedMenuName){
         JMenu associatedMenu = menuMap.get(associatedMenuName);
         menuItemNames.stream().forEach(menuItemName -> {
-            JMenuItem menuItem;
+            MenuItem menuItem;
 
-            //Determines short cut info of the menu item
-            if(menuItemsWithBasicShortcuts.contains(menuItemName)) menuItem = new MenuItem(menuItemName, true, false);//Menu item with short cut but no shift or no custom
-            else if(menuItemsWithShiftShortCuts.contains(menuItemName)) menuItem = new MenuItem(menuItemName, true, true);
-            else if(menuItemsWithCustomShortCuts.contains(menuItemName)) menuItem = new MenuItem(menuItemName, true, true, findCustomShortcut(menuItemName));
-            else menuItem = new MenuItem(menuItemName); //Menu item with no shortcut
+            if(!checkBoxMenuItemNames.contains(menuItemName)) {
 
-            //Adding the menu item to its menu
-            associatedMenu.add(menuItem);
-            menuItemsList.add(menuItem);
+                //Determines short cut info of the menu item
+                if (menuItemsWithBasicShortcuts.contains(menuItemName)) menuItem = new texteditor.menu.items.MenuItem(menuItemName, true, false);//Menu item with short cut but no shift or no custom
+                else if (menuItemsWithShiftShortCuts.contains(menuItemName)) menuItem = new MenuItem(menuItemName, true, true);
+                else if (menuItemsWithCustomShortCuts.contains(menuItemName)) menuItem = new MenuItem(menuItemName, true, true, findCustomShortcut(menuItemName));
+                else menuItem = new MenuItem(menuItemName); //Menu item with no shortcut
 
-            //Setting up the action listener
+            }else menuItem = new MenuItem(menuItemName, true, this);
+
+            //Adding the menu item to its menu and doing extra processing
+            associatedMenu.add(menuItem.getCheckBoxMenuItem() != null ? menuItem.getCheckBoxMenuItem() : menuItem);
+            menuItemsMap.put(menuItemName, menuItem);
             menuItem.addActionListener(this); //TODO: Explore alternatives to this - eg by making every sub type of MenuItem implementing its own action controller for methods that are associated with the menu?
+            if (menuItemsWithSeparators.contains(menuItemName)) associatedMenu.addSeparator();
 
-            //Adding separator to menu on exact menu items
-            if(menuItemsWithSeparators.contains(menuItemName)) associatedMenu.addSeparator();
         });
 
     }
@@ -204,27 +186,19 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
      */
     private void setupGUI(){
 
-        /* ---- Setting up the frame(this) ---- */
+        //JFrame setup
         setLayout(new BorderLayout());
         setTitle("Text Editor");
         setSize(new Dimension(FRAME_WIDTH, FRAME_HEIGHT));
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         setResizable(true); //Enables Resizability
 
-        /* ---- Setting up the menus ---- */
-        /*Adding menus to menu bar*/
-        List<String> tempMenuList = new ArrayList<>(Arrays.asList("File", "Edit", "Format")); //Menus will be added to menu bar in this order
-        for(String menuName : tempMenuList){
-            menuBar.add(menuMap.get(menuName));
-        }
+        //Adding the menus to the menu bars
+        List<String> tempMenuList = Arrays.asList("File", "Edit", "Format"); //Menus will be added to menu bar in this order
+        for(String menuName : tempMenuList) menuBar.add(menuMap.get(menuName));
 
-        /*Setting up the menus*/
-        setupMenus();
-
-        /*Setting this checkbox menu item to true since the light theme is on by default*/
-        for(JCheckBoxMenuItem checkBoxMenuItem : checkBoxMenuItemsList){
-            if(checkBoxMenuItem.getName().equals("Light Theme")) checkBoxMenuItem.setSelected(true);
-        }
+        //Setting default light theme menu item to selected
+        menuItemsMap.get("Light Theme").setSelected(true);
 
         /* ---- Setting up the main text area scroll pane (and in turn the main text area itself) ---- */
         mainTextArea.setFocusable(true); //For key events
@@ -247,23 +221,8 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
         setVisible(true);
     }
 
-    //TODO: MAY NO LONGER NEED THIS METHOD
     /**
-     * Adding menu items to their respective menus
-     */
-    private void setupMenus(){
-
-        /*Adding check box menu items to their respective menus*/
-        for (JCheckBoxMenuItem checkBoxMenuItem : checkBoxMenuItemsList){
-            String checkBoxMenuItemName = checkBoxMenuItem.getName();
-            if(fileMenuItemNames.contains(checkBoxMenuItemName)) menuMap.get("File").add(checkBoxMenuItem);
-            else if(editMenuItemNames.contains(checkBoxMenuItemName)) menuMap.get("Edit").add(checkBoxMenuItem);
-            else if(formatMenuItemNames.contains(checkBoxMenuItemName)) menuMap.get("Format").add(checkBoxMenuItem);
-        }
-    }
-
-    /**
-     * Adding a basic mouselistener to mainTextArea handle only mouseReleased events for right click
+     * Adds a mouselistener for mainTextArea that handles right clicks
      */
     private void setupBasicMouseListener(){
         mainTextArea.addMouseListener(new MouseAdapter() {
@@ -271,22 +230,20 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
             public void mouseReleased(MouseEvent e) {
                 super.mouseReleased(e);
 
-                /*Checking if right click*/
+                //Checking for right click
                 if(SwingUtilities.isRightMouseButton(e)){
                     rightClickMenu = new JPopupMenu(); //JPopupMenu to show at the point clicked
 
-                    /*Creating JMenuItems and placing into rightClickMenu*/
-                    for(JMenuItem menuItem: menuItemsList){
+                    //Creating menu items and placing into right click menu
+                    for(JMenuItem menuItem: menuItemsMap.values()){
                         String menuItemName = menuItem.getName();
                         if(rightClickMenuItemNames.contains(menuItemName)){
-                            JMenuItem newMenuItem = new JMenuItem(menuItemName);
-                            newMenuItem.setActionCommand(newMenuItem.getName());
-                            newMenuItem.addActionListener(TextEditor.this::actionPerformed);
+                            JMenuItem newMenuItem = new texteditor.menu.items.MenuItem(menuItemName, false, false);
                             rightClickMenu.add(newMenuItem);
                         }
                     }
 
-                    /*Showing the menu at the place clicked*/
+                    //Showing menu at the place clicked
                     rightClickMenu.show(e.getComponent(), e.getX(), e.getY());
                 }
             }
@@ -441,7 +398,7 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
 
     /*Getters*/
     public JTextArea getMainTextArea(){return mainTextArea;}
-    public List<JCheckBoxMenuItem> getCheckBoxMenuItemsList(){return checkBoxMenuItemsList;}
+    public Map<String, MenuItem> getMenuItemsMap(){return menuItemsMap;}
     public UndoManager getUndoManager(){return undoManager;}
     public int getInstanceNum() {return instanceNum; }
     public Font getMainTextAreaFont(){return mainTextAreaFont;}

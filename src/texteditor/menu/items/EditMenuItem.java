@@ -1,9 +1,7 @@
 package texteditor.menu.items;
 
-import java.awt.event.KeyEvent;
-
 //TODO: Split action listening to be restricted to each type of menu item?
-public class EditMenuItem extends MenuItem{
+public class EditMenuItem extends MenuItem {
     public EditMenuItem(String name){
         super(name);
     }

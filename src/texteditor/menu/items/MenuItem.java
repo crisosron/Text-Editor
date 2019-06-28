@@ -3,6 +3,7 @@ package texteditor.menu.items;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 //TODO: Split action listening to be restricted to each type of menu item - eg EditMenuItem implements EditActionController?
 
@@ -12,6 +13,7 @@ public class MenuItem extends JMenuItem {
     private final int SHORTCUT_KEY_MASK = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
     protected boolean isShiftKeyShortcut;
     protected boolean hasShortcut;
+    private JCheckBoxMenuItem checkBoxMenuItem;
 
     /**
      * Basic constructor for menu items with no shortcuts
@@ -22,7 +24,9 @@ public class MenuItem extends JMenuItem {
         this.menuItemName = menuItemName;
         isCheckBoxItem = false;
         isShiftKeyShortcut = false;
+        checkBoxMenuItem = null;
         setActionCommand(menuItemName); //For click events
+
     }
 
     /**
@@ -37,6 +41,7 @@ public class MenuItem extends JMenuItem {
         this.hasShortcut = hasShortcut;
         this.isShiftKeyShortcut = isShiftKeyShortcut;
         isCheckBoxItem = false;
+        checkBoxMenuItem = null;
         setActionCommand(menuItemName); //For click events
         setupShortcut(getKeyEventForChar(menuItemName.charAt(0)));
     }
@@ -54,8 +59,27 @@ public class MenuItem extends JMenuItem {
         this.hasShortcut = hasShortcut;
         this.isShiftKeyShortcut = isShiftKeyShortcut;
         isCheckBoxItem = false;
+        checkBoxMenuItem = null;
         setActionCommand(menuItemName); //For click events
         setupShortcut(customShortcut);
+    }
+    
+    /**
+     * Constructor for MenuItem objects that are checkbox menu items
+     * @param menuItemName Name of the menu item
+     * @param isCheckBoxItem Boolean indicating that this MenuItem is a check box item
+     * @param actionListener ActionListener object for the check box menu item
+     */
+    public MenuItem(String menuItemName, boolean isCheckBoxItem, ActionListener actionListener){
+
+        //There has to be a better way to do this....... Since both JMenuItem and JCheckBoxMenuItem
+        //Are separate classes, there's no easy way to make  this class inherit from both of them!
+        //For now.... this works.....
+        checkBoxMenuItem = new JCheckBoxMenuItem(menuItemName);
+        checkBoxMenuItem.setName(menuItemName);
+        checkBoxMenuItem.addActionListener(actionListener);
+        setActionCommand(menuItemName);
+        this.isCheckBoxItem = isCheckBoxItem;
     }
 
     /**
@@ -107,36 +131,10 @@ public class MenuItem extends JMenuItem {
         }catch(IllegalArgumentException e){throw new Error(e.getMessage());}
     }
 
-
-    public String getMenuItemName() {
-        return menuItemName;
+    public boolean isCheckboxMenuItem() {
+        return false;
     }
-
-    public boolean isCheckBoxItem() {
-        return isCheckBoxItem;
-    }
-
-    public boolean isShiftKeyShortcut() {
-        return isShiftKeyShortcut;
-    }
-
-    public boolean isHasShortcut() {
-        return hasShortcut;
-    }
-
-    public void setMenuItemName(String menuItemName) {
-        this.menuItemName = menuItemName;
-    }
-
-    public void setCheckBoxItem(boolean checkBoxItem) {
-        isCheckBoxItem = checkBoxItem;
-    }
-
-    public void setShiftKeyShortcut(boolean shiftKeyShortcut) {
-        isShiftKeyShortcut = shiftKeyShortcut;
-    }
-
-    public void setHasShortcut(boolean hasShortcut) {
-        this.hasShortcut = hasShortcut;
+    public JCheckBoxMenuItem getCheckBoxMenuItem(){
+        return checkBoxMenuItem;
     }
 }

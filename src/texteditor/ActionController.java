@@ -1,4 +1,5 @@
 package texteditor;
+import texteditor.menu.items.MenuItem;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,12 +10,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Scanner;
-
-import static javax.swing.JFrame.EXIT_ON_CLOSE;
+import java.util.*;
 
 public class ActionController {
     private TextEditor textEditor;
@@ -207,15 +203,11 @@ public class ActionController {
     public void changeTheme(String changeThemeTo){
 
         JTextArea mainTextArea = textEditor.getMainTextArea();
-        List<JCheckBoxMenuItem> checkBoxMenuItemList = textEditor.getCheckBoxMenuItemsList();
+        Map<String, MenuItem> menuItemsMap = textEditor.getMenuItemsMap();
 
         /*Getting the menu items for theme selection*/
-        JCheckBoxMenuItem lightThemeMenuItem = new JCheckBoxMenuItem();
-        JCheckBoxMenuItem darkThemeMenuItem = new JCheckBoxMenuItem();
-        for(JCheckBoxMenuItem checkBoxMenuItem : checkBoxMenuItemList){
-            if(checkBoxMenuItem.getName().equals("Dark Theme")) darkThemeMenuItem = checkBoxMenuItem;
-            else if(checkBoxMenuItem.getName().equals("Light Theme")) lightThemeMenuItem = checkBoxMenuItem;
-        }
+        JCheckBoxMenuItem lightThemeMenuItem = menuItemsMap.get("Light Theme").getCheckBoxMenuItem();
+        JCheckBoxMenuItem darkThemeMenuItem = menuItemsMap.get("Dark Theme").getCheckBoxMenuItem();
 
         if(changeThemeTo.equals("Dark Theme")){
 

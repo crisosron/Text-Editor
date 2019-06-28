@@ -1,8 +1,6 @@
 package texteditor.menu.items;
 
-import java.awt.event.KeyEvent;
-
-public class FormatMenuItem extends MenuItem{
+public class FormatMenuItem extends MenuItem {
     public FormatMenuItem(String name){
         super(name);
     }

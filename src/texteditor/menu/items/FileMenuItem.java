@@ -1,7 +1,5 @@
 package texteditor.menu.items;
 
-import java.awt.event.KeyEvent;
-
 public class FileMenuItem extends MenuItem {
     public FileMenuItem(String name){
         super(name);
