@@ -8,11 +8,11 @@ import java.awt.event.KeyEvent;
 //TODO: Split action listening to be restricted to each type of menu item - eg EditMenuItem implements EditActionController?
 
 public class MenuItem extends JMenuItem {
-    protected String menuItemName;
-    protected boolean isCheckBoxItem;
+    private String menuItemName;
+    private boolean isCheckBoxItem;
     private final int SHORTCUT_KEY_MASK = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
-    protected boolean isShiftKeyShortcut;
-    protected boolean hasShortcut;
+    private boolean isShiftKeyShortcut;
+    private boolean hasShortcut;
     private JCheckBoxMenuItem checkBoxMenuItem;
 
     /**
@@ -131,9 +131,6 @@ public class MenuItem extends JMenuItem {
         }catch(IllegalArgumentException e){throw new Error(e.getMessage());}
     }
 
-    public boolean isCheckboxMenuItem() {
-        return false;
-    }
     public JCheckBoxMenuItem getCheckBoxMenuItem(){
         return checkBoxMenuItem;
     }

@@ -32,7 +32,7 @@ public class ActionController {
         try{
 
             /*Performs save check*/
-            if(changesMade) saveCheck(3);
+            if(changesMade) saveCheck(SaveCheck.OPEN_FILE);
 
             /*If the saveAs method is called during saveCheck method, and the user cancels the save as dialog, assume
             * that the user wants to cancel the entire operation of opening a new file altogether - This prevents the user
@@ -124,14 +124,9 @@ public class ActionController {
     /**
      * Method called when the user attempts to create a new document or exit the program without saving
      * changes made to the current document
-     *
-     * Parameter sourceID notation:
-     * 0 = User clicked on exit button on the window
-     * 1 = User clicked on Exit JMenuItem in the File menu
-     * 2 = User clicked on New JMenuItem in the File menu without saving current changes
-     * 3 = User clicked on open file when changes were made to the current file
+     * @param action SaveCheck enum that represents the action that caused the invocation of this method
      */
-    public void saveCheck(int sourceID){
+    public void saveCheck(SaveCheck action){
         int optionInput = JOptionPane.showConfirmDialog(null, "Would you like to save changes made? ");
         if(optionInput == JOptionPane.YES_OPTION) {
             saveFile();
@@ -139,12 +134,12 @@ public class ActionController {
             /*If the saveFileAs method is called within saveFile and the user clicks cancel or closes
             * the save as dialog, cancelClose is set to true*/
             if(cancelClose) {
-                if(sourceID == 2) cancelNewFile = true;
-                if(sourceID == 3) cancelOpenFile = true;
+                if(action == SaveCheck.NEW_FILE) cancelNewFile = true;
+                if(action == SaveCheck.OPEN_FILE) cancelOpenFile = true;
                 return;
             }
 
-            if(sourceID == 0 || sourceID == 1) {
+            if(action == SaveCheck.EXIT_ON_WINDOW || action == SaveCheck.EXIT_ON_MENU) {
                 if(textEditor.getInstanceNum() != 0) textEditor.dispose();
                 System.exit(0);
             }
@@ -152,7 +147,7 @@ public class ActionController {
         else if(optionInput == JOptionPane.CANCEL_OPTION) return;
         else{
             /*If the user clicks exit on the window*/
-            if(sourceID ==  0 || sourceID == 1) {
+            if(action == SaveCheck.EXIT_ON_WINDOW || action == SaveCheck.EXIT_ON_MENU) {
                 if(textEditor.getInstanceNum() != 0) textEditor.dispose();
                 else System.exit(0);
             }
@@ -164,9 +159,9 @@ public class ActionController {
      */
     public void newDocument(){
 
-        /*Checking if the user wants to save an unsaved changes*/
+        /*Checking if the user wants to save unsaved changes*/
         if(changesMade) {
-            saveCheck(2);
+            saveCheck(SaveCheck.NEW_FILE);
         }
 
         if(cancelNewFile){
@@ -185,7 +180,7 @@ public class ActionController {
      * Forces a hard exit -Called when the Exit menu item in the File menu is clicked
      */
     public void exit(){
-        if(changesMade)saveCheck(1);
+        if(changesMade)saveCheck(SaveCheck.EXIT_ON_MENU);
 
         /*Closes the instance only if there is more than one instance of texteditor.TextEditor running
         * Ends the program completely otherwise*/

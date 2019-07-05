@@ -31,6 +31,7 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
     public static final int FRAME_HEIGHT = 800;
     private static final int MAIN_TEXT_AREA_WIDTH = FRAME_WIDTH;
     private static final int MAIN_TEXT_AREA_HEIGHT = FRAME_HEIGHT;
+    private static final int TEXT_AREA_MARGIN = 5;
 
     //Collections for the UI
     private List<String> fileMenuItemNames, editMenuItemNames, formatMenuItemNames, paintMenuItemNames, rightClickMenuItemNames, checkBoxMenuItemNames, menuItemsWithSeparators;
@@ -90,9 +91,9 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
         checkBoxMenuItemNames = Arrays.asList("Word Wrap", "Light Theme", "Dark Theme");
 
         /*Explanation of the 3 Collections:
-        *   menuItemsWithBasic is a collection of menu items whose shortcut is CTRL + [first character of the menu item name]
-        *   menuItemsWithCustomShortCuts is a collection of menu items whose shortcut does not use the first character of the menu item name
-        *   menuItemsWithShiftShortcuts is a collection of menu items whose shortcut is CTRL + SHIFT + [first character of the menu item name]
+        * menuItemsWithBasic is a collection of menu items whose shortcut is CTRL + [first character of the menu item name]
+        * menuItemsWithCustomShortCuts is a collection of menu items whose shortcut does not use the first character of the menu item name
+        * menuItemsWithShiftShortcuts is a collection of menu items whose shortcut is CTRL + SHIFT + [first character of the menu item name]
         */
         menuItemsWithBasicShortcuts = new HashSet<>(Arrays.asList("New", "Open", "Save", "Copy", "Font", "Insert Point"));
         menuItemsWithCustomShortCuts = new HashSet<>(Arrays.asList("Undo", "Cut", "Paste", "Exit", "Redo", "Insert Date"));
@@ -111,7 +112,7 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
             public void windowClosing(WindowEvent e) {
                 super.windowClosing(e);
                 if(actionController.hasChangesMade()){
-                    actionController.saveCheck(0);
+                    actionController.saveCheck(SaveCheck.EXIT_ON_WINDOW);
                 }else{
 
                     /*Checks the number of instances and sees if the instance should just dispose or close the
@@ -205,7 +206,7 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
         mainTextArea.addKeyListener(this); //For key events
         mainTextArea.setWrapStyleWord(true);
         mainTextArea.setFont(mainTextAreaFont);
-        mainTextArea.setMargin(new Insets(5, 5, 5, 5));
+        mainTextArea.setMargin(new Insets(TEXT_AREA_MARGIN, TEXT_AREA_MARGIN, TEXT_AREA_MARGIN, TEXT_AREA_MARGIN));
         mainTextAreaScroll.setBackground(Color.white);
         mainTextAreaScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
         mainTextAreaScroll.setPreferredSize(new Dimension(MAIN_TEXT_AREA_WIDTH, MAIN_TEXT_AREA_HEIGHT));
