@@ -79,10 +79,11 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
         loadDefaults(); //In this method, the setDefaultFont method is called
 
         /* ---- Setting up the collections ---- */
-        /*Set that stores the names of all the menus in the editor*/
+
+        //For menu names
         Set<String> menuNames = new HashSet<>(Arrays.asList("File", "Edit", "Format"));
 
-        /*Sets that stores the menu items within each respective menu*/
+        //List of menu item names within each menu
         fileMenuItemNames = Arrays.asList("New", "Open", "Save", "Save As...", "Exit", "New Window");
         editMenuItemNames = Arrays.asList("Cut", "Copy", "Paste", "Undo", "Redo", "Insert Point", "Insert Sub Point", "Insert Date");
         formatMenuItemNames = Arrays.asList("Font", "Word Wrap", "Light Theme", "Dark Theme");
@@ -201,7 +202,7 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
         //Setting default light theme menu item to selected
         menuItemsMap.get("Light Theme").setSelected(true);
 
-        /* ---- Setting up the main text area scroll pane (and in turn the main text area itself) ---- */
+        //setting up the main text area scroll pane (and in turn the main text area object itself)
         mainTextArea.setFocusable(true); //For key events
         mainTextArea.addKeyListener(this); //For key events
         mainTextArea.setWrapStyleWord(true);
@@ -211,10 +212,10 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
         mainTextAreaScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
         mainTextAreaScroll.setPreferredSize(new Dimension(MAIN_TEXT_AREA_WIDTH, MAIN_TEXT_AREA_HEIGHT));
 
-        /*Other setup*/
+        //Setting up the mouse listener
         setupBasicMouseListener();
 
-        /*Adding components to the frame*/
+        //Adding all components to the frame
         add(menuBar, BorderLayout.NORTH);
         setJMenuBar(menuBar);
         add(mainTextAreaScroll);
@@ -279,6 +280,7 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
 
     /**
      * actionPerformed method that handles all the interaction in the menu
+     * @param event ActionEvent object for the method
      */
     public void actionPerformed(ActionEvent event){
         String action = event.getActionCommand();
@@ -322,6 +324,7 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
 
     /**
      * Comes from the UndoableEditListener interface - Adds undoable actions to the UndoManager object
+     * @param undoableEditEvent The undoable edit event
      */
     public void undoableEditHappened(UndoableEditEvent undoableEditEvent){
         undoManager.addEdit(undoableEditEvent.getEdit());
@@ -329,6 +332,8 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
 
     /**
      * Sets the font based on what font the user selects
+     * @param fontStyle Font style of the new font
+     * @param fontSize Font size of the new font
      */
     public void setNewFont(String fontStyle, int fontSize){
         mainTextAreaFont = new Font(fontStyle, fontStyleType(fontStyle), fontSize);
@@ -337,6 +342,8 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
 
     /**
      * Method that returns the type of font style in string form
+     * @param fontStyle Name of the font style
+     * @return An integer corresponding to the appropriate font style
      */
     public static int fontStyleType(String fontStyle){
         if(fontStyle.contains("Bold") && fontStyle.contains("Italic")) return Font.BOLD|Font.ITALIC;
@@ -347,6 +354,7 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
 
     /**
      * For KeyListener - Sets changesMade to true
+     * @param ke Key event that invoked this method
      */
     public void keyPressed(KeyEvent ke){
         int keyShortCutMask = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
@@ -363,6 +371,7 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
 
     /**
      * For KeyListener - Sets changesMade to false if the mainTextArea component is empty and the user has not opened a file
+     * @param ke Key event that invoked this method
      */
     public void keyReleased(KeyEvent ke){
         if(mainTextArea.getText().equals("") && !actionController.openedFileExists()) actionController.setChangesMadeFalse();
@@ -387,6 +396,10 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
         mainTextAreaFont = new Font(fontStyle, fontFamily, fontSize);
     }
 
+    /**
+     * Removes an existing instance of this class from the list - This method is called when the user closes a window
+     * @param instanceIDToRemove Instance ID of the instance to remove
+     */
     public void removeInstanceFromList(int instanceIDToRemove){
         ArrayList<TextEditor> tempList = instanceList;
         for(int i=0; i<tempList.size(); i++){

@@ -14,13 +14,13 @@ import java.util.List;
 
 public class FontWindow extends JFrame implements ActionListener, ListSelectionListener {
 
-    /*Standard Collections*/
+    //Some collections
     private List<String> availableFontFamilyNames;
     private Font[] allAvailableFonts;
     private  Set<String> availableFontStylesForSelectedFont;
     private Map<String, JScrollPane> scrollPaneMap;
 
-    /*Constants*/
+    //Constants
     private static final int FONT_WINDOW_WIDTH = 700;
     private static final int FONT_WINDOW_HEIGHT = 600;
     private static final int PANEL_WIDTH = 200;
@@ -28,26 +28,30 @@ public class FontWindow extends JFrame implements ActionListener, ListSelectionL
     private static final int BUTTON_WIDTH = 100;
     private static final int BUTTON_HEIGHT = 40;
 
-    /*Various components*/
+    //Components
     private JTextArea sampleTextArea;
     private JScrollPane sampleTextAreaScroll;
     private JPanel fontFamilyPanel, fontStylePanel, fontSizePanel, samplePanel;
 
-    /*JLists and DefaultListModel objects*/
+    //List models and JList objects
     private JList fontFamilyList, fontStyleList;
     private JList<Integer> fontSizeList;
     private DefaultListModel listModelFontFamily, listModelFontStyle, listModelFontSize;
 
-    /*Other variables*/
+    //Selected items
     private String selectedFontFamily, selectedFontStyle;
     private int selectedFontSize;
 
     private TextEditor textEditor;
 
+    /**
+     * Contsructs a FontWindow object for a TextEditor instance
+     * @param textEditor TextEditor object associated with this FontWindow
+     */
     public FontWindow(TextEditor textEditor) {
         this.textEditor = textEditor;
 
-        /*Initialising panels*/
+        //Initialzing panels
         fontFamilyPanel = new JPanel();
         fontStylePanel = new JPanel();
         fontSizePanel = new JPanel();
@@ -58,6 +62,10 @@ public class FontWindow extends JFrame implements ActionListener, ListSelectionL
 
         setUpFontWindowUI();
     }
+
+    /**
+     * Sets up the UI of this FontWindow
+     */
     private void setUpFontWindowUI(){
 
         /*Setting up the frame*/

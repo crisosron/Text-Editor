@@ -7,7 +7,9 @@ import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -15,23 +17,27 @@ import java.util.*;
 public class ActionController {
     private TextEditor textEditor;
 
-    /*For file management*/
+    //For file management
     private boolean changesMade = false;
     private boolean cancelClose = false;
     private boolean cancelOpenFile;
     private boolean cancelNewFile;
     private File openedFile;
 
-    /*Format menu booleans*/
+    //Format menu booleans
     private boolean isWrapping = false; //Wrapping of text area is set to false by default
     private boolean lightThemeActive = true; //Light theme on by default
     private boolean darkThemeActive = false;
 
     public ActionController(TextEditor textEditor){this.textEditor = textEditor;}
+
+    /**
+     * Opens a file for editing
+     */
     public void openFile(){
         try{
 
-            /*Performs save check*/
+            //Performs save check
             if(changesMade) saveCheck(SaveCheck.OPEN_FILE);
 
             /*If the saveAs method is called during saveCheck method, and the user cancels the save as dialog, assume
@@ -42,7 +48,7 @@ public class ActionController {
                 return;
             }
 
-            /*Prompting user to open a file using file choosers*/
+            //File opening operations
             JFileChooser openFileChooser = new JFileChooser();
             openFileChooser.setCurrentDirectory(new File(System.getProperty("user.home"))); //Gets current working directory
             int status = openFileChooser.showOpenDialog(null); //Prompting user to open a file
@@ -52,32 +58,30 @@ public class ActionController {
             }
             else{
 
-                /*Getting the text in the opened file and transferring it onto the
-                 * mainTextArea component*/
+                //Getting text in file and placing into mainTextArea
                 openedFile = openFileChooser.getSelectedFile();
                 String openedFileName = openFileChooser.getSelectedFile().getName();
                 Scanner scan = new Scanner(openedFile);
                 String textToDisplay = "";
-                while(scan.hasNext()) textToDisplay += scan.nextLine() + "\n";
+                while(scan.hasNext()) textToDisplay += scan.nextLine() + "\n"; //Concatenating the string
                 textEditor.getMainTextArea().setText(textToDisplay);
                 textEditor.setTitle(openedFileName);
                 changesMade = false;
             }
 
-        }catch(Exception e){e.printStackTrace();}
+        }catch(FileNotFoundException e){throw new Error("File not found");}
     }
 
     /**
-     * Called when the Save menu item in the File menu. This method differs from saveFileAs method since
-     * it first checks if the user is trying to save to an existing file. If not, call the saveFileAs method
+     * Saves the current file - Calls saveFile if the file does not exist in a directory
      */
     public void saveFile(){
         try{
 
-            /*If the user attempts to save a newly opened file with no changes - return*/
+            //If the user tries to save to a newly created file with no changes
             if(!changesMade)return;
 
-            /*If saving to existing file*/
+            //If saving to an existing file
             if(openedFile != null){
                 FileWriter writeToOpenedFile = new FileWriter(openedFile);
                 textEditor.getMainTextArea().write(writeToOpenedFile);
@@ -86,16 +90,14 @@ public class ActionController {
                 return;
             }
 
-            /*saveFileAs method is called if the user is trying to save a brand new document*/
+            //If the user is trying to save a new file, prompt save as
             saveFileAs();
 
-        }catch(Exception e) {e.printStackTrace();}
+        }catch(IOException e) {throw new Error("Unable to write to file");}
     }
 
     /**
-     *  Method called when the 'Save As ....' menu item is clicked. This will force the showSaveDialog method to happen
-     *  unlike the saveFile method which does not force the showSaveDialog if the file being saved is a file that already
-     *  exists.
+     *  Saves the file by using the save dialog
      */
     public void saveFileAs(){
         try {
@@ -159,17 +161,18 @@ public class ActionController {
      */
     public void newDocument(){
 
-        /*Checking if the user wants to save unsaved changes*/
+        //Checks if the user wants to save unsaved changes
         if(changesMade) {
             saveCheck(SaveCheck.NEW_FILE);
         }
 
+        //Exits method if the creation of the new file is cancelled
         if(cancelNewFile){
             cancelNewFile = false;
             return;
         }
 
-        /*Resetting some things*/
+        //Resetting some states
         openedFile = null;
         textEditor.getMainTextArea().setText("");
         changesMade = false;
@@ -182,8 +185,7 @@ public class ActionController {
     public void exit(){
         if(changesMade)saveCheck(SaveCheck.EXIT_ON_MENU);
 
-        /*Closes the instance only if there is more than one instance of texteditor.TextEditor running
-        * Ends the program completely otherwise*/
+        //Exits the program if the last TextEditor instance existing is to be closed
         if(textEditor.getInstanceList().size() - 1 <= 0) System.exit(0);
         else{
             textEditor.removeInstanceFromList(textEditor.getInstanceNum());
@@ -206,19 +208,19 @@ public class ActionController {
 
         if(changeThemeTo.equals("Dark Theme")){
 
-            /*If the theme is already active, re-toggle selected on the menu item and returns*/
+            //If theme is already active, re-toggle the selection and exit
             if(darkThemeActive) {
                 darkThemeMenuItem.setSelected(true);
                 return;
             }
 
-            /*Setting booleans and selection logic*/
+            //Setting some booleans and selection logic
             darkThemeActive = true;
             lightThemeActive = false;
             lightThemeMenuItem.setSelected(false);
             darkThemeMenuItem.setSelected(true);
 
-            /*Setting mainTextArea colors*/
+            //Setting colors for the text area
             mainTextArea.setCaretColor(Color.white);
             mainTextArea.setForeground(Color.white);
             mainTextArea.setBackground(new Color(42, 42, 42));
@@ -253,22 +255,11 @@ public class ActionController {
      * Method that copies text and removes it from the mainTextArea component
      */
     public void cut(){
-
-        /*Text to cut is the selected text in the mainTextArea component*/
         String textToCut = textEditor.getMainTextArea().getSelectedText();
-
-        /*Clipboard object to store the highlighted text in the mainTextArea component*/
-        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-
-        /*StringSelection object that holds the highlighted text in the mainTextArea*/
-        StringSelection selectedText = new StringSelection(textToCut);
-
-        /*Storing selected text into system clipboard*/
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard(); //Clipboard to store the selected text
+        StringSelection selectedText = new StringSelection(textToCut); //StringSelection object to store the selected text into the clipboard object
         clipboard.setContents(selectedText, selectedText);
-
-        /*Operations to remove the selected text from the mainTextArea component*/
-        textEditor.getMainTextArea().replaceSelection("");
-
+        textEditor.getMainTextArea().replaceSelection(""); //Removing selected text from the text area
     }
 
     /**
@@ -325,19 +316,19 @@ public class ActionController {
      */
     public void insertDate(){
 
-        /*Getting the current date in the format dd/mm/yyyyy*/
+        //Getting current date in dd/mm/yyyy format
         Date date = new Date();
         String dateFormatString= "dd/MM/yyyy"; //Capital MM important to differentiate from mm (milliseconds)
         DateFormat dateFormat = new SimpleDateFormat(dateFormatString);
         String formattedDate = dateFormat.format(date);
 
-        /*Using calendar to get day of the week*/
+        //Using Calendar object to get the day of the week
         Calendar calendar = Calendar.getInstance();
         int day = calendar.get(Calendar.DAY_OF_WEEK);
 
         String dayOfTheWeek = "";
 
-        /*Switch statement to determine what day of the week it is*/
+        //Switch statement to determine the day of the week
         switch(day){
             case Calendar.SUNDAY: dayOfTheWeek = "Sunday"; break;
             case Calendar.MONDAY: dayOfTheWeek = "Monday"; break;
@@ -348,15 +339,15 @@ public class ActionController {
             case Calendar.SATURDAY: dayOfTheWeek = "Saturday"; break;
         }
 
-        /*Outputs text at the caret position*/
+        //Outputs date at the caret position in the text area
         textEditor.getMainTextArea().insert(dayOfTheWeek + " - " + formattedDate, textEditor.getMainTextArea().getCaretPosition());
     }
 
-    /*Getters*/
+    //Getters
     public boolean hasChangesMade(){return changesMade;}
     public boolean openedFileExists(){return openedFile != null;}
 
-    /*Setters*/
+    //Setters
     public void setChangesMadeTrue(){changesMade = true;}
     public void setChangesMadeFalse(){changesMade = false;}
 }
