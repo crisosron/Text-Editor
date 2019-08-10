@@ -68,7 +68,7 @@ public class FontWindow extends JFrame implements ActionListener, ListSelectionL
      */
     private void setUpFontWindowUI(){
 
-        /*Setting up the frame*/
+        //Setting up the frame
         setDefaultCloseOperation(DISPOSE_ON_CLOSE); //Gets rid of the this frame but the application stays open (therefore main frame stays)
         setLayout(null);
         setTitle("Configure Font");
@@ -76,18 +76,17 @@ public class FontWindow extends JFrame implements ActionListener, ListSelectionL
         setResizable(false);
         setVisible(true);
 
-        /*Setting up the panels*/
+        //Setting up the panels
         panelSetup();
 
-        /*Setting up the lists*/
+        //Setting up the lists/
         setupJLists();
 
-        /*Setting up the buttons*/
+        //Setting up the buttons
         setupButtons();
 
-        /*Setting up the sample text area*/
+        //Setting up the sample text area
         setupSampleTextArea();
-
     }
 
     /**
@@ -95,21 +94,21 @@ public class FontWindow extends JFrame implements ActionListener, ListSelectionL
      */
     private void panelSetup(){
 
-        /*Getting available fonts in machine and storing into array*/
+        //Getting available fonts and storing into an array
         String[] tempAvailableFontFamilyNamesArray = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames(); //Names of fonts
         allAvailableFonts = GraphicsEnvironment.getLocalGraphicsEnvironment().getAllFonts(); //Actual font objects
         availableFontFamilyNames = new ArrayList<>();
 
-        /*Adding all font family names into availableFontFamilyNames set*/
+        //Adding all available font family names into a list
         for(int i = 0; i < tempAvailableFontFamilyNamesArray.length; i++){
             availableFontFamilyNames.add(tempAvailableFontFamilyNamesArray[i]);
         }
 
-        /*x and y coordinates of the top left of corner of the bounding rectangle for the panels*/
+        //Coordinates of the top left of the panel bounding box
         int x = 20;
         int y = 20;
 
-        /*Absolutely positioning the panels in the frame*/
+        //Absolutely positioning the panels in the frame
         fontFamilyPanel.setBounds(x, y, PANEL_WIDTH, PANEL_HEIGHT); //setBounds(x, y, width, height); - Used for absolute positioning
         x += PANEL_WIDTH + 20;
         fontStylePanel.setBounds(x, y, PANEL_WIDTH, PANEL_HEIGHT);
@@ -119,7 +118,7 @@ public class FontWindow extends JFrame implements ActionListener, ListSelectionL
         x = 20;
         samplePanel.setBounds(x, y, PANEL_WIDTH * 3 + (20*2), PANEL_HEIGHT);
 
-        /*Adding the panels to the lists*/
+        //Adding panels to the frame
         add(fontFamilyPanel);
         add(fontStylePanel);
         add(fontSizePanel);
