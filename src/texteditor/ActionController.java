@@ -14,7 +14,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class ActionController {
+class ActionController {
     private TextEditor textEditor;
 
     //For file management
@@ -29,12 +29,12 @@ public class ActionController {
     private boolean lightThemeActive = true; //Light theme on by default
     private boolean darkThemeActive = false;
 
-    public ActionController(TextEditor textEditor){this.textEditor = textEditor;}
+     ActionController(TextEditor textEditor){this.textEditor = textEditor;}
 
     /**
      * Opens a file for editing
      */
-    public void openFile(){
+     void openFile(){
         try{
 
             //Performs save check
@@ -54,7 +54,6 @@ public class ActionController {
             int status = openFileChooser.showOpenDialog(null); //Prompting user to open a file
             if(status != JFileChooser.APPROVE_OPTION){
                 JOptionPane.showMessageDialog(null, "No file selected!");
-                return;
             }
             else{
 
@@ -62,9 +61,9 @@ public class ActionController {
                 openedFile = openFileChooser.getSelectedFile();
                 String openedFileName = openFileChooser.getSelectedFile().getName();
                 Scanner scan = new Scanner(openedFile);
-                String textToDisplay = "";
-                while(scan.hasNext()) textToDisplay += scan.nextLine() + "\n"; //Concatenating the string
-                textEditor.getMainTextArea().setText(textToDisplay);
+                StringBuilder textToDisplay = new StringBuilder();
+                while(scan.hasNext()) textToDisplay.append(scan.nextLine()).append("\n"); //Concatenating the string
+                textEditor.getMainTextArea().setText(textToDisplay.toString());
                 textEditor.setTitle(openedFileName);
                 changesMade = false;
             }
@@ -75,7 +74,7 @@ public class ActionController {
     /**
      * Saves the current file - Calls saveFile if the file does not exist in a directory
      */
-    public void saveFile(){
+     void saveFile(){
         try{
 
             //If the user tries to save to a newly created file with no changes
@@ -99,7 +98,7 @@ public class ActionController {
     /**
      *  Saves the file by using the save dialog
      */
-    public void saveFileAs(){
+     void saveFileAs(){
         try {
             /*Operations to conduct when saving to a brand new file*/
             JFileChooser saveFileChooser = new JFileChooser();
@@ -112,6 +111,7 @@ public class ActionController {
             else {
                 cancelClose = false;
                 File fileToSave = saveFileChooser.getSelectedFile(); //Creates a new file with a title based on the user's input
+                JOptionPane.showMessageDialog(null, fileToSave.getName());
                 FileWriter writer = new FileWriter(fileToSave); //FileWriter object to write to the newly created file
                 textEditor.getMainTextArea().write(writer); //Gets the text in the mainTextArea component and writes it to the newly created file
                 textEditor.setTitle(fileToSave.getName());
@@ -128,7 +128,7 @@ public class ActionController {
      * changes made to the current document
      * @param action SaveCheck enum that represents the action that caused the invocation of this method
      */
-    public void saveCheck(SaveCheck action){
+     void saveCheck(SaveCheck action){
         int optionInput = JOptionPane.showConfirmDialog(null, "Would you like to save changes made? ");
         if(optionInput == JOptionPane.YES_OPTION) {
             saveFile();
@@ -146,9 +146,11 @@ public class ActionController {
                 System.exit(0);
             }
         }
-        else if(optionInput == JOptionPane.CANCEL_OPTION) return;
         else{
-            /*If the user clicks exit on the window*/
+            //Exits the method if cancel was clicked on dialog
+            if(optionInput == JOptionPane.CANCEL_OPTION) return;
+
+            //If the user clicks exit on the window
             if(action == SaveCheck.EXIT_ON_WINDOW || action == SaveCheck.EXIT_ON_MENU) {
                 if(textEditor.getInstanceNum() != 0) textEditor.dispose();
                 else System.exit(0);
@@ -159,7 +161,7 @@ public class ActionController {
     /**
      * Creates a new untitled document
      */
-    public void newDocument(){
+    void newDocument(){
 
         //Checks if the user wants to save unsaved changes
         if(changesMade) {
@@ -182,7 +184,7 @@ public class ActionController {
     /**
      * Forces a hard exit -Called when the Exit menu item in the File menu is clicked
      */
-    public void exit(){
+     void exit(){
         if(changesMade)saveCheck(SaveCheck.EXIT_ON_MENU);
 
         //Exits the program if the last TextEditor instance existing is to be closed
@@ -197,7 +199,7 @@ public class ActionController {
      * Changes the theme to the specified string parameter
      * @param changeThemeTo Specifies what theme the editor should change to
      */
-    public void changeTheme(String changeThemeTo){
+     void changeTheme(String changeThemeTo){
 
         JTextArea mainTextArea = textEditor.getMainTextArea();
         Map<String, MenuItem> menuItemsMap = textEditor.getMenuItemsMap();
@@ -246,7 +248,7 @@ public class ActionController {
     /**
      * Activates/Deactivates the word wrap functionality around the mainTextArea component
      */
-    public void setWordWrap(){
+     void setWordWrap(){
         isWrapping = !isWrapping;
         textEditor.getMainTextArea().setLineWrap(isWrapping);
     }
@@ -254,7 +256,7 @@ public class ActionController {
     /**
      * Method that copies text and removes it from the mainTextArea component
      */
-    public void cut(){
+     void cut(){
         String textToCut = textEditor.getMainTextArea().getSelectedText();
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard(); //Clipboard to store the selected text
         StringSelection selectedText = new StringSelection(textToCut); //StringSelection object to store the selected text into the clipboard object
@@ -266,7 +268,7 @@ public class ActionController {
      * Method that takes the text stored in the system clipboard and pastes it to
      * the mainTextArea component
      */
-    public void paste() {
+     void paste() {
         try {
             JTextArea mainTextArea = textEditor.getMainTextArea();
             String textToPaste = (String) Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor);
@@ -277,7 +279,7 @@ public class ActionController {
     /**
      * Copies selected text in mainTextArea into system clipboard without removing the text from the mainTextArea component
      */
-    public void copy(){
+     void copy(){
         StringSelection textToCopy = new StringSelection(textEditor.getMainTextArea().getSelectedText());
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         clipboard.setContents(textToCopy, textToCopy);
@@ -286,35 +288,35 @@ public class ActionController {
     /**
      * Undo's most recent action
      */
-    public void undo(){
+     void undo(){
         if(textEditor.getUndoManager().canUndo()) textEditor.getUndoManager().undo();
     }
 
     /**
      * Redo's an undone action
      */
-    public void redo(){
+     void redo(){
         if(textEditor.getUndoManager().canRedo()) textEditor.getUndoManager().redo();
     }
 
     /**
      * Creates a new line and creates 4 spaces and a hyphen - Acts as a bullet point generator - Generated at caret position
      */
-    public void insertPoint(){
+     void insertPoint(){
         textEditor.getMainTextArea().insert("\n" + "    " + "-", textEditor.getMainTextArea().getCaretPosition());
     }
 
     /**
      * Serves the purpose of being a sub point for a created point at the caret position
      */
-    public void insertSubPoint(){
+     void insertSubPoint(){
         textEditor.getMainTextArea().insert("\n" + "    " + "    " + "-", textEditor.getMainTextArea().getCaretPosition());
     }
 
     /**
      * Inserts the current date and day of the week into the text area
      */
-    public void insertDate(){
+     void insertDate(){
 
         //Getting current date in dd/mm/yyyy format
         Date date = new Date();
@@ -344,10 +346,10 @@ public class ActionController {
     }
 
     //Getters
-    public boolean hasChangesMade(){return changesMade;}
-    public boolean openedFileExists(){return openedFile != null;}
+     boolean hasChangesMade(){return changesMade;}
+     boolean openedFileExists(){return openedFile != null;}
 
     //Setters
-    public void setChangesMadeTrue(){changesMade = true;}
-    public void setChangesMadeFalse(){changesMade = false;}
+     void setChangesMadeTrue(){changesMade = true;}
+     void setChangesMadeFalse(){changesMade = false;}
 }
