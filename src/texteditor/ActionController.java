@@ -29,7 +29,12 @@ class ActionController {
     private boolean lightThemeActive = true; //Light theme on by default
     private boolean darkThemeActive = false;
 
-     ActionController(TextEditor textEditor){this.textEditor = textEditor;}
+    /**
+     * Constructs an ActionController object which performs the actions that can be performed
+     * in the text editor
+     * @param textEditor TextEditor instance this ActionController is for
+     */
+    ActionController(TextEditor textEditor){this.textEditor = textEditor;}
 
     /**
      * Opens a file for editing
@@ -178,7 +183,7 @@ class ActionController {
         openedFile = null;
         textEditor.getMainTextArea().setText("");
         changesMade = false;
-        textEditor.setTitle("texteditor.TextEditor");
+        textEditor.setTitle("TextEditor");
     }
 
     /**

@@ -240,7 +240,7 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
                     for(JMenuItem menuItem: menuItemsMap.values()){
                         String menuItemName = menuItem.getName();
                         if(rightClickMenuItemNames.contains(menuItemName)){
-                            JMenuItem newMenuItem = new texteditor.menu.items.MenuItem(menuItemName, false, false);
+                            JMenuItem newMenuItem = new MenuItem(menuItemName, false, false);
                             rightClickMenu.add(newMenuItem);
                         }
                     }
@@ -259,19 +259,18 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
 
         try {
 
-            /*Setting up InputStream and Properties objects*/
+            //Setting up InputStream and Properties objects
             Properties properties = new Properties();
             InputStream inputStream = new FileInputStream("config.properties");
 
-            /*Loading config.properties using InputStream*/
-            if (inputStream != null) properties.load(inputStream);
-            else throw new FileNotFoundException("File config.properties cannot be found");
+            //Loading config.properties using InputStream
+            properties.load(inputStream);
 
-            /*Getting the default font settings*/
+            //Getting the default font settings
             String defFontStyle = properties.getProperty("font-style");
             String defFontSize = properties.getProperty("font-size");
 
-            /*Loading the default font (for startup) and closing inputStream*/
+            //Loading the default font (for startup) and closing inputStream
             setDefaultFont(defFontStyle, fontStyleType(defFontStyle), Integer.parseInt(defFontSize));
             inputStream.close();
 
@@ -400,7 +399,7 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
      * Removes an existing instance of this class from the list - This method is called when the user closes a window
      * @param instanceIDToRemove Instance ID of the instance to remove
      */
-    public void removeInstanceFromList(int instanceIDToRemove){
+     void removeInstanceFromList(int instanceIDToRemove){
         ArrayList<TextEditor> tempList = instanceList;
         for(int i=0; i<tempList.size(); i++){
             if(tempList.get(i).getInstanceNum() == instanceIDToRemove) {
@@ -410,13 +409,42 @@ public class TextEditor extends JFrame implements ActionListener, KeyListener , 
         }
     }
 
-    /*Getters*/
-    public JTextArea getMainTextArea(){return mainTextArea;}
-    public Map<String, MenuItem> getMenuItemsMap(){return menuItemsMap;}
-    public UndoManager getUndoManager(){return undoManager;}
-    public int getInstanceNum() {return instanceNum; }
-    public Font getMainTextAreaFont(){return mainTextAreaFont;}
-    public ArrayList<TextEditor> getInstanceList(){return instanceList;}
+    /**
+     * Retrieves the JTextArea instance associated with this TextEditor
+     * @return the JTextArea instance associated with this TextEditor
+     */
+    JTextArea getMainTextArea(){return mainTextArea;}
+
+    /**
+     * Gets the map of menu items for this TextEditor
+     * @return A map of MenuItem objects
+     */
+    Map<String, MenuItem> getMenuItemsMap(){return menuItemsMap;}
+
+    /**
+     * Returns the UndoManager instance of this TextEditor
+     * @return the UndoManager
+     */
+    UndoManager getUndoManager(){return undoManager;}
+
+    /**
+     * Returns the instance number of this TextEditor object
+     * @return An integer representing the instance number
+     */
+    int getInstanceNum() {return instanceNum; }
+
+    /**
+     * Returns the font that the main text area is currently using
+     * @return A Font object representing the font currently in use
+     */
+    Font getMainTextAreaFont(){return mainTextAreaFont;}
+
+    /**
+     * Returns the list of instances of the TextEditorClass
+     * @return a List of TextEditor instances
+     * TODO: Make instanceList a static field?
+     */
+    ArrayList<TextEditor> getInstanceList(){return instanceList;}
 
     public static void main(String[] args){
 
