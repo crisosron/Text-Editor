@@ -37,6 +37,15 @@ class ActionController {
     ActionController(TextEditor textEditor){this.textEditor = textEditor;}
 
     /**
+     * Checks if the supplied file name has .txt extension or has no extension at all
+     * @param fileName String file name to check
+     */
+    private boolean validFileName(String fileName){
+	    String fileExtension = fileName.substring(fileName.lastIndexOf("."));
+    	return fileExtension.equals(".txt") || fileExtension.equals("");
+    }
+
+    /**
      * Opens a file for editing
      */
      void openFile(){
@@ -65,6 +74,13 @@ class ActionController {
                 //Getting text in file and placing into mainTextArea
                 openedFile = openFileChooser.getSelectedFile();
                 String openedFileName = openFileChooser.getSelectedFile().getName();
+
+                //Validates the opened file
+                if(!validFileName(openedFileName)){
+                    JOptionPane.showMessageDialog(null, "Please open a txt file or a file with no extension!");
+                    return;
+                }
+
                 Scanner scan = new Scanner(openedFile);
                 StringBuilder textToDisplay = new StringBuilder();
                 while(scan.hasNext()) textToDisplay.append(scan.nextLine()).append("\n"); //Concatenating the string
@@ -116,6 +132,14 @@ class ActionController {
             else {
                 cancelClose = false;
                 File fileToSave = saveFileChooser.getSelectedFile(); //Creates a new file with a title based on the user's input
+
+                //Validates the selected file name to save to
+                if(!validFileName(fileToSave.getName())){
+                    JOptionPane.showMessageDialog(null, "Please save to a txt file or no file extension!");
+                    return;
+                }
+
+		        //Writes to the file
                 JOptionPane.showMessageDialog(null, fileToSave.getName());
                 FileWriter writer = new FileWriter(fileToSave); //FileWriter object to write to the newly created file
                 textEditor.getMainTextArea().write(writer); //Gets the text in the mainTextArea component and writes it to the newly created file
