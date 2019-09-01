@@ -129,29 +129,29 @@ public class FontWindow extends JFrame implements ActionListener, ListSelectionL
      * Setting up the buttons for this frame
      */
     private void setupButtons(){
-
-        /*Creating JButton objects*/
+		
+		//Creating the JButton objects
         JButton confirmButton = new JButton("Confirm");
         JButton cancelButton = new JButton("Cancel");
         JButton setFontAsDefaultButton = new JButton("Set Default");
-
-        /*x and y coordinates of the top left of the bounding rectangle for the buttons*/
+		
+		// X and Y coordiantes of the top left of the bounding rectangle for the buttons
         int x = 430;
         int y = 480;
         int fontDefaultButtonX = 20;
         int fontDefaultButtonY = 480;
-
-        /*Absolutely positioning the buttons*/
+		
+		//Absolutely positioning the buttons
         confirmButton.setBounds(x, y, BUTTON_WIDTH, BUTTON_HEIGHT);
         cancelButton.setBounds(x + BUTTON_WIDTH+15, y, BUTTON_WIDTH, BUTTON_HEIGHT);
         setFontAsDefaultButton.setBounds(fontDefaultButtonX, fontDefaultButtonY, BUTTON_WIDTH, BUTTON_HEIGHT);
-
-        /*Adding the buttons to the this frame*/
+		
+		//Adding the buttons to this frame
         add(confirmButton);
         add(cancelButton);
         add(setFontAsDefaultButton);
-
-        /*Adding action listener and setting action commands for each button*/
+		
+		//Adding action listener and setting action commands for each button
         confirmButton.setActionCommand("Confirm");
         cancelButton.setActionCommand("Cancel");
         setFontAsDefaultButton.setActionCommand("Set Default Font");
@@ -165,11 +165,11 @@ public class FontWindow extends JFrame implements ActionListener, ListSelectionL
      * Setting up the JList objects - This includes filling up the list with values
      */
     private void setupJLists(){
-
-        /*Custom ListCellRenderer object*/
+		
+		//Custom ListCellRenderer to render the fonts correctly for the JList objects
         FontJListCellRenderer customListCellRenderer = new FontJListCellRenderer();
-
-        /*  Setting up the font family list  */
+		
+		//Setting up the font family list
         listModelFontFamily = new DefaultListModel<>(); //DefaultListModel object to make adding elements easier
         for(String fontFamilyName : availableFontFamilyNames){
             listModelFontFamily.addElement(fontFamilyName);
@@ -178,7 +178,6 @@ public class FontWindow extends JFrame implements ActionListener, ListSelectionL
         fontFamilyList.setCellRenderer(customListCellRenderer); //Uses custom cell renderer to customize each individual cell in this list
         String firstFontFamily = fontFamilyList.getModel().getElementAt(0).toString(); //Gets the first font family in the list
         //setAvailableFontStylesForSelectedFont(firstFontFamily); //TODO: Put this in highlightSelectedFontProperties
-        //fontFamilyList.setSelectedIndex(0);
 
         /*Setting up the font style list*/
         listModelFontStyle = new DefaultListModel<>(); //DefaultListModel object to make adding elements easier
